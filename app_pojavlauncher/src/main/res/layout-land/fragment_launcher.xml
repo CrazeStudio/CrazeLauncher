@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_menu_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app"
+    android:padding="12dp">
+
+    <!-- Center Guideline for Split Landscape Layout (56% left, 44% right) -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/split_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.54" />
+
+    <!-- ======================================================== -->
+    <!-- LEFT PANE: INSTANCES & CONTENT + LAUNCHER TOOLS          -->
+    <!-- ======================================================== -->
+    <ScrollView
+        android:id="@+id/left_scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="10dp"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/split_guideline">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Category 1 Header: INSTANCES & CONTENT -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INSTANCES &amp; CONTENT"
+                android:textColor="#8D9AA8"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.06"
+                android:layout_marginBottom="6dp" />
+
+            <!-- Row 1: New Instance + Mods & Modpacks -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <!-- Card 1: New Instance -->
+                <LinearLayout
+                    android:id="@+id/card_new_instance"
+                    android:layout_width="0dp"
+                    android:layout_height="66dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="12dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_craze_add"
+                            android:contentDescription="New Instance" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New Instance"
+                            android:textColor="@color/primary_text"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vanilla, Fabric, Forge..."
+                        android:textColor="#6B7888"
+                        android:textSize="10sp"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <!-- Card 2: Mods & Modpacks -->
+                <LinearLayout
+                    android:id="@+id/card_mods_modpacks"
+                    android:layout_width="0dp"
+                    android:layout_height="66dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="12dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_craze_modpack_folder"
+                            android:contentDescription="Mods" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mods &amp; Modpacks"
+                            android:textColor="@color/primary_text"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Modrinth &amp; CurseForge"
+                        android:textColor="#6B7888"
+                        android:textSize="10sp"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Category 2 Header: LAUNCHER TOOLS -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LAUNCHER TOOLS"
+                android:textColor="#8D9AA8"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.06"
+                android:layout_marginBottom="6dp" />
+
+            <!-- Tools Grid: 2x2 -->
+            <!-- Row 1: Custom Controls + Execute .jar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <!-- Custom controls button -->
+                <com.kdt.mcgui.LauncherMenuButton
+                    android:id="@+id/custom_control_button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:drawableStart="@drawable/ic_craze_gamepad"
+                    android:text="Custom controls"
+                    android:textColor="@color/primary_text"
+                    android:textSize="12sp" />
+
+                <!-- Execute a .jar button -->
+                <com.kdt.mcgui.LauncherMenuButton
+                    android:id="@+id/install_jar_button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:drawableStart="@drawable/ic_craze_coffee"
+                    android:text="Execute a .jar"
+                    android:textColor="@color/primary_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Row 2: Open game directory + Share log file -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Open game directory button -->
+                <com.kdt.mcgui.LauncherMenuButton
+                    android:id="@+id/open_files_button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:drawableStart="@drawable/ic_craze_folder"
+                    android:text="Open game directory"
+                    android:textColor="@color/primary_text"
+                    android:textSize="12sp" />
+
+                <!-- Share log file button -->
+                <com.kdt.mcgui.LauncherMenuButton
+                    android:id="@+id/share_logs_button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:drawableStart="@drawable/ic_craze_log_doc"
+                    android:text="Share log file"
+                    android:textColor="@color/primary_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Hidden optional buttons for backward compatibility -->
+            <Button
+                android:id="@+id/news_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/social_media_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- ======================================================== -->
+    <!-- RIGHT PANE: CURRENT INSTANCE CARD + BIG PLAY BUTTON      -->
+    <!-- ======================================================== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/right_pane_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/split_guideline"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- CURRENT INSTANCE Card -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/current_instance_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_craze_card_dark"
+            android:padding="14dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Card Header: Title and Status Badge -->
+            <TextView
+                android:id="@+id/instance_card_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CURRENT INSTANCE"
+                android:textColor="#8D9AA8"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.06"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Ready Status Badge -->
+            <LinearLayout
+                android:id="@+id/ready_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_craze_badge_ready"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="● READY"
+                    android:textColor="@color/accent_green"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+            </LinearLayout>
+
+            <!-- Version Selector Row -->
+            <LinearLayout
+                android:id="@+id/version_row"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/instance_card_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!-- Craze Round C Icon -->
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/ic_craze_round_c"
+                    android:contentDescription="Craze" />
+
+                <!-- Version Spinner Dropdown -->
+                <com.kdt.mcgui.mcVersionSpinner
+                    android:id="@+id/mc_version_spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/primary_text"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="4dp"
+                    android:drawableEnd="@drawable/spinner_arrow"
+                    app:drawableEndSize="@dimen/padding_heavy"
+                    app:drawableStartIntegerScaling="true"
+                    app:drawableStartSize="28dp"
+                    app:drawableEndPadding="4dp" />
+
+                <!-- Edit Profile Button -->
+                <ImageButton
+                    android:id="@+id/edit_profile_button"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_craze_edit_btn"
+                    android:src="@drawable/ic_craze_pencil"
+                    android:scaleType="centerInside"
+                    android:contentDescription="@string/create_instance"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- Subtitle at Bottom of Card -->
+            <TextView
+                android:id="@+id/instance_card_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tap to change instance • Tap edit for JVM and settings"
+                android:textColor="#6B7888"
+                android:textSize="10sp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/version_row"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Big Rounded PLAY Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/play_button"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/bg_craze_play_btn_dark"
+            android:textAllCaps="true"
+            android:text="▶  PLAY"
+            android:textColor="@color/primary_text"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:gravity="center"
+            android:paddingHorizontal="24dp"
+            android:layout_marginTop="14dp"
+            app:layout_constraintTop_toBottomOf="@id/current_instance_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Subtitle under Play Button -->
+        <TextView
+            android:id="@+id/play_status_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minecraft Java Edition • Ready"
+            android:textColor="#6B7888"
+            android:textSize="11sp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/play_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
