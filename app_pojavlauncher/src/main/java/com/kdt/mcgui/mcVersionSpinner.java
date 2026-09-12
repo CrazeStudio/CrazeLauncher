@@ -74,9 +74,11 @@ public class mcVersionSpinner extends ExtendedTextView {
 
     public void setSelection(int position){
         if(mListView != null) mListView.setSelection(position);
-        mProfileAdapter.setView(this, position, false);
-        mSelectedIndex = position;
-        mProfileAdapter.applySelectionIndex(mSelectedIndex);
+        if(mProfileAdapter.getCount() > 0 && position >= 0 && position < mProfileAdapter.getCount()) {
+            mProfileAdapter.setView(this, position, false);
+            mSelectedIndex = position;
+            mProfileAdapter.applySelectionIndex(mSelectedIndex);
+        }
     }
 
     public void openProfileEditor(FragmentActivity fragmentActivity) {
@@ -110,7 +112,9 @@ public class mcVersionSpinner extends ExtendedTextView {
         setPaddingRelative(startPadding, 0, endPadding, 0);
         setCompoundDrawablePadding(startPadding);
         addOnAttachStateChangeListener(new ExtraAttachListener());
-        setSelection(0);
+        if(mProfileAdapter.getCount() > 0) {
+            setSelection(0);
+        }
 
         // Popup window behavior
         setOnClickListener(new OnClickListener() {

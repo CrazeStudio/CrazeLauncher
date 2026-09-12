@@ -43,7 +43,11 @@ public class InstanceAdapter extends BaseAdapter {
      */
     @Override
     public Object getItem(int position) {
-        if(mInstances == null) return mExtraEntires[position];
+        if(position < 0 || position >= getCount()) return null;
+        if(mInstances == null) {
+            if(position >= mExtraEntires.length) return null;
+            return mExtraEntires[position];
+        }
         int instanceListSize = mInstances.list.size();
         int extraPosition = position - instanceListSize;
         if(position < instanceListSize) {
