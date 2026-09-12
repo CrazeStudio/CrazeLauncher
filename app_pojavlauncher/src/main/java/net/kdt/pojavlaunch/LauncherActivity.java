@@ -33,6 +33,9 @@ import net.kdt.pojavlaunch.extra.ExtraListener;
 import net.kdt.pojavlaunch.fragments.MainMenuFragment;
 import net.kdt.pojavlaunch.fragments.MicrosoftLoginFragment;
 import net.kdt.pojavlaunch.fragments.SelectAuthFragment;
+import net.kdt.pojavlaunch.fragments.ProfileTypeSelectFragment;
+import net.kdt.pojavlaunch.fragments.SearchModFragment;
+import net.kdt.pojavlaunch.fragments.InstanceEditorFragment;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.InstanceInstaller;
 import net.kdt.pojavlaunch.instances.Instances;
@@ -56,6 +59,7 @@ public class LauncherActivity extends BaseActivity {
 
     private FragmentContainerView mFragmentView;
     private ImageButton mSettingsButton;
+    private ImageButton mDownloadButton;
     private ProgressLayout mProgressLayout;
     private ProgressServiceKeeper mProgressServiceKeeper;
     private NotificationManager mNotificationManager;
@@ -100,6 +104,40 @@ public class LauncherActivity extends BaseActivity {
             // The setting button doubles as a home button now
             Tools.backToMainMenu(this);
         }
+    };
+
+    /* Listener for the download and mods manager button */
+    private final View.OnClickListener mDownloadButtonListener = v -> {
+        FragmentManager manager = getSupportFragmentManager();
+        if(manager.isStateSaved()) return;
+
+        String[] options = {
+            getString(R.string.mcl_download_versions),
+            getString(R.string.mcl_browse_mods),
+            getString(R.string.mcl_instance_editor)
+        };
+
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.mcl_download_manager)
+            .setItems(options, (dialog, which) -> {
+                switch(which) {
+                    case 0:
+                        Tools.swapFragment(this, ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null);
+                        break;
+                    case 1:
+                        Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null);
+                        break;
+                    case 2:
+                        Instance selected = Instances.loadSelectedInstance();
+                        Bundle bundle = new Bundle();
+                        if(selected != null) {
+                            bundle.putString("instanceName", selected.name);
+                        }
+                        Tools.swapFragment(this, InstanceEditorFragment.class, InstanceEditorFragment.TAG, bundle);
+                        break;
+                }
+            })
+            .show();
     };
 
     private final ExtraListener<Boolean> mLaunchGameListener = (key, value) -> {
@@ -192,6 +230,7 @@ public class LauncherActivity extends BaseActivity {
         ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
 
         mSettingsButton.setOnClickListener(mSettingButtonListener);
+        mDownloadButton.setOnClickListener(mDownloadButtonListener);
         ProgressKeeper.addTaskCountListener(mProgressLayout);
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
         ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
@@ -331,6 +370,7 @@ public class LauncherActivity extends BaseActivity {
     private void bindViews(){
         mFragmentView = findViewById(R.id.container_fragment);
         mSettingsButton = findViewById(R.id.setting_button);
+        mDownloadButton = findViewById(R.id.download_button);
         mProgressLayout = findViewById(R.id.progress_layout);
     }
 }

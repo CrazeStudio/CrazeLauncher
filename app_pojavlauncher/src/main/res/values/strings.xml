@@ -521,4 +521,8 @@
     <string name="preference_metadata_clear_complete">Completed. Restart the launcher to apply the changes</string>
     <string name="preference_button_transparency">Buttons transparency</string>
     <string name="preference_button_transparency_summary">Changes on-screen buttons transparency</string>
+    <string name="mcl_download_manager">Downloads &amp; Mods Manager</string>
+    <string name="mcl_download_versions">Download Versions &amp; Modloaders</string>
+    <string name="mcl_browse_mods">Browse Mods &amp; Modpacks</string>
+    <string name="mcl_instance_editor">Instance Settings &amp; Icon</string>
 </resources>
