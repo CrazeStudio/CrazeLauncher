@@ -265,20 +265,50 @@ public class GameRunner {
         Log.i("GameRunner", "=====================================");
 
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
-        String libPath = Tools.NATIVE_LIB_DIR;
-        if(versionSpecificNativesDir.exists()) {
-            libPath = versionSpecificNativesDir.getAbsolutePath() + ":" + Tools.NATIVE_LIB_DIR;
-            javaArgList.add("-Djna.boot.library.path="+versionSpecificNativesDir.getAbsolutePath());
-        } else {
-            javaArgList.add("-Djna.boot.library.path="+Tools.NATIVE_LIB_DIR);
+        FileUtils.ensureDirectory(versionSpecificNativesDir);
+
+        // Unify built-in native libraries from Tools.NATIVE_LIB_DIR into versionSpecificNativesDir
+        // so that versionSpecificNativesDir contains a SINGLE flat directory of all required .so files.
+        File nativeLibDirFile = new File(Tools.NATIVE_LIB_DIR);
+        if(nativeLibDirFile.exists() && nativeLibDirFile.isDirectory()) {
+            File[] nativeFiles = nativeLibDirFile.listFiles();
+            if(nativeFiles != null) {
+                for(File nf : nativeFiles) {
+                    if(nf.isFile() && nf.getName().endsWith(".so")) {
+                        File destSo = new File(versionSpecificNativesDir, nf.getName());
+                        if(!destSo.exists() || destSo.length() != nf.length()) {
+                            try {
+                                java.nio.file.Files.copy(nf.toPath(), destSo.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                            } catch (Exception e) {
+                                Log.e("GameRunner", "Failed to copy native library " + nf.getName(), e);
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+        String libPath = versionSpecificNativesDir.getAbsolutePath();
+        javaArgList.add("-Djna.boot.library.path="+libPath);
         javaArgList.add("-Djava.library.path="+libPath);
-        // Sometimes, the game can extract natives itself onto this path
+        // CRITICAL: Never pass colon-separated paths to LWJGL 2, use a single absolute directory path
         javaArgList.add("-Dorg.lwjgl.librarypath="+libPath);
 
         File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
         FileUtils.ensureDirectory(lwjglExtractDir);
         javaArgList.add("-Dorg.lwjgl.system.SharedLibraryExtractPath="+lwjglExtractDir.getAbsolutePath());
+
+        File libLwjglFile = new File(versionSpecificNativesDir, "liblwjgl.so");
+        Log.i("GameRunner", "=== Complete Native Pipeline Diagnostics ===");
+        Log.i("GameRunner", "Selected Minecraft version: " + versionId);
+        Log.i("GameRunner", "Selected wrapper (renderer): " + rendererName);
+        Log.i("GameRunner", "Selected ABI: " + java.util.Arrays.toString(android.os.Build.SUPPORTED_ABIS));
+        Log.i("GameRunner", "Native directory path: " + libPath);
+        Log.i("GameRunner", "Exact liblwjgl.so path: " + libLwjglFile.getAbsolutePath());
+        Log.i("GameRunner", "liblwjgl.so exists: " + libLwjglFile.exists() + (libLwjglFile.exists() ? " (size: " + libLwjglFile.length() + " bytes)" : ""));
+        Log.i("GameRunner", "Library loading path configured: " + libPath);
+        Log.i("GameRunner", "Final wrapper selected immediately before start: " + rendererName);
+        Log.i("GameRunner", "============================================");
 
         addAuthlibInjectorArgs(javaArgList, account);
 
