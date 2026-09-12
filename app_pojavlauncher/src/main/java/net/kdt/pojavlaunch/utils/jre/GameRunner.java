@@ -85,36 +85,53 @@ public class GameRunner {
      * @return whether the GPU is affected by the Large Thin Wrapper render distance issue on vanilla
      */
 
-    private static boolean affectedByRenderDistanceIssue(JVersionList.Version version) throws ParseException {
-        if(LauncherPreferences.PREF_USE_ANGLE) return false;
-        GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
-        return info.isAdreno() &&
-                info.glesMajorVersion >= 3 &&
-                // 1.21.5 fixes the RD issue, released on march 25 2025
-                DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 2, 25);
-    }
-
-    private static boolean checkRenderDistance(JVersionList.Version version, File gamedir) throws ParseException {
-        if(!affectedByRenderDistanceIssue(version)) return false;
-        if(hasSodium(gamedir)) return false;
+    private static boolean affectedByRenderDistanceIssue(JVersionList.Version version) {
         try {
-            MCOptionUtils.load();
-        }catch (Exception e) {
-            Log.e("Tools", "Failed to load config", e);
+            if(LauncherPreferences.PREF_USE_ANGLE) return false;
+            GLInfoUtils.GLInfo info = GLInfoUtils.getGlInfo();
+            return info.isAdreno() &&
+                    info.glesMajorVersion >= 3 &&
+                    // 1.21.5 fixes the RD issue, released on march 25 2025
+                    DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 2, 25);
+        } catch (Exception e) {
+            Log.e("GameRunner", "Error in affectedByRenderDistanceIssue", e);
+            return false;
         }
-        int renderDistance = GameOptionsUtils.parseIntDefault(MCOptionUtils.get("renderDistance"),12);
-        // 7 is the render distance "magic number" above which MC creates too many buffers
-        // for Adreno's OpenGL ES implementation
-        return renderDistance > 7;
     }
 
-    private static boolean isGl4esCompatible(JVersionList.Version version) throws Exception{
-        return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 1, 7);
+    private static boolean checkRenderDistance(JVersionList.Version version, File gamedir) {
+        try {
+            if(!affectedByRenderDistanceIssue(version)) return false;
+            if(hasSodium(gamedir)) return false;
+            try {
+                MCOptionUtils.load();
+            }catch (Exception e) {
+                Log.e("Tools", "Failed to load config", e);
+            }
+            int renderDistance = GameOptionsUtils.parseIntDefault(MCOptionUtils.get("renderDistance"),12);
+            // 7 is the render distance "magic number" above which MC creates too many buffers
+            // for Adreno's OpenGL ES implementation
+            return renderDistance > 7;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    private static boolean isCompatContext(JVersionList.Version version) throws Exception{
-        // Day before the release date of 21w10a, the first OpenGL 3 Core Minecraft version
-        return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2021, 3, 9);
+    private static boolean isGl4esCompatible(JVersionList.Version version) {
+        try {
+            return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2025, 1, 7);
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+    private static boolean isCompatContext(JVersionList.Version version) {
+        try {
+            // Day before the release date of 21w10a, the first OpenGL 3 Core Minecraft version
+            return DateUtils.dateBefore(DateUtils.getOriginalReleaseDate(version), 2021, 3, 9);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private static boolean showDialog(AppCompatActivity activity, int message) throws InterruptedException {
@@ -440,7 +457,7 @@ public class GameRunner {
             if(creationDate != null && !DateUtils.dateBefore(creationDate, 2022, 9, 26)) {
                 userType = "msa";
             }
-        }catch (ParseException e) {
+        }catch (Exception e) {
             Log.e("CheckForProfileKey", "Failed to determine profile creation date, using \"mojang\"", e);
         }
 

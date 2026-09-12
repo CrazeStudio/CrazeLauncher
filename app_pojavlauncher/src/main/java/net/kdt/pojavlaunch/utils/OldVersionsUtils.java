@@ -35,7 +35,7 @@ public class OldVersionsUtils {
             String openGlVersion =  DateUtils.dateBefore(creationDate, 2011, 6, 8) ? "1" : defaultGles;
             Log.i("GL_SELECT", openGlVersion);
             ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, openGlVersion);
-        }catch (ParseException exception){
+        }catch (Exception exception){
             Log.e("GL_SELECT", exception.toString());
             ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, defaultGles);
         }

@@ -19,11 +19,15 @@ public class DateUtils {
      * @return the date object
      * @throws ParseException if date parsing fails
      */
-    public static Date parseReleaseDate(String releaseTime) throws ParseException {
-        if(releaseTime == null) return null;
-        int tIndexOf = releaseTime.indexOf('T');
-        if(tIndexOf != -1) releaseTime = releaseTime.substring(0, tIndexOf);
-        return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(releaseTime);
+    public static Date parseReleaseDate(String releaseTime) {
+        if(releaseTime == null) return new Date(0);
+        try {
+            int tIndexOf = releaseTime.indexOf('T');
+            if(tIndexOf != -1) releaseTime = releaseTime.substring(0, tIndexOf);
+            return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(releaseTime);
+        } catch (Exception e) {
+            return new Date(0);
+        }
     }
 
     /**
@@ -35,7 +39,8 @@ public class DateUtils {
      * @param dayOfMonth the day of the month
      * @return true if the Date is before year, month, dayOfMonth, false otherwise
      */
-    public static boolean dateBefore(@NonNull Date date, int year, int month, int dayOfMonth) {
+    public static boolean dateBefore(Date date, int year, int month, int dayOfMonth) {
+        if(date == null) return false;
         return date.before(new Date(new GregorianCalendar(year, month, dayOfMonth).getTimeInMillis()));
     }
 
@@ -44,15 +49,22 @@ public class DateUtils {
      * @param gameVersion the JMinecraftVersionList.Version object
      * @return the game's original release date
      */
-    public static Date getOriginalReleaseDate(JVersionList.Version gameVersion) throws ParseException {
-        if(Tools.isValidString(gameVersion.inheritsFrom)) {
-            gameVersion = Tools.getVersionInfo(gameVersion.inheritsFrom, true);
-        }else {
-            // The launcher's inheritor mutilates the version object, causing it to have the original
-            // version's ID but modded version's dates. Work around it by re-reading the version without
-            // inheriting.
-            gameVersion = Tools.getVersionInfo(gameVersion.id, true);
+    public static Date getOriginalReleaseDate(JVersionList.Version gameVersion) {
+        if(gameVersion == null) return new Date(0);
+        try {
+            if(Tools.isValidString(gameVersion.inheritsFrom)) {
+                JVersionList.Version inherited = Tools.getVersionInfo(gameVersion.inheritsFrom, true);
+                if(inherited != null) gameVersion = inherited;
+            }else {
+                // The launcher's inheritor mutilates the version object, causing it to have the original
+                // version's ID but modded version's dates. Work around it by re-reading the version without
+                // inheriting.
+                JVersionList.Version reRead = Tools.getVersionInfo(gameVersion.id, true);
+                if(reRead != null) gameVersion = reRead;
+            }
+            return parseReleaseDate(gameVersion.releaseTime);
+        } catch (Exception e) {
+            return new Date(0);
         }
-        return parseReleaseDate(gameVersion.releaseTime);
     }
 }
