@@ -102,7 +102,7 @@ public class JREUtils {
     }
     public static void setEnviroimentForGame(Context context, String renderer) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
-        envMap.put("LIBGL_MIPMAP", "3");
+        envMap.put("LIBGL_MIPMAP", "0");
 
         // Prevent OptiFine (and other error-reporting stuff in Minecraft) from balooning the log
         envMap.put("LIBGL_NOERROR", "1");

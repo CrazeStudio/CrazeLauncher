@@ -29,8 +29,8 @@ public class MesaUtils {
             case "opengles3_krypton":
                 envMap.put("LIBGL_USEVBO", "1");
                 envMap.put("LIBGL_BATCH", "1");
-                envMap.put("LIBGL_SHRINK", "1");
-                envMap.put("LIBGL_MIPMAP", "3");
+                envMap.put("LIBGL_SHRINK", "0");
+                envMap.put("LIBGL_MIPMAP", "0");
                 envMap.put("LIBGL_NOERROR", "1");
                 envMap.put("LIBGL_DEFAULTWRAP", "1");
                 envMap.put("LIBGL_NORMALIZE", "1");
