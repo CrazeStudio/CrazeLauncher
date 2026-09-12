@@ -23,6 +23,8 @@ import com.kdt.SimpleArrayAdapter;
 import net.kdt.pojavlaunch.PojavApplication;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackApi;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ImageReceiver;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
@@ -274,6 +276,10 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 mExtendedErrorTextView.setVisibility(View.GONE);
                 mVersionAdapter.setObjects(Arrays.asList(detailedItem.versionNames));
                 mExtendedSpinner.setAdapter(mVersionAdapter);
+                int selectedIndex = findBestVersionIndex(detailedItem);
+                if (selectedIndex >= 0 && detailedItem.versionNames != null && selectedIndex < detailedItem.versionNames.length) {
+                    mExtendedSpinner.setSelection(selectedIndex);
+                }
             } else {
                 closeDetailedView();
                 setInstallEnabled(false);
@@ -281,6 +287,72 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 mExtendedSpinner.setAdapter(null);
                 mVersionAdapter.setObjects(null);
             }
+        }
+
+        private int findBestVersionIndex(ModDetail detailedItem) {
+            if (detailedItem == null || detailedItem.versionNames == null || detailedItem.versionNames.length == 0) {
+                return 0;
+            }
+            Instance instance = Instances.loadSelectedInstance();
+            if (instance == null) {
+                return 0;
+            }
+            String targetMcVersion = instance.getMinecraftVersion();
+            String targetLoader = instance.getModLoaderType();
+
+            if (targetMcVersion == null || targetMcVersion.isEmpty()) {
+                return 0;
+            }
+
+            int bestIndex = 0;
+            int highestScore = -1;
+
+            for (int i = 0; i < detailedItem.versionNames.length; i++) {
+                int score = 0;
+                String vName = detailedItem.versionNames[i] != null ? detailedItem.versionNames[i].toLowerCase() : "";
+                String mcName = detailedItem.mcVersionNames != null && i < detailedItem.mcVersionNames.length && detailedItem.mcVersionNames[i] != null
+                        ? detailedItem.mcVersionNames[i].toLowerCase() : "";
+                String fName = detailedItem.fileNames != null && i < detailedItem.fileNames.length && detailedItem.fileNames[i] != null
+                        ? detailedItem.fileNames[i].toLowerCase() : "";
+
+                String lowerTargetMc = targetMcVersion.toLowerCase();
+
+                // Check MC Version
+                if (mcName.equals(lowerTargetMc)) {
+                    score += 20;
+                } else if (vName.contains(lowerTargetMc) || fName.contains(lowerTargetMc)) {
+                    score += 15;
+                } else if (mcName.startsWith(lowerTargetMc) || (lowerTargetMc.contains(".") && mcName.contains(lowerTargetMc))) {
+                    score += 8;
+                }
+
+                // Check Loader compatibility
+                if (targetLoader != null && !targetLoader.isEmpty()) {
+                    String lowerLoader = targetLoader.toLowerCase();
+                    boolean hasLoaderMatch = vName.contains(lowerLoader) || fName.contains(lowerLoader);
+                    if (hasLoaderMatch) {
+                        score += 10;
+                    }
+
+                    // Check for mismatched loaders
+                    String[] otherLoaders = new String[]{"fabric", "forge", "neoforge", "quilt"};
+                    for (String other : otherLoaders) {
+                        if (!other.equals(lowerLoader)) {
+                            // If it mentions another loader and does NOT mention target loader
+                            if ((vName.contains(other) || fName.contains(other)) && !hasLoaderMatch) {
+                                score -= 12;
+                            }
+                        }
+                    }
+                }
+
+                if (score > highestScore) {
+                    highestScore = score;
+                    bestIndex = i;
+                }
+            }
+
+            return highestScore > 0 ? bestIndex : 0;
         }
 
         private void openDetailedView() {

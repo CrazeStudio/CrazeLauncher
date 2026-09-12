@@ -272,7 +272,8 @@ public class JREUtils {
             default:
                 renderLibrary = "libgl4es_114.so";
                 useGles = true;
-                glesVersion = Integer.parseInt((String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
+                String openGlVal = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
+                glesVersion = openGlVal != null ? Integer.parseInt(openGlVal) : (GLInfoUtils.getGlInfo().glesMajorVersion >= 3 ? 3 : 2);
                 break;
         }
 

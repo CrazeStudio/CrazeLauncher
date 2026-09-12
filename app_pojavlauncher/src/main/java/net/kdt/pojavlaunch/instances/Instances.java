@@ -189,6 +189,13 @@ public class Instances {
      */
     public static Instance loadSelectedInstance() {
         File selectedInstanceLocation = selectedInstanceLocation();
+        if(selectedInstanceLocation == null) {
+            try {
+                loadDisplay();
+                selectedInstanceLocation = selectedInstanceLocation();
+            }catch (Exception ignored) {}
+        }
+        if(selectedInstanceLocation == null) return null;
         Instance instance = read(selectedInstanceLocation, Instance.class);
         if(instance == null) return null;
         instance.sanitize();

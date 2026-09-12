@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.modloaders.modpacks.api;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,9 +11,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.kdt.mcgui.ProgressLayout;
 
+import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.downloader.AcquireableTaskMetadata;
 import net.kdt.pojavlaunch.downloader.Downloader;
+import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.Instances;
+import net.kdt.pojavlaunch.lifecycle.ContextExecutor;
 import net.kdt.pojavlaunch.mirrors.DownloadMirror;
 import net.kdt.pojavlaunch.modloaders.FabriclikeUtils;
 import net.kdt.pojavlaunch.modloaders.ForgelikeUtils;
@@ -25,6 +30,8 @@ import net.kdt.pojavlaunch.modloaders.modpacks.models.ModDetail;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.ModItem;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchResult;
+import net.kdt.pojavlaunch.progresskeeper.DownloaderProgressWrapper;
+import net.kdt.pojavlaunch.utils.DownloadUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 import net.kdt.pojavlaunch.utils.GsonJsonUtils;
 import net.kdt.pojavlaunch.utils.ZipUtils;
@@ -57,13 +64,20 @@ public class CurseforgeApi implements ModpackApi{
         mApiHandler = new ApiHandler("https://api.curseforge.com/v1", apiKey);
     }
 
+    private static int getCurseforgeClassId(String projectType, boolean isModpack) {
+        if (isModpack || "modpack".equals(projectType)) return CURSEFORGE_MODPACK_CLASS_ID;
+        if ("resourcepack".equals(projectType)) return 12;
+        if ("shader".equals(projectType)) return 6552;
+        return CURSEFORGE_MOD_CLASS_ID;
+    }
+
     @Override
     public SearchResult searchMod(SearchFilters searchFilters, SearchResult previousPageResult) {
         CurseforgeSearchResult curseforgeSearchResult = (CurseforgeSearchResult) previousPageResult;
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("gameId", CURSEFORGE_MC_GAME_ID);
-        params.put("classId", searchFilters.isModpack ? CURSEFORGE_MODPACK_CLASS_ID : CURSEFORGE_MOD_CLASS_ID);
+        params.put("classId", getCurseforgeClassId(searchFilters.projectType, searchFilters.isModpack));
         params.put("searchFilter", searchFilters.name);
         params.put("sortField", CURSEFORGE_SORT_RELEVANCY);
         params.put("sortOrder", "desc");
@@ -78,6 +92,7 @@ public class CurseforgeApi implements ModpackApi{
         if(dataArray == null) return null;
         JsonObject paginationInfo = response.getAsJsonObject("pagination");
         ArrayList<ModItem> modItemList = new ArrayList<>(dataArray.size());
+        String pType = searchFilters.projectType != null ? searchFilters.projectType : (searchFilters.isModpack ? "modpack" : "mod");
         for(int i = 0; i < dataArray.size(); i++) {
             JsonObject dataElement = dataArray.get(i).getAsJsonObject();
             JsonElement allowModDistribution = dataElement.get("allowModDistribution");
@@ -88,11 +103,12 @@ public class CurseforgeApi implements ModpackApi{
                 continue;
             }
             ModItem modItem = new ModItem(Constants.SOURCE_CURSEFORGE,
-                    searchFilters.isModpack,
+                    "modpack".equals(pType),
+                    pType,
                     dataElement.get("id").getAsString(),
                     dataElement.get("name").getAsString(),
                     dataElement.get("summary").getAsString(),
-                    dataElement.getAsJsonObject("logo").get("thumbnailUrl").getAsString());
+                    dataElement.has("logo") && !dataElement.get("logo").isJsonNull() && dataElement.getAsJsonObject("logo").has("thumbnailUrl") && !dataElement.getAsJsonObject("logo").get("thumbnailUrl").isJsonNull() ? dataElement.getAsJsonObject("logo").get("thumbnailUrl").getAsString() : null);
             modItemList.add(modItem);
         }
         if(curseforgeSearchResult == null) curseforgeSearchResult = new CurseforgeSearchResult();
@@ -117,32 +133,113 @@ public class CurseforgeApi implements ModpackApi{
         String[] mcVersionNames = new String[length];
         String[] versionUrls = new String[length];
         String[] hashes = new String[length];
+        String[] fileNames = new String[length];
         for(int i = 0; i < allModDetails.size(); i++) {
             JsonObject modDetail = allModDetails.get(i);
-            versionNames[i] = modDetail.get("displayName").getAsString();
+            versionNames[i] = modDetail.has("displayName") && !modDetail.get("displayName").isJsonNull()
+                    ? modDetail.get("displayName").getAsString()
+                    : "Version " + i;
+
+            if (modDetail.has("fileName") && !modDetail.get("fileName").isJsonNull()) {
+                fileNames[i] = modDetail.get("fileName").getAsString();
+            }
 
             JsonElement downloadUrl = modDetail.get("downloadUrl");
-            versionUrls[i] = downloadUrl.getAsString();
-
-            JsonArray gameVersions = modDetail.getAsJsonArray("gameVersions");
-            for(JsonElement jsonElement : gameVersions) {
-                String gameVersion = jsonElement.getAsString();
-                if(!sMcVersionPattern.matcher(gameVersion).matches()) {
-                    continue;
+            if (downloadUrl != null && !downloadUrl.isJsonNull() && !downloadUrl.getAsString().isEmpty()) {
+                versionUrls[i] = downloadUrl.getAsString();
+            } else {
+                try {
+                    versionUrls[i] = getDownloadUrl(modDetail);
+                } catch (Exception e) {
+                    long fileId = modDetail.has("id") ? modDetail.get("id").getAsLong() : 0;
+                    String fName = fileNames[i] != null ? fileNames[i] : "mod.jar";
+                    versionUrls[i] = String.format("https://edge.forgecdn.net/files/%s/%s/%s", fileId / 1000, fileId % 1000, fName);
                 }
-                mcVersionNames[i] = gameVersion;
-                break;
+            }
+
+            JsonArray gameVersions = GsonJsonUtils.getJsonArraySafe(modDetail, "gameVersions");
+            if (gameVersions != null) {
+                for(JsonElement jsonElement : gameVersions) {
+                    String gameVersion = jsonElement.getAsString();
+                    if(!sMcVersionPattern.matcher(gameVersion).matches()) {
+                        continue;
+                    }
+                    mcVersionNames[i] = gameVersion;
+                    break;
+                }
             }
 
             hashes[i] = getSha1FromModData(modDetail);
         }
-        return new ModDetail(item, versionNames, mcVersionNames, versionUrls, hashes);
+        return new ModDetail(item, versionNames, mcVersionNames, versionUrls, hashes, fileNames);
     }
 
     @Override
     public LoaderInstaller installModpack(ModDetail modDetail, int selectedVersion) throws IOException{
-        //TODO considering only modpacks for now
-        return ModpackInstaller.downloadModpack(modDetail, selectedVersion, this::installCurseforgeZip);
+        if (modDetail.isModpack || "modpack".equals(modDetail.projectType)) {
+            return ModpackInstaller.downloadModpack(modDetail, selectedVersion, this::installCurseforgeZip);
+        }
+
+        downloadAndInstallStandaloneContent(modDetail, selectedVersion);
+        return null;
+    }
+
+    private void downloadAndInstallStandaloneContent(ModDetail modDetail, int selectedVersion) throws IOException {
+        Instance instance = Instances.loadSelectedInstance();
+        File gameDir = instance != null ? instance.getGameDirectory() : Instances.SHARED_DATA_DIRECTORY;
+
+        File targetFolder;
+        String type = modDetail.projectType;
+        if ("shader".equals(type)) {
+            targetFolder = new File(gameDir, "shaderpacks");
+        } else if ("resourcepack".equals(type)) {
+            targetFolder = new File(gameDir, "resourcepacks");
+        } else {
+            targetFolder = new File(gameDir, "mods");
+        }
+        FileUtils.ensureDirectory(targetFolder);
+
+        if (selectedVersion < 0 || modDetail.versionUrls == null || selectedVersion >= modDetail.versionUrls.length) {
+            throw new IOException("Invalid version selected");
+        }
+
+        String fileName = null;
+        if (modDetail.fileNames != null && selectedVersion < modDetail.fileNames.length && modDetail.fileNames[selectedVersion] != null) {
+            fileName = modDetail.fileNames[selectedVersion];
+        }
+        if (fileName == null || fileName.isEmpty()) {
+            String url = modDetail.versionUrls[selectedVersion];
+            if (url != null && url.contains("/")) {
+                fileName = url.substring(url.lastIndexOf('/') + 1);
+            } else {
+                fileName = FileUtils.escapeFileName(modDetail.title + ".jar");
+            }
+        }
+
+        File destinationFile = new File(targetFolder, fileName);
+        String versionUrl = modDetail.versionUrls[selectedVersion];
+        String versionHash = modDetail.versionHashes != null && selectedVersion < modDetail.versionHashes.length ? modDetail.versionHashes[selectedVersion] : null;
+
+        byte[] downloadBuffer = new byte[8192];
+        try {
+            DownloadUtils.ensureSha1(destinationFile, versionHash, () -> {
+                DownloadUtils.downloadFileMonitored(versionUrl, destinationFile, downloadBuffer,
+                        new DownloaderProgressWrapper(R.string.modpack_download_downloading_metadata,
+                                ProgressLayout.INSTALL_MODPACK
+                        )
+                );
+                return null;
+            });
+            final String finalFileName = fileName;
+            ContextExecutor.executeActivity(activity ->
+                    Toast.makeText(activity, "Installed " + finalFileName, Toast.LENGTH_SHORT).show()
+            );
+        } catch (Exception e) {
+            destinationFile.delete();
+            throw new IOException("Failed to download " + fileName, e);
+        } finally {
+            ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
+        }
     }
 
     public LoaderInstaller installLocalModpack(String modpackName, File modpackFile, String icon) throws IOException {

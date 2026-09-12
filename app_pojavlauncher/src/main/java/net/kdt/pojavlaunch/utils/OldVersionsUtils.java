@@ -18,8 +18,10 @@ public class OldVersionsUtils {
     public static void selectOpenGlVersion(JVersionList.Version version){
         // 1309989600 is 2011-07-07  2011-07-07T22:00:00+00:00
         String creationTime = version.time;
+        int detectedGles = GLInfoUtils.getGlInfo().glesMajorVersion;
+        String defaultGles = detectedGles >= 3 ? "3" : "2";
         if(!Tools.isValidString(creationTime)){
-            ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, "2");
+            ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, defaultGles);
             return;
         }
 
@@ -27,15 +29,15 @@ public class OldVersionsUtils {
            Date creationDate = DateUtils.parseReleaseDate(creationTime);
             if(creationDate == null) {
                 Log.e("GL_SELECT", "Failed to parse version date");
-                ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, "2");
+                ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, defaultGles);
                 return;
             }
-            String openGlVersion =  DateUtils.dateBefore(creationDate, 2011, 6, 8) ? "1" : "2";
+            String openGlVersion =  DateUtils.dateBefore(creationDate, 2011, 6, 8) ? "1" : defaultGles;
             Log.i("GL_SELECT", openGlVersion);
             ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, openGlVersion);
         }catch (ParseException exception){
             Log.e("GL_SELECT", exception.toString());
-            ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, "2");
+            ExtraCore.setValue(ExtraConstants.OPEN_GL_VERSION, defaultGles);
         }
     }
 }

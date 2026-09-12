@@ -31,6 +31,8 @@ import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.instances.Instance;
+import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.modpacks.ModItemAdapter;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.CommonApi;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackApi;
@@ -142,6 +144,19 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                 mSearchFilters.isModpack = args.getBoolean(ARG_IS_MODPACK, true);
             }
         }
+
+        // Auto-select MC version filter if not already set and not in modpack mode
+        if (mSearchFilters.mcVersion == null || mSearchFilters.mcVersion.isEmpty()) {
+            Instance selectedInstance = Instances.loadSelectedInstance();
+            if (selectedInstance != null) {
+                String mcVer = selectedInstance.getMinecraftVersion();
+                if (mcVer != null && !mcVer.isEmpty()) {
+                    if (!"modpack".equals(mSearchFilters.projectType) && !mSearchFilters.isModpack) {
+                        mSearchFilters.mcVersion = mcVer;
+                    }
+                }
+            }
+        }
         // You can only access resources after attaching to current context
         mModItemAdapter = new ModItemAdapter(getResources(), modpackApi, this);
         ProgressKeeper.addTaskCountListener(mModItemAdapter);
@@ -209,6 +224,15 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private void selectType(String type) {
         mSearchFilters.projectType = type;
         mSearchFilters.isModpack = "modpack".equals(type);
+        if (!"modpack".equals(type) && (mSearchFilters.mcVersion == null || mSearchFilters.mcVersion.isEmpty())) {
+            Instance selectedInstance = Instances.loadSelectedInstance();
+            if (selectedInstance != null) {
+                String mcVer = selectedInstance.getMinecraftVersion();
+                if (mcVer != null && !mcVer.isEmpty()) {
+                    mSearchFilters.mcVersion = mcVer;
+                }
+            }
+        }
         updateChipVisuals();
         searchMods(mSearchEditText != null ? mSearchEditText.getText().toString() : "");
     }
@@ -293,7 +317,14 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             mSelectVersionButton.setOnClickListener(v -> VersionSelectorDialog.open(v.getContext(), true, (id, snapshot)-> mSelectedVersion.setText(id)));
 
             // Apply visually all the current settings
-            mSelectedVersion.setText(mSearchFilters.mcVersion);
+            String currentFilterVersion = mSearchFilters.mcVersion;
+            if (currentFilterVersion == null || currentFilterVersion.isEmpty()) {
+                Instance selectedInstance = Instances.loadSelectedInstance();
+                if (selectedInstance != null) {
+                    currentFilterVersion = selectedInstance.getMinecraftVersion();
+                }
+            }
+            mSelectedVersion.setText(currentFilterVersion != null ? currentFilterVersion : "");
 
             // Apply the new settings
             mApplyButton.setOnClickListener(v -> {

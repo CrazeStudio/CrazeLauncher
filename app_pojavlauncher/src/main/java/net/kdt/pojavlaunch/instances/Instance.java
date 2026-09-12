@@ -6,11 +6,14 @@ import android.util.Log;
 
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.tasks.MoJsonExtras;
 import net.kdt.pojavlaunch.utils.JSONUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Instance extends DisplayInstance {
     public static final int ARGS_MODE_REPLACE = 0;
@@ -113,5 +116,66 @@ public class Instance extends DisplayInstance {
     public File getGameDirectory() {
         if(sharedData) return Instances.SHARED_DATA_DIRECTORY;
         return mInstanceRoot;
+    }
+
+    private static final Pattern MC_VERSION_PATTERN = Pattern.compile("(?:^|[^0-9])(1\\.[0-9]+(?:\\.[0-9]+)?)");
+
+    public String getMinecraftVersion() {
+        if (!Tools.isValidString(versionId)) return null;
+        String normalized = MoJsonExtras.normalizeVersionId(versionId);
+        if (!Tools.isValidString(normalized)) normalized = versionId;
+
+        // Try exact match or extraction from normalized versionId
+        String extracted = extractMcVersion(normalized);
+        if (extracted != null) return extracted;
+
+        // Try checking version JSON file if present
+        try {
+            net.kdt.pojavlaunch.JVersionList.Version verInfo = Tools.getVersionInfo(normalized, true);
+            if (verInfo != null) {
+                if (Tools.isValidString(verInfo.inheritsFrom)) {
+                    extracted = extractMcVersion(verInfo.inheritsFrom);
+                    if (extracted != null) return extracted;
+                }
+                if (Tools.isValidString(verInfo.id)) {
+                    extracted = extractMcVersion(verInfo.id);
+                    if (extracted != null) return extracted;
+                }
+            }
+        } catch (Throwable ignored) {}
+
+        return extractMcVersion(versionId);
+    }
+
+    private static String extractMcVersion(String str) {
+        if (str == null || str.isEmpty()) return null;
+        if (str.matches("1\\.[0-9]+(\\.[0-9]+)?")) {
+            return str;
+        }
+        Matcher matcher = MC_VERSION_PATTERN.matcher(str);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
+    }
+
+    public String getModLoaderType() {
+        String full = (versionId != null ? versionId : "").toLowerCase();
+        try {
+            if (Tools.isValidString(versionId)) {
+                String normalized = MoJsonExtras.normalizeVersionId(versionId);
+                net.kdt.pojavlaunch.JVersionList.Version verInfo = Tools.getVersionInfo(normalized, true);
+                if (verInfo != null && Tools.isValidString(verInfo.inheritsFrom)) {
+                    full += " " + verInfo.inheritsFrom.toLowerCase();
+                }
+            }
+        } catch (Throwable ignored) {}
+
+        if (full.contains("neoforge")) return "neoforge";
+        if (full.contains("fabric")) return "fabric";
+        if (full.contains("quilt")) return "quilt";
+        if (full.contains("forge")) return "forge";
+        if (full.contains("optifine")) return "optifine";
+        return null;
     }
 }
