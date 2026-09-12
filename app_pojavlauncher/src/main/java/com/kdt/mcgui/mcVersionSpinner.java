@@ -63,11 +63,7 @@ public class mcVersionSpinner extends ExtendedTextView {
     private Object mPopupAnimation;
     private int mSelectedIndex;
 
-    private final InstanceAdapter mProfileAdapter = new InstanceAdapter(new InstanceAdapterExtra[]{
-            new InstanceAdapterExtra(VERSION_SPINNER_PROFILE_CREATE,
-                    R.string.create_instance,
-                    ResourcesCompat.getDrawable(getResources(), R.drawable.ic_add, null)),
-    });
+    private final InstanceAdapter mProfileAdapter = new InstanceAdapter(null);
 
 
     /** Set the selection AND saves it as a shared preference */
@@ -84,12 +80,7 @@ public class mcVersionSpinner extends ExtendedTextView {
     }
 
     public void openProfileEditor(FragmentActivity fragmentActivity) {
-        Object currentSelection = mProfileAdapter.getItem(mSelectedIndex);
-        if(currentSelection instanceof InstanceAdapterExtra) {
-            performExtraAction((InstanceAdapterExtra) currentSelection);
-        }else{
-            Tools.swapFragment(fragmentActivity, InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
-        }
+        Tools.swapFragment(fragmentActivity, InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
     }
 
     private void applyInstances(Instances instances) {
@@ -139,13 +130,6 @@ public class mcVersionSpinner extends ExtendedTextView {
         });
     }
 
-    private void performExtraAction(InstanceAdapterExtra extra) {
-        //Replace with switch-case if you want to add more extra actions
-        if (extra.id == VERSION_SPINNER_PROFILE_CREATE) {
-            Tools.swapFragment((FragmentActivity) getContext(), ProfileTypeSelectFragment.class,
-                    ProfileTypeSelectFragment.TAG, null);
-        }
-    }
 
 
     /** Create the listView and popup window for the interface, and set up the click behavior */
@@ -158,9 +142,6 @@ public class mcVersionSpinner extends ExtendedTextView {
             if(item instanceof DisplayInstance) {
                 hidePopup(true);
                 setProfileSelection(position);
-            }else if(item instanceof InstanceAdapterExtra) {
-                hidePopup(false);
-                performExtraAction((InstanceAdapterExtra) item);
             }
         });
 
