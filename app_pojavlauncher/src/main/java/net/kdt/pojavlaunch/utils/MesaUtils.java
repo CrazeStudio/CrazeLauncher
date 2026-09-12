@@ -35,6 +35,10 @@ public class MesaUtils {
                 envMap.put("LIBGL_DEFAULTWRAP", "1");
                 envMap.put("LIBGL_NORMALIZE", "1");
                 envMap.put("LIBGL_FORCE_DEPTH16", "0");
+                if (GLInfoUtils.getGlInfo().glesMajorVersion >= 3) {
+                    envMap.put("LIBGL_ES", "3");
+                    envMap.put("LIBGL_GL", "30");
+                }
                 break;
             case "vulkan_zink":
                 envMap.put("GALLIUM_DRIVER", "zink");
