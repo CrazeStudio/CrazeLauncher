@@ -249,14 +249,31 @@ public class GameRunner {
             javaArgList.add("-Dlog4j.configurationFile=" + configFile);
         }
 
-        File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
-        if(versionSpecificNativesDir.exists()) {
-            String dirPath = versionSpecificNativesDir.getAbsolutePath();
-            javaArgList.add("-Djava.library.path="+dirPath+":"+Tools.NATIVE_LIB_DIR);
-            javaArgList.add("-Djna.boot.library.path="+dirPath);
-            // Sometimes, the game can extract natives itself onto this path
-            javaArgList.add("-Dorg.lwjgl.librarypath="+dirPath);
+        File shadercFile = new File(Tools.NATIVE_LIB_DIR, "libshaderc.so");
+        boolean shadercExists = shadercFile.exists();
+        Log.i("GameRunner", "=== Shaderc & Native Diagnostics ===");
+        Log.i("GameRunner", "Native library directory: " + Tools.NATIVE_LIB_DIR);
+        Log.i("GameRunner", "libshaderc.so exists: " + shadercExists + " (path: " + shadercFile.getAbsolutePath() + ")");
+        Log.i("GameRunner", "OS Arch: " + System.getProperty("os.arch"));
+        Log.i("GameRunner", "Supported ABIs: " + java.util.Arrays.toString(android.os.Build.SUPPORTED_ABIS));
+        if (shadercExists) {
+            Log.i("GameRunner", "libshaderc.so size: " + shadercFile.length() + " bytes");
+        } else {
+            Log.e("GameRunner", "WARNING: libshaderc.so not found in native library directory!");
         }
+        Log.i("GameRunner", "=====================================");
+
+        File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
+        String libPath = Tools.NATIVE_LIB_DIR;
+        if(versionSpecificNativesDir.exists()) {
+            libPath = versionSpecificNativesDir.getAbsolutePath() + ":" + Tools.NATIVE_LIB_DIR;
+            javaArgList.add("-Djna.boot.library.path="+versionSpecificNativesDir.getAbsolutePath());
+        } else {
+            javaArgList.add("-Djna.boot.library.path="+Tools.NATIVE_LIB_DIR);
+        }
+        javaArgList.add("-Djava.library.path="+libPath);
+        // Sometimes, the game can extract natives itself onto this path
+        javaArgList.add("-Dorg.lwjgl.librarypath="+libPath);
 
         File lwjglExtractDir = new File(Tools.DIR_CACHE, "lwjgl_native/"+versionId);
         FileUtils.ensureDirectory(lwjglExtractDir);

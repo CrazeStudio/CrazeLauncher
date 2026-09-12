@@ -72,3 +72,10 @@ add_library(awt_xawt SHARED
         awt_xawt/xawt_fake.c
 )
 target_link_libraries(awt_xawt PRIVATE awt_headless)
+
+add_library(shaderc SHARED
+        shaderc/shaderc_stub.cpp
+)
+target_link_libraries(shaderc PRIVATE log)
+target_compile_options(shaderc PRIVATE -std=c++17 -fvisibility=hidden)
+set_target_properties(shaderc PROPERTIES LINK_FLAGS "-static-libstdc++")
