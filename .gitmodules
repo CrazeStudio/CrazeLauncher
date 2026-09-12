@@ -1,9 +1,0 @@
-[submodule "glfw"]
-	path = glfw
-	url = https://github.com/MojoLauncher/glfw
-[submodule "mojoexec"]
-	path = mojoexec
-	url = https://github.com/MojoLauncher/mojoexec
-[submodule "sdl"]
-	path = sdl
-	url = https://github.com/MojoLauncher/MojoSDL

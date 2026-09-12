@@ -1,0 +1,7 @@
+{
+    global:
+        mojoexec_*;
+        Java_*;
+    local:
+        *;
+};
