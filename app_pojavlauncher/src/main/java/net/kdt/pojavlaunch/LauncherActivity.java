@@ -111,33 +111,36 @@ public class LauncherActivity extends BaseActivity {
         FragmentManager manager = getSupportFragmentManager();
         if(manager.isStateSaved()) return;
 
-        String[] options = {
-            getString(R.string.mcl_download_versions),
-            getString(R.string.mcl_browse_mods),
-            getString(R.string.mcl_instance_editor)
-        };
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_download_manager, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create();
 
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.mcl_download_manager)
-            .setItems(options, (dialog, which) -> {
-                switch(which) {
-                    case 0:
-                        Tools.swapFragment(this, ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null);
-                        break;
-                    case 1:
-                        Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null);
-                        break;
-                    case 2:
-                        Instance selected = Instances.loadSelectedInstance();
-                        Bundle bundle = new Bundle();
-                        if(selected != null) {
-                            bundle.putString("instanceName", selected.name);
-                        }
-                        Tools.swapFragment(this, InstanceEditorFragment.class, InstanceEditorFragment.TAG, bundle);
-                        break;
-                }
-            })
-            .show();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        dialogView.findViewById(R.id.option_download_versions).setOnClickListener(view -> {
+            dialog.dismiss();
+            Tools.swapFragment(this, ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null);
+        });
+
+        dialogView.findViewById(R.id.option_browse_mods).setOnClickListener(view -> {
+            dialog.dismiss();
+            Tools.swapFragment(this, SearchModFragment.class, SearchModFragment.TAG, null);
+        });
+
+        dialogView.findViewById(R.id.option_instance_editor).setOnClickListener(view -> {
+            dialog.dismiss();
+            Instance selected = Instances.loadSelectedInstance();
+            Bundle bundle = new Bundle();
+            if(selected != null) {
+                bundle.putString("instanceName", selected.name);
+            }
+            Tools.swapFragment(this, InstanceEditorFragment.class, InstanceEditorFragment.TAG, bundle);
+        });
+
+        dialog.show();
     };
 
     private final ExtraListener<Boolean> mLaunchGameListener = (key, value) -> {
