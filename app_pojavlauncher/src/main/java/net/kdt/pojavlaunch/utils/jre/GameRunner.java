@@ -186,14 +186,15 @@ public class GameRunner {
 
         boolean isGl4es = rendererName.equals("opengles2") || rendererName.equals("opengles2_5")
                 || rendererName.equals("krypton") || rendererName.equals("opengles3_krypton");
+        boolean isKrypton = rendererName.equals("krypton") || rendererName.equals("opengles3_krypton");
         boolean ltwSupported = RendererCompatUtil.getCompatibleRenderers(activity).rendererIds.contains("opengles3_ltw");
-        // Block Sodium from running with GL4ES on 1.17+
-        if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir)) {
+        // Block Sodium from running with GL4ES on 1.17+ (unless Krypton is explicitly selected by user)
+        if(!isCompatContext(versionInfo) && isGl4es && hasSodium(gamedir) && !isKrypton) {
             rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_sodium_not_supported);
         }
 
-        // Switch renderer to LTW when running 1.21.5
-        if(!isGl4esCompatible(versionInfo) && isGl4es) {
+        // Switch renderer to LTW when running 1.21.5 (unless Krypton is explicitly selected by user)
+        if(!isGl4esCompatible(versionInfo) && isGl4es && !isKrypton) {
             rendererName = switchLtw(ltwSupported, instance, activity, R.string.compat_version_not_supported);
         }
         RendererCompatUtil.releaseRenderersCache();
