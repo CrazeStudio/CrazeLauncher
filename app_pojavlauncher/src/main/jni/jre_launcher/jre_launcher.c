@@ -159,15 +159,41 @@ static bool initializeJavaVM(java_vm_t* java_vm, JNIEnv *env, jstring* vmpath, j
 
 static bool executeMain(JNIEnv* vm_env, const char* mainClass, jobjectArray vm_appArgs) {
 #define EXCEPTION_CHECK if((*vm_env)->ExceptionCheck(vm_env)) {(*vm_env)->ExceptionDescribe(vm_env); return false;}
+    jclass classLoaderClass = (*vm_env)->FindClass(vm_env, "java/lang/ClassLoader"); EXCEPTION_CHECK
+    if(classLoaderClass == NULL) return false;
+
+    jmethodID getSystemClassLoaderMethod = (*vm_env)->GetStaticMethodID(vm_env, classLoaderClass, "getSystemClassLoader", "()Ljava/lang/ClassLoader;"); EXCEPTION_CHECK
+    if(getSystemClassLoaderMethod == NULL) return false;
+
+    jobject systemClassLoader = (*vm_env)->CallStaticObjectMethod(vm_env, classLoaderClass, getSystemClassLoaderMethod); EXCEPTION_CHECK
+    if(systemClassLoader == NULL) return false;
+
+    jmethodID loadClassMethod = (*vm_env)->GetMethodID(vm_env, classLoaderClass, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;"); EXCEPTION_CHECK
+    if(loadClassMethod == NULL) return false;
+
     size_t classNameLen = strlen(mainClass) + 1;
-    char mainClassSlashed[classNameLen];
+    char mainClassDots[classNameLen];
     for(size_t i = 0; i < classNameLen; i++) {
         char nameChar = mainClass[i];
-        if(nameChar == '.') nameChar = '/';
-        mainClassSlashed[i] = nameChar;
+        if(nameChar == '/') nameChar = '.';
+        mainClassDots[i] = nameChar;
     }
-    jclass mainClassObj = (*vm_env)->FindClass(vm_env, mainClassSlashed); EXCEPTION_CHECK
+
+    jstring classNameString = (*vm_env)->NewStringUTF(vm_env, mainClassDots); EXCEPTION_CHECK
+    jclass mainClassObj = (jclass)(*vm_env)->CallObjectMethod(vm_env, systemClassLoader, loadClassMethod, classNameString); EXCEPTION_CHECK
+    (*vm_env)->DeleteLocalRef(vm_env, classNameString);
+
+    if(mainClassObj == NULL) {
+        LOGE("Failed to load main class: %s", mainClassDots);
+        return false;
+    }
+
     jmethodID mainMethod = (*vm_env)->GetStaticMethodID(vm_env, mainClassObj, "main", "([Ljava/lang/String;)V"); EXCEPTION_CHECK
+    if(mainMethod == NULL) {
+        LOGE("Failed to find main(String[]) method in class: %s", mainClassDots);
+        return false;
+    }
+
     (*vm_env)->CallStaticVoidMethod(vm_env, mainClassObj, mainMethod, vm_appArgs); EXCEPTION_CHECK
     return true;
 #undef EXCEPTION_CHECK
