@@ -26,11 +26,15 @@ public class GLInfoUtils {
         String vendor = GLES20.glGetString(GLES20.GL_VENDOR);
         String renderer = GLES20.glGetString(GLES20.GL_RENDERER);
         String versionString = GLES20.glGetString(GLES30.GL_VERSION);
+        if (vendor == null) vendor = "<Unknown Vendor>";
+        if (renderer == null) renderer = "<Unknown Renderer>";
         int version = 2;
-        try {
-            version = getMajorGLVersion(versionString);
-        }catch (NumberFormatException e) {
-            Log.w("GLInfoUtils","Failed to parse GL version number, falling back to 2", e);
+        if (versionString != null) {
+            try {
+                version = getMajorGLVersion(versionString);
+            } catch (NumberFormatException e) {
+                Log.w("GLInfoUtils","Failed to parse GL version number, falling back to 2", e);
+            }
         }
         // LTW depends on the ability to create a context with a major version of 3,
         // and even if the string parse returns 3 while EGL can only create 2,
@@ -92,9 +96,19 @@ public class GLInfoUtils {
         EGLConfig[] config = new EGLConfig[1];
         int[] num_configs = new int[]{0};
         if(!EGL14.eglChooseConfig(eglDisplay, egl_attributes, 0, config, 0, 1, num_configs, 0) || num_configs[0] == 0) {
-            EGL14.eglTerminate(eglDisplay);
-            Log.e("GLInfoUtils", "Failed to choose an EGL config");
-            return false;
+            int[] egl_attributes_fallback = new int[] {
+                    EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT,
+                    EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
+                    EGL14.EGL_NONE
+            };
+            if(!EGL14.eglChooseConfig(eglDisplay, egl_attributes_fallback, 0, config, 0, 1, num_configs, 0) || num_configs[0] == 0) {
+                int[] egl_attributes_any = new int[] { EGL14.EGL_NONE };
+                if(!EGL14.eglChooseConfig(eglDisplay, egl_attributes_any, 0, config, 0, 1, num_configs, 0) || num_configs[0] == 0) {
+                    EGL14.eglTerminate(eglDisplay);
+                    Log.e("GLInfoUtils", "Failed to choose an EGL config");
+                    return false;
+                }
+            }
         }
 
         boolean forcedMsaa = isMSAAConfig(eglDisplay, config[0]);
@@ -171,7 +185,10 @@ public class GLInfoUtils {
          * @return
          */
         public boolean isAdreno() {
-            return renderer.contains("Adreno") && vendor.contains("Qualcomm");
+            if (renderer == null || vendor == null) return false;
+            String r = renderer.toUpperCase();
+            String v = vendor.toUpperCase();
+            return r.contains("ADRENO") || v.contains("QUALCOMM");
         }
 
         /**
@@ -179,11 +196,12 @@ public class GLInfoUtils {
          * @return
          */
         public boolean isAdreno500Lower(){
-            return vendor.contains("Qualcomm") &&
-                    (renderer.contains("Adreno (TM) 5") ||
-                    renderer.contains("Adreno (TM) 4") ||
-                    renderer.contains("Adreno (TM) 3") ||
-                    renderer.contains("Adreno (TM) 2"));
+            if (renderer == null || vendor == null) return false;
+            String r = renderer.toUpperCase();
+            return isAdreno() && (r.contains("ADRENO (TM) 5") || r.contains("ADRENO (TM) 4") ||
+                    r.contains("ADRENO (TM) 3") || r.contains("ADRENO (TM) 2") ||
+                    r.contains("ADRENO 5") || r.contains("ADRENO 4") ||
+                    r.contains("ADRENO 3") || r.contains("ADRENO 2"));
         }
 
         /**
@@ -191,7 +209,10 @@ public class GLInfoUtils {
          * @return
          */
         public boolean isArm() {
-            return (renderer.contains("Mali") || renderer.contains("Immortalis")) && vendor.equals("ARM");
+            if (renderer == null || vendor == null) return false;
+            String r = renderer.toUpperCase();
+            String v = vendor.toUpperCase();
+            return r.contains("MALI") || r.contains("IMMORTALIS") || v.contains("ARM");
         }
     }
 }
