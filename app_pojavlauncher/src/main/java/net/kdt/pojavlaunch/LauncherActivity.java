@@ -232,14 +232,19 @@ public class LauncherActivity extends BaseActivity {
         ProgressKeeper.addTaskCountListener(mDoubleLaunchPreventionListener);
         ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
 
-        mSettingsButton.setOnClickListener(mSettingButtonListener);
+        if (mSettingsButton != null) {
+            attachTouchAnimation(mSettingsButton);
+            mSettingsButton.setOnClickListener(mSettingButtonListener);
+        }
         if (mDownloadButton != null) mDownloadButton.setOnClickListener(mDownloadButtonListener);
         View addAccountBtn = findViewById(R.id.add_account_button);
         if (addAccountBtn != null) {
+            attachTouchAnimation(addAccountBtn);
             addAccountBtn.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true));
         }
         View drawerBtn = findViewById(R.id.drawer_button);
         if (drawerBtn != null) {
+            attachTouchAnimation(drawerBtn);
             drawerBtn.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true));
         }
         ProgressKeeper.addTaskCountListener(mProgressLayout);
@@ -383,5 +388,22 @@ public class LauncherActivity extends BaseActivity {
         mSettingsButton = findViewById(R.id.setting_button);
         mDownloadButton = findViewById(R.id.download_button);
         mProgressLayout = findViewById(R.id.progress_layout);
+    }
+
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
+    private static void attachTouchAnimation(View v) {
+        if (v == null) return;
+        v.setOnTouchListener((view, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    view.animate().scaleX(0.96f).scaleY(0.96f).setDuration(80).start();
+                    break;
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    view.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start();
+                    break;
+            }
+            return false;
+        });
     }
 }

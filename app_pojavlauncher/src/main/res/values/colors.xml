@@ -4,22 +4,22 @@
     <color name="control_button_pressed_color">#4D000000</color>
 
     <color name="minebutton_color">#10B981</color>
-    <color name="background_app">#0B0F19</color>
-    <color name="divider">#1F2937</color>
-    <color name="background_overlay">#111827</color>
-    <color name="background_status_bar">#070A11</color>
-    <color name="background_bottom_bar">#0E1422</color>
-    <color name="icon_outline_color">#9CA3AF</color>
+    <color name="background_app">#080B0F</color>
+    <color name="divider">#1B222A</color>
+    <color name="background_overlay">#0F141A</color>
+    <color name="background_status_bar">#06080B</color>
+    <color name="background_bottom_bar">#0F141A</color>
+    <color name="icon_outline_color">#8D9AA8</color>
 
-    <color name="card_surface">#111827</color>
-    <color name="card_surface_elevated">#1A2234</color>
-    <color name="card_surface_hover">#222D42</color>
-    <color name="card_border">#232F42</color>
-    <color name="card_border_highlight">#10B981</color>
+    <color name="card_surface">#0F141A</color>
+    <color name="card_surface_elevated">#141A22</color>
+    <color name="card_surface_hover">#1B222A</color>
+    <color name="card_border">#1B222A</color>
+    <color name="card_border_highlight">#22C55E</color>
 
-    <color name="primary_text">#F9FAFB</color>
-    <color name="secondary_text">#9CA3AF</color>
-    <color name="text_tertiary">#6B7280</color>
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#8D9AA8</color>
+    <color name="text_tertiary">#5A6878</color>
     <color name="accent_green">#10B981</color>
     <color name="accent_green_dark">#059669</color>
     <color name="accent_emerald_glow">#34D399</color>

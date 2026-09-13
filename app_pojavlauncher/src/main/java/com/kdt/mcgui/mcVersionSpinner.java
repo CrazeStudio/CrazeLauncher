@@ -107,10 +107,10 @@ public class mcVersionSpinner extends ExtendedTextView {
         // Setup various attributes
         setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._12ssp));
         setGravity(Gravity.CENTER_VERTICAL);
-        int startPadding = getContext().getResources().getDimensionPixelOffset(R.dimen._17sdp);
-        int endPadding = getContext().getResources().getDimensionPixelOffset(R.dimen._5sdp);
+        int startPadding = (int) (10 * getResources().getDisplayMetrics().density);
+        int endPadding = (int) (6 * getResources().getDisplayMetrics().density);
         setPaddingRelative(startPadding, 0, endPadding, 0);
-        setCompoundDrawablePadding(startPadding);
+        setCompoundDrawablePadding((int) (8 * getResources().getDisplayMetrics().density));
         addOnAttachStateChangeListener(new ExtraAttachListener());
         if(mProfileAdapter.getCount() > 0) {
             setSelection(0);

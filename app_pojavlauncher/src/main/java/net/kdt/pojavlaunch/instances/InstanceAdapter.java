@@ -76,8 +76,12 @@ public class InstanceAdapter extends BaseAdapter {
 
         //MinecraftProfile minecraftProfile = mProfiles.get(nm);
         //if(minecraftProfile == null) minecraftProfile = dummy;
-        Drawable cachedIcon = InstanceIconProvider.fetchIcon(v.getResources(), i);
-        extendedTextView.setCompoundDrawablesRelative(cachedIcon, null, extendedTextView.getCompoundsDrawables()[2], null);
+        if (displaySelection) {
+            Drawable cachedIcon = InstanceIconProvider.fetchIcon(v.getResources(), i);
+            extendedTextView.setCompoundDrawablesRelative(cachedIcon, null, extendedTextView.getCompoundsDrawables()[2], null);
+        } else {
+            extendedTextView.setCompoundDrawablesRelative(null, null, extendedTextView.getCompoundsDrawables()[2], null);
+        }
 
         // Historically, the profile name "New" was hardcoded as the default profile name
         // We consider "New" the same as putting no name at all

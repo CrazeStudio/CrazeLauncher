@@ -10,7 +10,7 @@
     android:paddingEnd="16dp"
     app:drawableStartSize="28dp"
     app:drawableStartIntegerScaling="true"
-    android:textColor="@color/primary_text"
+    android:textColor="#FFFFFF"
     android:textSize="14sp"
     android:textStyle="bold"
     android:gravity="center_vertical"

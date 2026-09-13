@@ -60,10 +60,12 @@ public class MainMenuFragment extends Fragment {
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
 
         if (mPlayButton != null) {
+            attachTouchAnimation(mPlayButton);
             mPlayButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
         }
 
         if (mEditProfileButton != null) {
+            attachTouchAnimation(mEditProfileButton);
             mEditProfileButton.setOnClickListener(v -> {
                 if (mVersionSpinner != null) {
                     mVersionSpinner.openProfileEditor(requireActivity());
@@ -72,18 +74,22 @@ public class MainMenuFragment extends Fragment {
         }
 
         if (mCustomControlButton != null) {
+            attachTouchAnimation(mCustomControlButton);
             mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
         }
 
         if (mInstallJarButton != null) {
+            attachTouchAnimation(mInstallJarButton);
             mInstallJarButton.setOnClickListener(v -> runInstallerWithConfirmation());
         }
 
         if (mShareLogsButton != null) {
+            attachTouchAnimation(mShareLogsButton);
             mShareLogsButton.setOnClickListener(v -> shareLog(requireContext()));
         }
 
         if (mOpenDirectoryButton != null) {
+            attachTouchAnimation(mOpenDirectoryButton);
             mOpenDirectoryButton.setOnClickListener(v -> openGameDirectory(requireContext()));
         }
 
@@ -91,10 +97,12 @@ public class MainMenuFragment extends Fragment {
         View mCardMods = view.findViewById(R.id.card_mods_modpacks);
 
         if (mCardNewInstance != null) {
+            attachTouchAnimation(mCardNewInstance);
             mCardNewInstance.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
         }
 
         if (mCardMods != null) {
+            attachTouchAnimation(mCardMods);
             mCardMods.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
         }
 
@@ -134,5 +142,22 @@ public class MainMenuFragment extends Fragment {
         if (ProgressKeeper.getTaskCount() == 0) {
             mModInstallerLauncher.launch(null);
         } else Toast.makeText(requireContext(), R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
+    }
+
+    @android.annotation.SuppressLint("ClickableViewAccessibility")
+    private static void attachTouchAnimation(View v) {
+        if (v == null) return;
+        v.setOnTouchListener((view, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    view.animate().scaleX(0.96f).scaleY(0.96f).setDuration(80).start();
+                    break;
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    view.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start();
+                    break;
+            }
+            return false;
+        });
     }
 }
