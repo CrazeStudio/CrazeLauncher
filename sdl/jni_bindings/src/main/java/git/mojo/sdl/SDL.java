@@ -55,7 +55,26 @@ public class SDL {
 
     static public void initialize(int subsystems) {
         setContext(null);
-        System.loadLibrary("SDL3");
+        try {
+            System.loadLibrary("mojoexec");
+        } catch (Throwable ignored) {}
+        try {
+            System.loadLibrary("SDL3");
+        } catch (UnsatisfiedLinkError e) {
+            boolean loaded = false;
+            if (mContext != null && mContext.getApplicationInfo() != null && mContext.getApplicationInfo().nativeLibraryDir != null) {
+                java.io.File sdlFile = new java.io.File(mContext.getApplicationInfo().nativeLibraryDir, "libSDL3.so");
+                if (sdlFile.exists()) {
+                    try {
+                        System.load(sdlFile.getAbsolutePath());
+                        loaded = true;
+                    } catch (Throwable ignored) {}
+                }
+            }
+            if (!loaded) {
+                throw e;
+            }
+        }
         SDLActivity.initialize();
 
         if (isSubsystemCompiled(SDL_INIT_AUDIO)) {

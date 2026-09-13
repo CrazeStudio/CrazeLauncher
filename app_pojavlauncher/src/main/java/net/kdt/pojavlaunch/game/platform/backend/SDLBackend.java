@@ -38,7 +38,26 @@ public class SDLBackend implements PlatformBackend {
     }
 
     public static void initialize(Activity activity) {
-        // TODO: check what can be moved to the initialize point
+        // Pre-load dependencies and SDL3 before SDL.initialize() calls System.loadLibrary("SDL3")
+        try {
+            System.loadLibrary("mojoexec");
+        } catch (Throwable t) {
+            android.util.Log.w("SDLBackend", "Failed to pre-load mojoexec: " + t.getMessage());
+        }
+        try {
+            System.loadLibrary("SDL3");
+        } catch (Throwable t) {
+            if (activity != null && activity.getApplicationInfo() != null && activity.getApplicationInfo().nativeLibraryDir != null) {
+                java.io.File sdlFile = new java.io.File(activity.getApplicationInfo().nativeLibraryDir, "libSDL3.so");
+                if (sdlFile.exists()) {
+                    try {
+                        System.load(sdlFile.getAbsolutePath());
+                    } catch (Throwable t2) {
+                        android.util.Log.e("SDLBackend", "Failed to load libSDL3.so directly", t2);
+                    }
+                }
+            }
+        }
         // we need to setup enough SDL for the game to not crash to initialize it later
         SDL.initialize();
         SDL.setContext(activity);

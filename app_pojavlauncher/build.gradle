@@ -96,7 +96,7 @@ android {
         resValue 'string', 'group_id', 'git.artdeell'
         externalNativeBuild {
             cmake {
-                targets "pojavexec", "pojavexec_awt", "awt_headless", "awt_xawt", "shaderc", "glfw", "mojoexec", "linkerhook"
+                targets "pojavexec", "pojavexec_awt", "awt_headless", "awt_xawt", "shaderc", "glfw", "mojoexec", "linkerhook", "SDL3-shared"
             }
         }
     }
@@ -183,8 +183,10 @@ android {
     packagingOptions {
         jniLibs {
             useLegacyPackaging = true
+            pickFirsts.add('**/*.so')
         }
-        pickFirst '**/libbytehook.so'
+        pickFirst '**/lib*.so'
+        pickFirst '**/*.so'
     }
 
     buildFeatures {
