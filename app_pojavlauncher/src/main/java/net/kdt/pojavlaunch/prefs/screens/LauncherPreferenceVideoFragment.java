@@ -1,7 +1,9 @@
 package net.kdt.pojavlaunch.prefs.screens;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +18,6 @@ import androidx.preference.SwitchPreferenceCompat;
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Architecture;
-import net.kdt.pojavlaunch.plugins.FclPluginManager;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -32,12 +33,14 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             uri -> {
                 if (uri != null && getContext() != null) {
                     try {
-                        FclPluginManager.FclPlugin plugin = FclPluginManager.importPluginApk(requireContext(), uri);
-                        Toast.makeText(getContext(), "Imported FCLRendererPlugin: " + plugin.name, Toast.LENGTH_LONG).show();
-                        refreshRendererList();
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(intent);
+                        Toast.makeText(getContext(), "Opening Android Package Installer...", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        Log.e("LauncherPrefVideo", "Failed to import FCLRendererPlugin APK", e);
-                        Toast.makeText(getContext(), "Error importing APK: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("LauncherPrefVideo", "Failed to launch package installer for APK", e);
+                        Toast.makeText(getContext(), "Error opening package installer: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             }

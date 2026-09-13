@@ -9,7 +9,7 @@ import android.os.Build;
 
 import net.kdt.pojavlaunch.Architecture;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.plugins.FclPluginManager;
+import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,14 +48,14 @@ public class RendererCompatUtil {
             rendererNames.add(defaultRendererNames[i]);
         }
 
-        // Dynamically add imported or installed FCLRendererPlugin APKs
+        // Dynamically add installed FCLRendererPlugin APKs
         if (context != null) {
-            List<FclPluginManager.FclPlugin> fclPlugins = FclPluginManager.getAvailablePlugins(context);
-            for (FclPluginManager.FclPlugin plugin : fclPlugins) {
-                String prefId = plugin.getPreferenceId();
+            List<net.kdt.pojavlaunch.plugins.LibraryPlugin> fclPlugins = net.kdt.pojavlaunch.plugins.LibraryPlugin.discoverAllFclPlugins(context);
+            for (net.kdt.pojavlaunch.plugins.LibraryPlugin plugin : fclPlugins) {
+                String prefId = "fcl_pkg:" + plugin.getId();
                 if (!rendererIds.contains(prefId)) {
                     rendererIds.add(prefId);
-                    rendererNames.add("FCL Plugin: " + plugin.name);
+                    rendererNames.add("FCL Plugin: " + plugin.getAppName());
                 }
             }
         }

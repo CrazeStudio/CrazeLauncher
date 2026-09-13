@@ -17,7 +17,6 @@ import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.multirt.Runtime;
-import net.kdt.pojavlaunch.plugins.FclPluginManager;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.*;
 
@@ -259,45 +258,48 @@ public class JREUtils {
         boolean preloadVk = true;
         int glesVersion = 3;
 
-        if (renderer != null && (renderer.startsWith(FclPluginManager.RENDERER_PREFIX) || renderer.equals("fcl_render"))) {
-            FclPluginManager.FclPlugin fclPlugin = FclPluginManager.getPluginById(context, renderer);
-            if (fclPlugin != null) {
-                renderLibrary = fclPlugin.getResolvedMainSoPath();
-                bypassNamespace = true;
-                useGles = true;
-                glesVersion = 3;
-                setRendererLibraryPath(fclPlugin.libraryPath, null);
-                Log.i("JREUtils", "Loaded selected FCLRendererPlugin (" + fclPlugin.name + ") lib: " + renderLibrary);
-                
-                if (fclPlugin.environmentVars != null) {
-                    for (Map.Entry<String, String> entry : fclPlugin.environmentVars.entrySet()) {
-                        try {
-                            Os.setenv(entry.getKey(), entry.getValue(), true);
-                        } catch (Exception e) {
-                            Log.e("JREUtils", "Failed to setenv " + entry.getKey(), e);
+        if (renderer != null && (renderer.startsWith("fcl_pkg:") || renderer.startsWith("com.") || renderer.equals("fcl_render"))) {
+            LibraryPlugin plugin = null;
+            if (renderer.startsWith("fcl_pkg:")) {
+                String pkgId = renderer.substring("fcl_pkg:".length());
+                plugin = LibraryPlugin.discoverPlugin(context, pkgId);
+            } else if (renderer.startsWith("com.")) {
+                plugin = LibraryPlugin.discoverPlugin(context, renderer);
+            }
+            if (plugin == null) {
+                plugin = LibraryPlugin.discoverFclPlugin(context);
+            }
+
+            if (plugin != null) {
+                String[] candidateLibs = {
+                    "libfcl_render.so", "libkrypton.so", "libgl4es_115.so", "libgl4es_114.so", "libzink.so", "libvirgl.so", "libGL.so", "libEGL_angle.so", "libGLESv2.so"
+                };
+                String foundLib = null;
+                for (String lib : candidateLibs) {
+                    if (new File(plugin.getLibraryPath(), lib).exists()) {
+                        foundLib = lib;
+                        break;
+                    }
+                }
+                if (foundLib == null) {
+                    File nativeDir = new File(plugin.getLibraryPath());
+                    File[] files = nativeDir.listFiles();
+                    if (files != null) {
+                        for (File f : files) {
+                            if (f.getName().endsWith(".so")) {
+                                foundLib = f.getName();
+                                break;
+                            }
                         }
                     }
                 }
-            } else {
-                LibraryPlugin fallback = LibraryPlugin.discoverFclPlugin(context);
-                if (fallback != null) {
-                    String[] candidateLibs = {
-                        "libfcl_render.so", "libkrypton.so", "libgl4es_115.so", "libgl4es_114.so", "libzink.so", "libvirgl.so", "libGL.so", "libGLESv2.so"
-                    };
-                    String foundLib = null;
-                    for (String lib : candidateLibs) {
-                        if (new File(fallback.getLibraryPath(), lib).exists()) {
-                            foundLib = lib;
-                            break;
-                        }
-                    }
-                    if (foundLib != null) {
-                        renderLibrary = fallback.resolveAbsolutePath(foundLib);
-                        bypassNamespace = true;
-                        useGles = true;
-                        glesVersion = 3;
-                        setRendererLibraryPath(fallback.getLibraryPath(), null);
-                    }
+                if (foundLib != null) {
+                    renderLibrary = plugin.resolveAbsolutePath(foundLib);
+                    bypassNamespace = true;
+                    useGles = true;
+                    glesVersion = 3;
+                    setRendererLibraryPath(plugin.getLibraryPath(), null);
+                    Log.i("JREUtils", "Loaded installed FCLRendererPlugin (" + plugin.getAppName() + ") native library: " + renderLibrary);
                 }
             }
         } else {
