@@ -96,6 +96,35 @@ public class LibraryPlugin {
             Log.e(TAG, "Error discovering FCL plugins", e);
         }
 
+        // Local directory overrides (e.g., user placed .so files in plugins folder)
+        File[] overrideDirs = {
+            new File(net.kdt.pojavlaunch.Tools.DIR_GAME_HOME, "fcl_render"),
+            new File(net.kdt.pojavlaunch.Tools.DIR_CACHE, "fcl_render"),
+            new File(ctx.getExternalFilesDir(null), "plugins"),
+            new File(ctx.getFilesDir(), "plugins"),
+            new File("/sdcard/PojavLauncher/plugins"),
+            new File("/sdcard/fcl/renders")
+        };
+
+        for (File dir : overrideDirs) {
+            if (dir.exists() && dir.isDirectory()) {
+                File[] files = dir.listFiles();
+                if (files != null) {
+                    boolean hasSo = false;
+                    for (File f : files) {
+                        if (f.getName().endsWith(".so")) {
+                            hasSo = true;
+                            break;
+                        }
+                    }
+                    if (hasSo) {
+                        String overrideId = "fcl_dir:" + dir.getAbsolutePath();
+                        list.add(new LibraryPlugin(overrideId, dir.getAbsolutePath(), "FCL Plugin (Local Override: " + dir.getName() + ")"));
+                    }
+                }
+            }
+        }
+
         return list;
     }
 

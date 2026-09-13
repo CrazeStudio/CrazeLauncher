@@ -265,11 +265,16 @@ public class JREUtils {
             renderer = "opengles2";
         }
 
-        if (renderer.startsWith("fcl_pkg:") || renderer.startsWith("com.") || renderer.equals("fcl_render")) {
+        if (renderer.startsWith("fcl_pkg:") || renderer.startsWith("fcl_dir:") || renderer.startsWith("com.") || renderer.equals("fcl_render") || renderer.contains("plugin")) {
             LibraryPlugin plugin = null;
             if (renderer.startsWith("fcl_pkg:")) {
                 String pkgId = renderer.substring("fcl_pkg:".length());
                 plugin = LibraryPlugin.discoverPlugin(context, pkgId);
+            } else if (renderer.startsWith("fcl_dir:")) {
+                String dirPath = renderer.substring("fcl_dir:".length());
+                if (new File(dirPath).exists()) {
+                    plugin = new LibraryPlugin(renderer, dirPath, "FCL Override (" + new File(dirPath).getName() + ")");
+                }
             } else if (renderer.startsWith("com.")) {
                 plugin = LibraryPlugin.discoverPlugin(context, renderer);
             }

@@ -24,6 +24,22 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <queries>
+        <package android:name="com.shirosaki.fclrendererplugin" />
+        <package android:name="com.commonlauncher.nativeplugin" />
+        <package android:name="com.fcl.renderplugin" />
+        <package android:name="com.fcl.render" />
+        <package android:name="com.zalith.renderplugin" />
+        <package android:name="org.fcl.renderplugin" />
+        <package android:name="com.fcl.fclrendererplugin" />
+        <package android:name="git.mojo.fcl" />
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+        </intent>
+    </queries>
 
     <application
         android:name="net.kdt.pojavlaunch.PojavApplication"
