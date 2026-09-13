@@ -119,7 +119,19 @@ public class JREUtils {
             envMap.put("POJAV_VSYNC_IN_ZINK", "1");
 
         // The OPEN GL version is changed according
-        envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
+        String openGlVersion = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
+        int detectedGles = GLInfoUtils.getGlInfo().glesMajorVersion;
+        int parsedGlVersion = 2;
+        try {
+            parsedGlVersion = openGlVersion != null ? Integer.parseInt(openGlVersion) : (detectedGles >= 3 ? 3 : 2);
+        } catch (Exception e) {
+            parsedGlVersion = detectedGles >= 3 ? 3 : 2;
+        }
+        envMap.put("LIBGL_ES", String.valueOf(parsedGlVersion));
+        if (parsedGlVersion >= 3 || detectedGles >= 3) {
+            envMap.put("LIBGL_GL", "33");
+            envMap.put("LIBGL_ES", "3");
+        }
 
         envMap.put("FORCE_VSYNC", String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC));
 

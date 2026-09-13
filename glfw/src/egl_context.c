@@ -31,6 +31,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <dlfcn.h>
 
 #if defined(_GLFW_ANDROID)
 #include "android_egl_context_hook.h"
@@ -357,12 +358,26 @@ static GLFWglproc getProcAddressEGL(const char* procname)
     if (proc)
         return proc;
 
-    if (!_glfw.egl.KHR_get_all_proc_addresses)
+    _GLFWwindow* window = _glfwPlatformGetTls(&_glfw.contextSlot);
+    if (window != NULL && window->context.egl.client != NULL)
     {
-        _GLFWwindow* window = _glfwPlatformGetTls(&_glfw.contextSlot);
-        assert(window != NULL);
+        GLFWglproc sym = (GLFWglproc) _glfwPlatformGetModuleSymbol(window->context.egl.client, procname);
+        if (sym)
+            return sym;
+    }
 
-        return _glfwPlatformGetModuleSymbol(window->context.egl.client, procname);
+    // Fallback to system GLES library / global dlopen for GLES3 / GL33 sampler functions etc.
+    void* gles2 = dlopen("libGLESv2.so", RTLD_LAZY | RTLD_NOLOAD);
+    if (!gles2) gles2 = dlopen("libGLESv2.so", RTLD_LAZY);
+    if (gles2) {
+        GLFWglproc sym = (GLFWglproc) dlsym(gles2, procname);
+        if (sym) return sym;
+    }
+
+    void* global = dlopen(NULL, RTLD_LAZY);
+    if (global) {
+        GLFWglproc sym = (GLFWglproc) dlsym(global, procname);
+        if (sym) return sym;
     }
 
     return NULL;

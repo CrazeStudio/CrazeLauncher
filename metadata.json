@@ -1,6 +1,6 @@
 {
-  "name": "MJLauncher",
-  "description": "Minecraft Java Edition launcher for Android (CrazeLauncher)",
+  "name": "CrazeLauncher",
+  "description": "Minecraft Java Edition launcher for Android",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
