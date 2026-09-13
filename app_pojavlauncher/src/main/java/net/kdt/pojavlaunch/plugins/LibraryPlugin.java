@@ -25,17 +25,61 @@ public class LibraryPlugin {
         this.libraryPath = libraryPath;
     }
     public static LibraryPlugin discoverPlugin(Context ctx, String appId){
-        if (ctx == null) return null;
+        if (ctx == null || appId == null) return null;
         String libraryPath;
         try {
             PackageInfo pluginPackage = ctx.getPackageManager().getPackageInfo(appId, PackageManager.GET_SHARED_LIBRARY_FILES);
-            libraryPath = pluginPackage.applicationInfo.nativeLibraryDir;
-
+            libraryPath = pluginPackage.applicationInfo != null ? pluginPackage.applicationInfo.nativeLibraryDir : null;
+            if (libraryPath != null && new File(libraryPath).exists()) {
+                return new LibraryPlugin(appId, libraryPath);
+            }
         } catch (Exception e){
-            Log.e(TAG, "Plugin discover failed: " + e.getMessage());
-            return null;
+            Log.d(TAG, "Plugin discover failed for " + appId + ": " + e.getMessage());
         }
-       return new LibraryPlugin(appId, libraryPath);
+        return null;
+    }
+
+    /** Discover FCL / Custom Renderer Plugin installed via APK or plugin package */
+    public static LibraryPlugin discoverFclPlugin(Context ctx) {
+        String[] knownFclAppIds = {
+            "com.shirosaki.fclrendererplugin",
+            "com.fcl.renderplugin",
+            "com.fcl.render",
+            "com.zalith.renderplugin",
+            "org.fcl.renderplugin",
+            "com.fcl.fclrendererplugin",
+            "git.mojo.fcl"
+        };
+
+        if (ctx != null) {
+            for (String appId : knownFclAppIds) {
+                LibraryPlugin plugin = discoverPlugin(ctx, appId);
+                if (plugin != null) {
+                    return plugin;
+                }
+            }
+
+            try {
+                PackageManager pm = ctx.getPackageManager();
+                for (PackageInfo pkg : pm.getInstalledPackages(PackageManager.GET_SHARED_LIBRARY_FILES)) {
+                    if (pkg.packageName == null) continue;
+                    String lowerPkg = pkg.packageName.toLowerCase();
+                    if (lowerPkg.contains("fclrendererplugin") || lowerPkg.contains("fclrender") || 
+                        (lowerPkg.contains("fcl") && lowerPkg.contains("render")) ||
+                        (lowerPkg.contains("renderer") && lowerPkg.contains("plugin"))) {
+                        String nativeDir = pkg.applicationInfo != null ? pkg.applicationInfo.nativeLibraryDir : null;
+                        if (nativeDir != null && new File(nativeDir).exists()) {
+                            Log.i(TAG, "Discovered FCL Renderer Plugin APK: " + pkg.packageName + " at " + nativeDir);
+                            return new LibraryPlugin(pkg.packageName, nativeDir);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error scanning installed packages for FCL plugin: " + e.getMessage());
+            }
+        }
+
+        return null;
     }
 
     public String getId(){

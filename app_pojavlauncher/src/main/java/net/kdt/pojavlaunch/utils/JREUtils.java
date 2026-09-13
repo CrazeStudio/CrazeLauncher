@@ -251,12 +251,12 @@ public class JREUtils {
      * It will fallback if it fails to load the library.
      * @return The name of the loaded library
      */
-    public static String loadGraphicsLibrary(String renderer){
-        String renderLibrary;
-        boolean useGles;
+    public static String loadGraphicsLibrary(Context context, String renderer){
+        String renderLibrary = "libgl4es_114.so";
+        boolean useGles = true;
         boolean bypassNamespace = false;
         boolean preloadVk = true;
-        int glesVersion;
+        int glesVersion = 3;
         switch (renderer){
             case "freedreno_kgsl":
                 preloadVk = false;
@@ -273,21 +273,73 @@ public class JREUtils {
                 glesVersion = 3;
                 break;
             case "fcl_render":
-                LibraryPlugin fclPlugin = LibraryPlugin.discoverPlugin(null, LibraryPlugin.ID_FCL_RENDER_PLUGIN);
-                if (fclPlugin != null && fclPlugin.checkLibraries("libfcl_render.so")) {
-                    renderLibrary = fclPlugin.resolveAbsolutePath("libfcl_render.so");
-                    bypassNamespace = true;
-                } else {
-                    File customLib = new File(Tools.DIR_CACHE, "fcl_render/libfcl_render.so");
-                    if (customLib.exists()) {
-                        renderLibrary = customLib.getAbsolutePath();
+                LibraryPlugin fclPlugin = LibraryPlugin.discoverFclPlugin(context);
+                if (fclPlugin != null) {
+                    String[] candidateLibs = {
+                        "libfcl_render.so", "libkrypton.so", "libgl4es_115.so", "libgl4es_114.so", "libzink.so", "libvirgl.so", "libGL.so", "libGLESv2.so"
+                    };
+                    String foundLib = null;
+                    for (String lib : candidateLibs) {
+                        if (new File(fclPlugin.getLibraryPath(), lib).exists()) {
+                            foundLib = lib;
+                            break;
+                        }
+                    }
+                    if (foundLib == null) {
+                        File nativeDir = new File(fclPlugin.getLibraryPath());
+                        File[] files = nativeDir.listFiles();
+                        if (files != null) {
+                            for (File f : files) {
+                                if (f.getName().endsWith(".so")) {
+                                    foundLib = f.getName();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (foundLib != null) {
+                        renderLibrary = fclPlugin.resolveAbsolutePath(foundLib);
                         bypassNamespace = true;
-                    } else {
-                        renderLibrary = "libgl4es_114.so";
+                        useGles = true;
+                        glesVersion = 3;
+                        setRendererLibraryPath(fclPlugin.getLibraryPath(), null);
+                        Log.i("JREUtils", "Loaded FCL Renderer Plugin (" + fclPlugin.getId() + ") library: " + renderLibrary);
+                        break;
                     }
                 }
-                useGles = true;
-                glesVersion = 3;
+
+                File[] fallbackDirs = {
+                    new File(Tools.DIR_CACHE, "fcl_render"),
+                    new File(Tools.DIR_GAME_HOME, "fcl_render"),
+                    new File("/sdcard/fcl/renders"),
+                    new File("/sdcard/PojavLauncher/plugins")
+                };
+                boolean foundFallback = false;
+                for (File dir : fallbackDirs) {
+                    if (dir.exists() && dir.isDirectory()) {
+                        File[] files = dir.listFiles();
+                        if (files != null) {
+                            for (File f : files) {
+                                if (f.getName().endsWith(".so")) {
+                                    renderLibrary = f.getAbsolutePath();
+                                    bypassNamespace = true;
+                                    useGles = true;
+                                    glesVersion = 3;
+                                    foundFallback = true;
+                                    Log.i("JREUtils", "Loaded custom render library from file: " + renderLibrary);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (foundFallback) break;
+                }
+
+                if (!foundFallback) {
+                    renderLibrary = "libgl4es_114.so";
+                    useGles = true;
+                    glesVersion = 3;
+                }
                 break;
             case "opengles2":
             case "opengles2_5":
@@ -306,6 +358,10 @@ public class JREUtils {
         }
         MesaUtils.destroyZink(); // Not needed anymore
         return renderLibrary;
+    }
+
+    public static String loadGraphicsLibrary(String renderer){
+        return loadGraphicsLibrary((Context) null, renderer);
     }
 
     public static int getDetectedVersion() {
