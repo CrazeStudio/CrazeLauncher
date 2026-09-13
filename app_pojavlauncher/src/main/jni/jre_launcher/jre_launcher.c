@@ -147,6 +147,11 @@ static bool initializeJavaVM(java_vm_t* java_vm, JNIEnv *env, jstring* vmpath, j
         throwException(env, STAGE_CREATE_RUNTIME, result, NULL);
         return false;
     }
+    void (*set_glfw_jvm)(JavaVM*) = (void (*)(JavaVM*)) dlsym(RTLD_DEFAULT, "android_glfw_set_jvm");
+    if(set_glfw_jvm != NULL) {
+        LOGI("Forwarding created JavaVM %p to libglfw.so", java_vm->vm);
+        set_glfw_jvm(java_vm->vm);
+    }
     return true;
 
     fail:

@@ -37,6 +37,7 @@
 #include <string.h>
 
 #include <jni.h>
+#include <dlfcn.h>
 #include <android/input.h>
 #include <android/log.h>
 #include <android/native_window.h>
@@ -45,6 +46,7 @@
 #include <mojoexec.h>
 
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, "android_window", __VA_ARGS__)
+#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "android_window", __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "android_window", __VA_ARGS__)
 
 #define GLFW_ANDROID_WINDOW_MODE_UNDEFINED 0
@@ -94,21 +96,60 @@ static _Thread_local struct {
     JNIEnv *env;
     bool attached;
 } jni_tl = {
-        .attached = false
+    .env = NULL,
+    .attached = false
 };
 
 static queue_top_t input_queue;
 
+JNIEXPORT void JNICALL android_glfw_set_jvm(JavaVM *vm) {
+    LOGI("android_glfw_set_jvm called with JavaVM: %p", vm);
+    if(vm != NULL) {
+        jni.vm = vm;
+    }
+}
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
+    LOGI("libglfw.so JNI_OnLoad called with JavaVM: %p", vm);
+    if(jni.vm == NULL && vm != NULL) {
+        jni.vm = vm;
+    }
+    return JNI_VERSION_1_6;
+}
+
 static void ensure_comm_connected() {
-    if(jni_tl.attached) return;
-    JNIEnv *env;
+    if(jni_tl.attached && jni_tl.env != NULL) return;
+
+    if(jni.vm == NULL) {
+        typedef jint (*GetCreatedJavaVMsFn)(JavaVM**, jsize, jsize*);
+        GetCreatedJavaVMsFn get_vms = (GetCreatedJavaVMsFn) dlsym(RTLD_DEFAULT, "JNI_GetCreatedJavaVMs");
+        if(get_vms != NULL) {
+            jsize count = 0;
+            JavaVM* vms[2] = {NULL, NULL};
+            if(get_vms(vms, 2, &count) == JNI_OK && count > 0 && vms[0] != NULL) {
+                jni.vm = vms[0];
+                LOGI("ensure_comm_connected: recovered jni.vm via dlsym JNI_GetCreatedJavaVMs (%p)", jni.vm);
+            }
+        }
+    }
+
+    if(jni.vm == NULL) {
+        LOGW("ensure_comm_connected: jni.vm is NULL; skipping JNI attachment");
+        jni_tl.attached = false;
+        jni_tl.env = NULL;
+        return;
+    }
+
+    JNIEnv *env = NULL;
     jint error = (*jni.vm)->GetEnv(jni.vm, (void**)&env, JNI_VERSION_1_6);
     if(error == JNI_EDETACHED) {
         error = (*jni.vm)->AttachCurrentThreadAsDaemon(jni.vm, &env, NULL);
     }
-    if(error != JNI_OK) {
-        LOGE("JNI connection failed: %i", error);
-        abort();
+    if(error != JNI_OK || env == NULL) {
+        LOGE("ensure_comm_connected: JNI connection failed: %i", error);
+        jni_tl.attached = false;
+        jni_tl.env = NULL;
+        return;
     }
     jni_tl.env = env;
     jni_tl.attached = true;
@@ -406,8 +447,16 @@ GLFWbool _glfwCreateWindowAndroid(_GLFWwindow* window,
                                const _GLFWctxconfig* old_config,
                                const _GLFWfbconfig* fbconfig)
 {
-    if (!createNativeWindow(window, wndconfig, fbconfig))
+    LOGI("_glfwCreateWindowAndroid: dims=(%dx%d), client=%d, source=%d",
+         wndconfig ? wndconfig->width : 0,
+         wndconfig ? wndconfig->height : 0,
+         old_config ? old_config->client : -1,
+         old_config ? old_config->source : -1);
+
+    if (!createNativeWindow(window, wndconfig, fbconfig)) {
+        LOGE("_glfwCreateWindowAndroid: createNativeWindow failed!");
         return GLFW_FALSE;
+    }
 
     _GLFWctxconfig new_config;
     android_reconfigure_context(old_config, &new_config);
@@ -425,10 +474,14 @@ GLFWbool _glfwCreateWindowAndroid(_GLFWwindow* window,
         else if (ctxconfig->source == GLFW_EGL_CONTEXT_API ||
                 ctxconfig->source == GLFW_NATIVE_CONTEXT_API)
         {
-            if (!_glfwInitEGL())
+            if (!_glfwInitEGL()) {
+                LOGE("_glfwCreateWindowAndroid: _glfwInitEGL failed!");
                 return GLFW_FALSE;
-            if (!_glfwCreateContextEGL(window, ctxconfig, fbconfig))
+            }
+            if (!_glfwCreateContextEGL(window, ctxconfig, fbconfig)) {
+                LOGE("_glfwCreateWindowAndroid: _glfwCreateContextEGL failed!");
                 return GLFW_FALSE;
+            }
 
             EGLDisplay  display = _glfw.egl.display;
             EGLConfig  config = window->context.egl.config;
@@ -436,8 +489,10 @@ GLFWbool _glfwCreateWindowAndroid(_GLFWwindow* window,
             if(!res) _glfwInputError(GLFW_PLATFORM_ERROR, "Failed to query the default visual ID: %x", eglGetError());
         }
 
-        if (!_glfwRefreshContextAttribs(window, ctxconfig))
+        if (!_glfwRefreshContextAttribs(window, ctxconfig)) {
+            LOGE("_glfwCreateWindowAndroid: _glfwRefreshContextAttribs failed!");
             return GLFW_FALSE;
+        }
     }
 
     if (wndconfig->mousePassthrough)
@@ -462,6 +517,7 @@ GLFWbool _glfwCreateWindowAndroid(_GLFWwindow* window,
         }
     }
 
+    LOGI("_glfwCreateWindowAndroid: Window and context created successfully");
     return GLFW_TRUE;
 }
 
@@ -791,19 +847,22 @@ GLFWbool _glfwWindowVisibleAndroid(_GLFWwindow* window)
 }
 
 void updateNativeWindowDimensions(_GLFWwindow* window) {
-    // This is incredibly cringe, but...
+    if (nativeWindow == NULL) {
+        LOGW("updateNativeWindowDimensions: nativeWindow is NULL, skipping buffer configuration");
+        return;
+    }
     // When we set W/H in the buffer geometry to 0,0, we reset the ANW to its default dimensions
     // Therefore, we also don't change its dimensions (which breaks vulkan swapchains)
     ANativeWindow_setBuffersGeometry(nativeWindow, 0, 0, window->android.visualId);
     int width = ANativeWindow_getWidth(nativeWindow);
     int height = ANativeWindow_getHeight(nativeWindow);
     LOGI("Update window dimensions: %i %i", width, height);
-    window->android.width = width;
-    window->android.height = height;
+    if(width > 0) window->android.width = width;
+    if(height > 0) window->android.height = height;
     surfaceUpdated = false;
 
-    _glfwInputWindowSize(window, width, height);
-    _glfwInputFramebufferSize(window, width, height);
+    _glfwInputWindowSize(window, window->android.width, window->android.height);
+    _glfwInputFramebufferSize(window, window->android.width, window->android.height);
 }
 
 void _glfwPollEventsAndroid(void)
@@ -871,9 +930,11 @@ void _glfwGetCursorPosAndroid(_GLFWwindow* window, double* xpos, double* ypos)
 void _glfwSetCursorPosAndroid(_GLFWwindow* window, double x, double y)
 {
     ensure_comm_connected();
-    (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class,
-                                        jni.method_receiveCursorPos,
-                                        x, y);
+    if (jni_tl.attached && jni_tl.env != NULL && jni.glfw_class != NULL && jni.method_receiveCursorPos != NULL) {
+        (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class,
+                                            jni.method_receiveCursorPos,
+                                            x, y);
+    }
     _glfw.android.xcursor = x;
     _glfw.android.ycursor = y;
 }
@@ -881,9 +942,11 @@ void _glfwSetCursorPosAndroid(_GLFWwindow* window, double x, double y)
 void _glfwSetCursorModeAndroid(_GLFWwindow* window, int mode)
 {
     ensure_comm_connected();
-    (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class,
-                                        jni.method_receiveGrabState,
-                                        mode == GLFW_CURSOR_DISABLED);
+    if (jni_tl.attached && jni_tl.env != NULL && jni.glfw_class != NULL && jni.method_receiveGrabState != NULL) {
+        (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class,
+                                            jni.method_receiveGrabState,
+                                            mode == GLFW_CURSOR_DISABLED);
+    }
 }
 
 GLFWbool _glfwCreateCursorAndroid(_GLFWcursor* cursor,
@@ -892,6 +955,9 @@ GLFWbool _glfwCreateCursorAndroid(_GLFWcursor* cursor,
 {
     cursor->android.cursorRef = NULL;
     ensure_comm_connected();
+    if (!jni_tl.attached || jni_tl.env == NULL || jni.glfw_class == NULL || jni.method_loadCursor == NULL) {
+        return GLFW_TRUE;
+    }
     jobject imageBuffer = (*jni_tl.env)->NewDirectByteBuffer(jni_tl.env, image->pixels, image->width * image->height * 4);
     if((*jni_tl.env)->ExceptionCheck(jni_tl.env)) {
         (*jni_tl.env)->ExceptionClear(jni_tl.env);
@@ -919,8 +985,9 @@ void _glfwDestroyCursorAndroid(_GLFWcursor* cursor)
 {
     ensure_comm_connected();
     jobject cursorRef = cursor->android.cursorRef;
-    if(cursorRef != NULL) {
+    if(cursorRef != NULL && jni_tl.attached && jni_tl.env != NULL) {
         (*jni_tl.env)->DeleteGlobalRef(jni_tl.env, cursorRef);
+        cursor->android.cursorRef = NULL;
     }
 }
 
@@ -928,10 +995,13 @@ void _glfwSetCursorAndroid(_GLFWwindow* window, _GLFWcursor* cursor)
 {
     ensure_comm_connected();
     jobject cursorRef = cursor ? cursor->android.cursorRef : NULL;
-    (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_useCursor, cursorRef);
+    if (jni_tl.attached && jni_tl.env != NULL && jni.glfw_class != NULL && jni.method_useCursor != NULL) {
+        (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_useCursor, cursorRef);
+    }
 }
 
 static void free_old_clip() {
+    if(!jni_tl.attached || jni_tl.env == NULL) return;
     if(clipboard_string != NULL && clipboard_string_ref != NULL) {
         (*jni_tl.env)->ReleaseStringUTFChars(jni_tl.env, clipboard_string_ref, clipboard_string);
         (*jni_tl.env)->DeleteGlobalRef(jni_tl.env, clipboard_string_ref);
@@ -946,6 +1016,7 @@ static void free_old_clip() {
 }
 
 static void set_new_clip(jstring clip_string) {
+    if(!jni_tl.attached || jni_tl.env == NULL || clip_string == NULL) return;
     clipboard_string_ref = (*jni_tl.env)->NewGlobalRef(jni_tl.env, clip_string);
     clipboard_string = (*jni_tl.env)->GetStringUTFChars(jni_tl.env, clipboard_string_ref, NULL);
 }
@@ -953,7 +1024,9 @@ static void set_new_clip(jstring clip_string) {
 void _glfwSetClipboardStringAndroid(const char* string)
 {
     ensure_comm_connected();
-
+    if (!jni_tl.attached || jni_tl.env == NULL || jni.glfw_class == NULL || jni.method_setClipboardString == NULL) {
+        return;
+    }
     free_old_clip();
 
     jstring clip_string = (*jni_tl.env)->NewStringUTF(jni_tl.env, string);
@@ -964,7 +1037,9 @@ void _glfwSetClipboardStringAndroid(const char* string)
 const char* _glfwGetClipboardStringAndroid(void)
 {
     ensure_comm_connected();
-
+    if (!jni_tl.attached || jni_tl.env == NULL || jni.glfw_class == NULL || jni.method_getClipboardString == NULL) {
+        return "";
+    }
     free_old_clip();
 
     jstring clip_string = (*jni_tl.env)->CallStaticObjectMethod(jni_tl.env, jni.glfw_class, jni.method_getClipboardString);
@@ -973,11 +1048,14 @@ const char* _glfwGetClipboardStringAndroid(void)
     }
 
     set_new_clip(clip_string);
-    return clipboard_string;
+    return clipboard_string ? clipboard_string : "";
 }
 
 void _glfwEnableGamepadAndroid(unsigned char* buttons, int buttonCount, float* axes, int axisCount) {
     ensure_comm_connected();
+    if (!jni_tl.attached || jni_tl.env == NULL || jni.glfw_class == NULL || jni.method_enableDirectGamepad == NULL) {
+        return;
+    }
     jobject buttonBuffer = (*jni_tl.env)->NewDirectByteBuffer(jni_tl.env, buttons, sizeof(char) * buttonCount);
     jobject axisBuffer = (*jni_tl.env)->NewDirectByteBuffer(jni_tl.env, axes, sizeof(float) * axisCount);
     (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_enableDirectGamepad, buttonBuffer, axisBuffer);
@@ -1020,8 +1098,11 @@ int _glfwGetIMEStatusAndroid(_GLFWwindow* window)
 EGLSurface _glfwManageEglSurfaceAndroid(_GLFWwindow* window) {
     int wantedMode = GLFW_ANDROID_WINDOW_MODE_UNDEFINED;
     int currentMode = window->android.mode;
-    if (window != surfaceOwner || surfaceDestroyed) wantedMode = GLFW_ANDROID_WINDOW_MODE_PBUFFER;
-    else wantedMode = GLFW_ANDROID_WINDOW_MODE_SURFACE;
+    if (window != surfaceOwner || surfaceDestroyed || nativeWindow == NULL) {
+        wantedMode = GLFW_ANDROID_WINDOW_MODE_PBUFFER;
+    } else {
+        wantedMode = GLFW_ANDROID_WINDOW_MODE_SURFACE;
+    }
 
     if (currentMode != wantedMode) {
         EGLSurface oldSurface = window->context.egl.surface;
@@ -1043,30 +1124,49 @@ EGLSurface _glfwManageEglSurfaceAndroid(_GLFWwindow* window) {
 
     EGLDisplay  display = _glfw.egl.display;
     EGLConfig  config = window->context.egl.config;
-    EGLSurface newSurface;
+    EGLSurface newSurface = EGL_NO_SURFACE;
 
     switch (wantedMode) {
         case GLFW_ANDROID_WINDOW_MODE_PBUFFER: {
+            int pWidth = window->android.width > 0 ? window->android.width : 800;
+            int pHeight = window->android.height > 0 ? window->android.height : 600;
             const EGLint attribs[] = {
-                    EGL_WIDTH, window->android.width,
-                    EGL_HEIGHT, window->android.height,
+                    EGL_WIDTH, pWidth,
+                    EGL_HEIGHT, pHeight,
                     EGL_NONE
             };
-            LOGI("Configure pbuffer for inactive window");
+            LOGI("Configure pbuffer for inactive or pre-surface window (%dx%d)", pWidth, pHeight);
             newSurface = eglCreatePbufferSurface(display, config, attribs);
+            if (newSurface == EGL_NO_SURFACE) {
+                LOGE("eglCreatePbufferSurface failed: 0x%x", eglGetError());
+            }
         } break;
         case GLFW_ANDROID_WINDOW_MODE_SURFACE: {
             LOGI("Configure native window: %p", nativeWindow);
             updateNativeWindowDimensions(window);
             surfaceInUse = true;
             newSurface = eglCreateWindowSurface(display, config, nativeWindow, NULL);
+            if (newSurface == EGL_NO_SURFACE) {
+                LOGE("eglCreateWindowSurface failed: 0x%x, falling back to pbuffer", eglGetError());
+                int pWidth = window->android.width > 0 ? window->android.width : 800;
+                int pHeight = window->android.height > 0 ? window->android.height : 600;
+                const EGLint attribs[] = {
+                        EGL_WIDTH, pWidth,
+                        EGL_HEIGHT, pHeight,
+                        EGL_NONE
+                };
+                newSurface = eglCreatePbufferSurface(display, config, attribs);
+                wantedMode = GLFW_ANDROID_WINDOW_MODE_PBUFFER;
+            }
         } break;
         default:
+            LOGE("_glfwManageEglSurfaceAndroid: unexpected wantedMode %d", wantedMode);
             abort();
     }
 
     window->android.mode = wantedMode;
     window->context.egl.surface = newSurface;
+    LOGI("_glfwManageEglSurfaceAndroid: mode=%d newSurface=%p", wantedMode, newSurface);
     return newSurface;
 }
 
@@ -1383,19 +1483,36 @@ VkResult _glfwCreateWindowSurfaceAndroid(VkInstance instance,
 }
 
 void android_notify_init(){
+    LOGI("android_notify_init: starting init notification");
     ensure_comm_connected();
-    (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_receiveInit);
+    if (jni_tl.attached && jni_tl.env != NULL && jni.glfw_class != NULL && jni.method_receiveInit != NULL) {
+        (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_receiveInit);
+        LOGI("android_notify_init: receiveInit dispatched successfully");
+    } else {
+        LOGW("android_notify_init: skipped dispatching init to Java (attached=%d, env=%p, class=%p, method=%p)",
+             jni_tl.attached, jni_tl.env, jni.glfw_class, jni.method_receiveInit);
+    }
 }
 
 
 JNIEXPORT void JNICALL
 Java_git_artdeell_dnbootstrap_glfw_GLFW_nativeSurfaceCreated(JNIEnv *env, jclass clazz,
                                                                          jobject surface) {
+    LOGI("nativeSurfaceCreated: env=%p, clazz=%p, surface=%p", env, clazz, surface);
+    if (env == NULL || surface == NULL) {
+        LOGE("nativeSurfaceCreated: Invalid env (%p) or surface (%p)", env, surface);
+        return;
+    }
     ANativeWindow* window = ANativeWindow_fromSurface(env, surface);
+    if (window == NULL) {
+        LOGE("nativeSurfaceCreated: ANativeWindow_fromSurface failed (returned NULL)");
+        return;
+    }
     ANativeWindow_acquire(window);
     LOGI("Acquired native window: %p", window);
     nativeWindow = window;
     surfaceDestroyed = false;
+    surfaceUpdated = true;
     if(ownedByVulkan) {
         pthread_mutex_lock(&nw_vulkan_mutex);
         pthread_cond_broadcast(&nw_vulkan_cond);
@@ -1405,25 +1522,30 @@ Java_git_artdeell_dnbootstrap_glfw_GLFW_nativeSurfaceCreated(JNIEnv *env, jclass
 
 JNIEXPORT void JNICALL
 Java_git_artdeell_dnbootstrap_glfw_GLFW_nativeSurfaceUpdated(JNIEnv *env, jclass clazz) {
+    LOGI("nativeSurfaceUpdated called");
     surfaceUpdated = true;
 }
 
 JNIEXPORT void JNICALL
 Java_git_artdeell_dnbootstrap_glfw_GLFW_nativeSurfaceDestroyed(JNIEnv *env,
                                                                            jclass clazz) {
+    LOGI("nativeSurfaceDestroyed called");
     surfaceDestroyed = true;
     if(!ownedByVulkan && surfaceInUse) {
         pthread_mutex_lock(&nw_egl_mutex);
         pthread_cond_wait(&nw_egl_cond, &nw_egl_mutex);
         LOGI("Unhalted after window destruction");
-        ANativeWindow_release(nativeWindow);
-        nativeWindow = NULL;
+        if (nativeWindow != NULL) {
+            ANativeWindow_release(nativeWindow);
+            nativeWindow = NULL;
+        }
         pthread_mutex_unlock(&nw_egl_mutex);
-    }else {
-        ANativeWindow_release(nativeWindow);
-        nativeWindow = NULL;
+    } else {
+        if (nativeWindow != NULL) {
+            ANativeWindow_release(nativeWindow);
+            nativeWindow = NULL;
+        }
     }
-
 }
 
 
@@ -1438,7 +1560,19 @@ Java_git_artdeell_dnbootstrap_glfw_GLFW_sendMousePosition0__DD(JNIEnv *env, jcla
 
 JNIEXPORT void JNICALL
 Java_git_artdeell_dnbootstrap_glfw_GLFW_initialize(JNIEnv *env, jclass clazz) {
-    (*env)->GetJavaVM(env, &jni.vm);
+    LOGI("GLFW_initialize called (env=%p, clazz=%p)", env, clazz);
+    if (env == NULL || clazz == NULL) {
+        LOGE("GLFW_initialize: env or clazz is NULL!");
+        return;
+    }
+    if ((*env)->GetJavaVM(env, &jni.vm) != JNI_OK || jni.vm == NULL) {
+        LOGE("GLFW_initialize: Failed to retrieve JavaVM from JNIEnv!");
+    } else {
+        LOGI("GLFW_initialize: JavaVM successfully retrieved: %p", jni.vm);
+    }
+    if (jni.glfw_class != NULL) {
+        (*env)->DeleteGlobalRef(env, jni.glfw_class);
+    }
     jni.glfw_class = (*env)->NewGlobalRef(env, clazz);
     jni.method_receiveGrabState = (*env)->GetStaticMethodID(env, clazz, "receiveGrabState", "(Z)V");
     jni.method_receiveCursorPos = (*env)->GetStaticMethodID(env, clazz, "receiveCursorPos", "(DD)V");
@@ -1448,6 +1582,7 @@ Java_git_artdeell_dnbootstrap_glfw_GLFW_initialize(JNIEnv *env, jclass clazz) {
     jni.method_setClipboardString = (*env)->GetStaticMethodID(env, clazz, "setClipboardString", "(Ljava/lang/String;)V");
     jni.method_enableDirectGamepad = (*env)->GetStaticMethodID(env, clazz, "enableDirectGamepad", "(Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;)V");
     jni.method_receiveInit = (*env)->GetStaticMethodID(env, clazz, "receiveInit", "()V");
+    LOGI("GLFW_initialize: Initialization completed successfully");
 }
 
 JNIEXPORT void JNICALL

@@ -44,9 +44,16 @@ public class GameOptionsUtils {
      */
     private static void disableFullscreen() {
         String fullscreen = MCOptionUtils.get("fullscreen");
-        if(fullscreen == null) return;
-        if(fullscreen.equals("true")) MCOptionUtils.set("fullscreen", "false");
-        else if(fullscreen.equals("1")) MCOptionUtils.set("fullscreen","0");
+        if(fullscreen == null) {
+            MCOptionUtils.set("fullscreen", "false");
+            return;
+        }
+        if("1".equals(fullscreen) || "0".equals(fullscreen)) {
+            MCOptionUtils.set("fullscreen", "0");
+        } else {
+            // Modern Minecraft strictly requires a boolean ("true" / "false")
+            MCOptionUtils.set("fullscreen", "false");
+        }
     }
 
     public static void fixOptions(boolean isLtw) {

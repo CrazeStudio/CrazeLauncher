@@ -302,6 +302,11 @@ public class GameRunner {
                     if(nf.isFile() && nf.getName().endsWith(".so")) {
                         // Skip libjnidispatch.so here as it is strictly managed by JnaNativeManager
                         if(nf.getName().equals("libjnidispatch.so")) continue;
+                        // Avoid copying core launcher native singletons to prevent dual-instance linker issues
+                        if(nf.getName().equals("libglfw.so") || nf.getName().equals("libpojavexec.so")
+                                || nf.getName().equals("libmojoexec.so") || nf.getName().equals("libSDL3.so")) {
+                            continue;
+                        }
                         File destSo = new File(versionSpecificNativesDir, nf.getName());
                         if(!destSo.exists() || destSo.length() != nf.length()) {
                             try {
@@ -313,6 +318,12 @@ public class GameRunner {
                     }
                 }
             }
+        }
+
+        // Ensure no stale duplicate libglfw.so exists in versionSpecificNativesDir
+        File staleGlfw = new File(versionSpecificNativesDir, "libglfw.so");
+        if(staleGlfw.exists()) {
+            staleGlfw.delete();
         }
 
         // Manage and ensure version-aligned, architecture-verified libjnidispatch.so (Expected 7.0.4 for modern Fabric/MC)
@@ -365,6 +376,7 @@ public class GameRunner {
             System.exit(0);
         }
         javaArgList.add("-Dorg.lwjgl.opengl.libname=libGLMojo.so");
+        javaArgList.add("-Dorg.lwjgl.glfw.libname="+ Tools.NATIVE_LIB_DIR+"/libglfw.so");
         javaArgList.add("-Dorg.lwjgl.freetype.libname="+ Tools.NATIVE_LIB_DIR+"/libfreetype.so");
 
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());

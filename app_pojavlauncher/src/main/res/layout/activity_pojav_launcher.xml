@@ -62,12 +62,12 @@
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Emerald Accent Line below Top Bar -->
+    <!-- Subtle Accent Line below Top Bar -->
     <View
         android:id="@+id/top_accent_divider"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/accent_green"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_craze_divider"
         app:layout_constraintTop_toBottomOf="@id/top_bar_layout" />
 
     <!-- Main Content Fragment Container -->

@@ -278,7 +278,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <!-- Ready Status Badge -->
+            <!-- Ready Status Badge with SVG vector dot -->
             <LinearLayout
                 android:id="@+id/ready_badge"
                 android:layout_width="wrap_content"
@@ -286,17 +286,26 @@
                 android:background="@drawable/bg_craze_badge_ready"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/ic_status_dot_ready"
+                    android:contentDescription="@null"
+                    android:layout_marginEnd="5dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="● READY"
+                    android:text="READY"
                     android:textColor="@color/accent_green"
                     android:textSize="10sp"
                     android:textStyle="bold"
-                    android:letterSpacing="0.05" />
+                    android:letterSpacing="0.06" />
             </LinearLayout>
 
             <!-- Version Selector Row -->
@@ -355,7 +364,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tap to change instance • Tap edit for JVM and settings"
-                android:textColor="#6B7888"
+                android:textColor="@color/secondary_text"
                 android:textSize="10sp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintTop_toBottomOf="@id/version_row"
@@ -363,24 +372,37 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!-- Big Rounded PLAY Button -->
-        <androidx.appcompat.widget.AppCompatButton
+        <!-- Big Rounded PLAY Button with SVG Play Vector -->
+        <LinearLayout
             android:id="@+id/play_button"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:background="@drawable/bg_craze_play_btn_dark"
-            android:textAllCaps="true"
-            android:text="▶  PLAY"
-            android:textColor="@color/primary_text"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.08"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_craze_play_btn"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:paddingHorizontal="24dp"
+            android:orientation="horizontal"
             android:layout_marginTop="14dp"
             app:layout_constraintTop_toBottomOf="@id/current_instance_card"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_craze_play"
+                android:contentDescription="@null"
+                android:layout_marginEnd="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PLAY"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+        </LinearLayout>
 
         <!-- Subtitle under Play Button -->
         <TextView
@@ -388,7 +410,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Minecraft Java Edition • Ready"
-            android:textColor="#6B7888"
+            android:textColor="@color/secondary_text"
             android:textSize="11sp"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@id/play_button"

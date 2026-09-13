@@ -32,18 +32,21 @@ public class LauncherMenuButton extends ExtendedButton {
 
     /** Set style stuff */
     private void setSettings(){
-        Resources resources = getContext().getResources();
+        int paddingStart = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
+        int drawablePadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
+        int iconSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 22, getResources().getDisplayMetrics());
 
-        int padding = resources.getDimensionPixelSize(R.dimen._22sdp);
-        setCompoundDrawablePadding(padding);
-        setPaddingRelative(padding, 0, 0, 0);
+        setCompoundDrawablePadding(drawablePadding);
+        setPaddingRelative(paddingStart, 0, paddingStart, 0);
         setGravity(Gravity.CENTER_VERTICAL);
-
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._12ssp));
+        setAllCaps(false);
+        setTypeface(ResourcesCompat.getFont(getContext(), R.font.noto_sans_bold));
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        setTextColor(ResourcesCompat.getColor(getResources(), R.color.primary_text, null));
 
         // Set drawable size
         int[] sizes = getExtendedViewData().getSizeCompounds();
-        sizes[0] = resources.getDimensionPixelSize(R.dimen._30sdp);
+        sizes[0] = iconSize;
         getExtendedViewData().setSizeCompounds(sizes);
         postProcessDrawables();
     }

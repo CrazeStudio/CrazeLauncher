@@ -298,7 +298,7 @@ public class GameView extends FrameLayout implements PlatformGrabListener, Surfa
         refreshSize(true);
 
         //Load Minecraft options:
-        MCOptionUtils.set("fullscreen", "off");
+        MCOptionUtils.set("fullscreen", "false");
         MCOptionUtils.set("overrideWidth", String.valueOf(windowWidth));
         MCOptionUtils.set("overrideHeight", String.valueOf(windowHeight));
         MCOptionUtils.save();

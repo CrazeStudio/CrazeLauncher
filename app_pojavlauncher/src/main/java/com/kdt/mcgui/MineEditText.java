@@ -4,6 +4,8 @@ import android.content.*;
 import android.util.*;
 import android.graphics.*;
 import android.widget.EditText;
+import androidx.core.content.res.ResourcesCompat;
+import git.artdeell.mojo.R;
 
 public class MineEditText extends androidx.appcompat.widget.AppCompatEditText {
 	public MineEditText(Context ctx) {
@@ -17,7 +19,9 @@ public class MineEditText extends androidx.appcompat.widget.AppCompatEditText {
 	}
 
 	public void init() {
-		setBackgroundColor(Color.parseColor("#131313"));
-		setPadding(5, 5, 5, 5);
+		setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.bg_craze_input, null));
+		setTextColor(ResourcesCompat.getColor(getResources(), R.color.primary_text, null));
+		setHintTextColor(ResourcesCompat.getColor(getResources(), R.color.text_tertiary, null));
 	}
 }
+

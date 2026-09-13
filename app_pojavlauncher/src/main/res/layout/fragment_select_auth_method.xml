@@ -1,50 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_app"
-    android:paddingHorizontal="@dimen/fragment_padding_medium">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background_app">
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/background_card"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingVertical="@dimen/padding_extra_extra_large">
+        android:scrollbars="none">
 
-        <com.kdt.mcgui.MineButton
-            android:id="@+id/button_microsoft_authentication"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/auth_select_microsoft"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginHorizontal="@dimen/_25sdp"
-            android:layout_marginBottom="@dimen/_20sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="16dp">
 
-        <com.kdt.mcgui.MineButton
-            android:id="@+id/button_elyby_authentication"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/auth_select_elyby"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginHorizontal="@dimen/_25sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            app:layout_constraintTop_toBottomOf="@+id/button_microsoft_authentication" />
+            <!-- Authentication Card Container -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxWidth="440dp"
+                android:background="@drawable/background_card"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="28dp">
 
-        <com.kdt.mcgui.MineButton
-            android:id="@+id/button_local_authentication"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/auth_select_local"
-            android:textSize="@dimen/_12ssp"
-            android:layout_marginHorizontal="@dimen/_25sdp"
-            android:layout_marginTop="@dimen/_20sdp"
-            app:layout_constraintTop_toBottomOf="@+id/button_elyby_authentication" />
+                <!-- Header Icon -->
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_craze_round_c"
+                    android:contentDescription="@null"
+                    android:layout_marginBottom="12dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <!-- Title & Subtitle -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/main_add_account"
+                    android:textColor="@color/primary_text"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Select an account type to sign in"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="13sp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="24dp" />
+
+                <!-- Option 1: Microsoft Login -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_microsoft_authentication"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:drawableStart="@drawable/ic_auth_ms"
+                    android:drawablePadding="14dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/auth_select_microsoft"
+                    android:textColor="@color/primary_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Option 2: Ely.by Login -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_elyby_authentication"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:drawableStart="@drawable/ic_auth_elyby"
+                    android:drawablePadding="14dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/auth_select_elyby"
+                    android:textColor="@color/primary_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Option 3: Local / Offline Login -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_local_authentication"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_craze_card_clickable"
+                    android:drawableStart="@drawable/ic_auth_local"
+                    android:drawablePadding="14dp"
+                    android:gravity="start|center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:text="@string/auth_select_local"
+                    android:textColor="@color/primary_text"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
