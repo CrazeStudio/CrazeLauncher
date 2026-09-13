@@ -233,7 +233,15 @@ public class LauncherActivity extends BaseActivity {
         ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
 
         mSettingsButton.setOnClickListener(mSettingButtonListener);
-        mDownloadButton.setOnClickListener(mDownloadButtonListener);
+        if (mDownloadButton != null) mDownloadButton.setOnClickListener(mDownloadButtonListener);
+        View addAccountBtn = findViewById(R.id.add_account_button);
+        if (addAccountBtn != null) {
+            addAccountBtn.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true));
+        }
+        View drawerBtn = findViewById(R.id.drawer_button);
+        if (drawerBtn != null) {
+            drawerBtn.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true));
+        }
         ProgressKeeper.addTaskCountListener(mProgressLayout);
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
         ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);

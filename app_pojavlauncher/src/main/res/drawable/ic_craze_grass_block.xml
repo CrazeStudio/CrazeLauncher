@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <!-- Top Face (Grass) -->
+  <path
+      android:fillColor="#558B2F"
+      android:pathData="M12,2 L21,7 L12,12 L3,7 Z"/>
+  <!-- Left Face (Dirt) -->
+  <path
+      android:fillColor="#5D4037"
+      android:pathData="M3,8.5 L11,13 L11,22 L3,17.5 Z"/>
+  <!-- Right Face (Dirt Dark) -->
+  <path
+      android:fillColor="#3E2723"
+      android:pathData="M13,13 L21,8.5 L21,17.5 L13,22 Z"/>
+  <!-- Top Rim Accent -->
+  <path
+      android:fillColor="#7CB342"
+      android:pathData="M3,8.5 L11,13 L11,14.5 L3,10 Z"/>
+  <path
+      android:fillColor="#689F38"
+      android:pathData="M13,13 L21,8.5 L21,10 L13,14.5 Z"/>
+</vector>

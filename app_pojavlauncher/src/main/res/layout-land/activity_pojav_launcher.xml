@@ -17,45 +17,110 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Account Spinner on the left -->
-        <com.kdt.mcgui.AccountSpinner
-            android:id="@+id/account_spinner"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:dropDownWidth="260dp"
-            android:dropDownVerticalOffset="52dp"
+        <!-- Hamburger Navigation Menu Icon -->
+        <ImageButton
+            android:id="@+id/drawer_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_craze_edit_btn"
+            android:src="@drawable/ic_craze_drawer"
+            android:scaleType="centerInside"
+            android:padding="8dp"
+            android:contentDescription="Menu"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/download_button"
-            tools:ignore="RtlSymmetry" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <!-- Download Manager icon -->
+        <!-- Logo Title and Subtitle -->
+        <LinearLayout
+            android:id="@+id/logo_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            app:layout_constraintStart_toEndOf="@id/drawer_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CRAZELAUNCHER"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.04" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PLAY BEYOND LIMITS"
+                android:textColor="#8D9AA8"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.10"
+                android:layout_marginTop="-1dp" />
+        </LinearLayout>
+
+        <!-- Add Account Pill Button -->
+        <LinearLayout
+            android:id="@+id/add_account_button"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_craze_card_clickable"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@id/setting_button"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_craze_add"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add account"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginStart="6dp" />
+        </LinearLayout>
+
+        <!-- Hidden AccountSpinner to preserve view binding reference -->
+        <com.kdt.mcgui.AccountSpinner
+            android:id="@+id/account_spinner"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Hidden Download Button to preserve view binding reference -->
         <ImageButton
             android:id="@+id/download_button"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:background="@drawable/bg_craze_edit_btn"
-            android:src="@drawable/ic_px_file_dl"
-            android:scaleType="centerInside"
-            android:padding="10dp"
-            android:tint="@color/primary_text"
-            android:contentDescription="@string/mcl_download_manager"
-            app:layout_constraintEnd_toStartOf="@+id/setting_button"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="8dp" />
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Settings icon on the right -->
+        <!-- Settings Icon Button on Right -->
         <ImageButton
             android:id="@+id/setting_button"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/bg_craze_edit_btn"
             android:src="@drawable/ic_px_sliders"
             android:scaleType="centerInside"
-            android:padding="10dp"
-            android:tint="@color/primary_text"
+            android:padding="8dp"
             android:contentDescription="@string/preference_category_miscellaneous"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

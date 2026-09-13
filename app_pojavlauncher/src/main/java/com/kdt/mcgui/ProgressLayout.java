@@ -59,6 +59,9 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
     private final ArrayList<LayoutProgressListener> mMap = new ArrayList<>();
     private LinearLayout mLinearLayout;
     private TextView mTaskNumberDisplayer;
+    private TextView mSubtitleDisplayer;
+    private TextView mPercentageDisplayer;
+    private android.widget.ProgressBar mProgressBar;
     private ImageView mFlipArrow;
 
 
@@ -82,8 +85,11 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
         inflate(getContext(), R.layout.view_progress, this);
         mLinearLayout = findViewById(R.id.progress_linear_layout);
         mTaskNumberDisplayer = findViewById(R.id.progress_textview);
+        mSubtitleDisplayer = findViewById(R.id.progress_subtitle_textview);
+        mPercentageDisplayer = findViewById(R.id.progress_percentage_textview);
+        mProgressBar = findViewById(R.id.progress_generic_progressbar);
         mFlipArrow = findViewById(R.id.progress_flip_arrow);
-        setBackgroundColor(getResources().getColor(R.color.background_bottom_bar));
+        setBackgroundColor(android.graphics.Color.TRANSPARENT);
         setOnClickListener(this);
     }
 
@@ -152,9 +158,25 @@ public class ProgressLayout extends ConstraintLayout implements View.OnClickList
         public void onProgressUpdated(int progress, int resid, Object... va) {
             post(()-> {
                 textView.setProgress(progress);
-                if(resid != -1) textView.setText(getContext().getString(resid, va));
-                else if(va.length > 0 && va[0] != null)textView.setText((String)va[0]);
-                else textView.setText("");
+                String msg = "";
+                if(resid != -1) msg = getContext().getString(resid, va);
+                else if(va.length > 0 && va[0] != null) msg = (String)va[0];
+                textView.setText(msg);
+
+                if (mSubtitleDisplayer != null && !msg.isEmpty()) {
+                    mSubtitleDisplayer.setText(msg);
+                }
+                if (mProgressBar != null) {
+                    if (progress >= 0) {
+                        mProgressBar.setIndeterminate(false);
+                        mProgressBar.setProgress(progress);
+                    } else {
+                        mProgressBar.setIndeterminate(true);
+                    }
+                }
+                if (mPercentageDisplayer != null && progress >= 0) {
+                    mPercentageDisplayer.setText(progress + "%");
+                }
             });
         }
 
