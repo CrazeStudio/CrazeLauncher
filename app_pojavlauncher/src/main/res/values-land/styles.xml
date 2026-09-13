@@ -7,10 +7,16 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:statusBarColor">@color/background_status_bar</item>
         <item name="android:navigationBarColor">@color/background_app</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="preferenceTheme">@style/CrazePreferenceTheme</item>
+
+        <item name="colorAccent">@color/minebutton_color</item>
+        <item name="colorControlActivated">@color/minebutton_color</item>
+        <item name="colorControlNormal">#8D9AA8</item>
+        <item name="colorControlHighlight">#26FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#8D9AA8</item>
 
         <item name="android:textSize">@dimen/_14ssp</item>
-
     </style>
 
     <style name="LauncherMenuButton.Universal" parent="LauncherMenuButton">

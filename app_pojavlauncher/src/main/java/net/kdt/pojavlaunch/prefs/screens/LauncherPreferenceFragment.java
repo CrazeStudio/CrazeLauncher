@@ -27,6 +27,17 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         view.setBackgroundColor(getResources().getColor(R.color.background_app));
         super.onViewCreated(view, savedInstanceState);
+
+        setDivider(new android.graphics.drawable.ColorDrawable(getResources().getColor(R.color.divider)));
+        setDividerHeight((int) (1 * getResources().getDisplayMetrics().density));
+
+        androidx.recyclerview.widget.RecyclerView listView = getListView();
+        if (listView != null) {
+            int paddingSide = (int) (14 * getResources().getDisplayMetrics().density);
+            int paddingTopBottom = (int) (8 * getResources().getDisplayMetrics().density);
+            listView.setPadding(paddingSide, paddingTopBottom, paddingSide, paddingTopBottom);
+            listView.setClipToPadding(false);
+        }
     }
 
     @Override

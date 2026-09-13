@@ -7,10 +7,57 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:statusBarColor">@color/background_status_bar</item>
         <item name="android:navigationBarColor">@color/background_app</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="preferenceTheme">@style/CrazePreferenceTheme</item>
+
+        <item name="colorAccent">@color/minebutton_color</item>
+        <item name="colorControlActivated">@color/minebutton_color</item>
+        <item name="colorControlNormal">#8D9AA8</item>
+        <item name="colorControlHighlight">#26FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#8D9AA8</item>
 
         <item name="android:textSize">@dimen/_12ssp</item>
+    </style>
 
+    <style name="CrazePreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceCategoryStyle">@style/CrazePreferenceCategory</item>
+        <item name="preferenceStyle">@style/CrazePreference</item>
+        <item name="checkBoxPreferenceStyle">@style/CrazePreference.CheckBox</item>
+        <item name="switchPreferenceCompatStyle">@style/CrazePreference.Switch</item>
+        <item name="switchPreferenceStyle">@style/CrazePreference.Switch</item>
+        <item name="seekBarPreferenceStyle">@style/CrazePreference.SeekBar</item>
+        <item name="dialogPreferenceStyle">@style/CrazePreference</item>
+        <item name="editTextPreferenceStyle">@style/CrazePreference</item>
+
+        <item name="colorAccent">@color/minebutton_color</item>
+        <item name="colorControlActivated">@color/minebutton_color</item>
+        <item name="colorControlNormal">#8D9AA8</item>
+        <item name="colorControlHighlight">#26FFFFFF</item>
+    </style>
+
+    <style name="CrazePreferenceCategory" parent="@style/Preference.Category">
+        <item name="android:textColor">#10B981</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CrazePreference" parent="@style/Preference.Material">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#8D9AA8</item>
+    </style>
+
+    <style name="CrazePreference.CheckBox" parent="@style/Preference.CheckBoxPreference.Material">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#8D9AA8</item>
+    </style>
+
+    <style name="CrazePreference.Switch" parent="@style/Preference.SwitchPreferenceCompat.Material">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#8D9AA8</item>
+    </style>
+
+    <style name="CrazePreference.SeekBar" parent="@style/Preference.SeekBarPreference.Material">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#8D9AA8</item>
     </style>
 
     <style name="LauncherFragment_Divider">

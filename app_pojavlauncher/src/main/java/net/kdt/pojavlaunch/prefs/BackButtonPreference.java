@@ -24,7 +24,18 @@ public class BackButtonPreference extends Preference {
             setTitle(R.string.preference_back_title);
         }
         if(getIcon() == null){
-            setIcon(R.drawable.ic_px_arrow_left);
+            setIcon(R.drawable.ic_craze_back);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@androidx.annotation.NonNull androidx.preference.PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        android.widget.TextView titleView = (android.widget.TextView) holder.findViewById(android.R.id.title);
+        if (titleView != null) {
+            titleView.setTextColor(android.graphics.Color.WHITE);
+            titleView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 16);
+            titleView.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
         }
     }
 
