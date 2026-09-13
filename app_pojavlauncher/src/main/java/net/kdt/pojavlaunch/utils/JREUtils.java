@@ -272,9 +272,20 @@ public class JREUtils {
                 useGles = true;
                 glesVersion = 3;
                 break;
-            case "krypton":
-            case "opengles3_krypton":
-                renderLibrary = "libgl4es_114.so";
+            case "fcl_render":
+                LibraryPlugin fclPlugin = LibraryPlugin.discoverPlugin(null, LibraryPlugin.ID_FCL_RENDER_PLUGIN);
+                if (fclPlugin != null && fclPlugin.checkLibraries("libfcl_render.so")) {
+                    renderLibrary = fclPlugin.resolveAbsolutePath("libfcl_render.so");
+                    bypassNamespace = true;
+                } else {
+                    File customLib = new File(Tools.DIR_CACHE, "fcl_render/libfcl_render.so");
+                    if (customLib.exists()) {
+                        renderLibrary = customLib.getAbsolutePath();
+                        bypassNamespace = true;
+                    } else {
+                        renderLibrary = "libgl4es_114.so";
+                    }
+                }
                 useGles = true;
                 glesVersion = 3;
                 break;

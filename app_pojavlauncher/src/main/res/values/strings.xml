@@ -63,7 +63,7 @@
     <string name="mcl_setting_title_javaargs">JVM Launch arguments</string>
     <string name="mcl_setting_subtitle_javaargs">Be careful, this may make game crash if modified without knowledge.</string>
     <string name="mcl_setting_category_renderer">Renderer</string>
-    <string name="mcl_setting_renderer_krypton">Krypton (OpenGL ES 3) - High Performance wrapper, all versions</string>
+    <string name="mcl_setting_renderer_fcl_render">FCL Render Plugin - Custom render plugin support</string>
     <string name="mcl_setting_renderer_gles2_4">Holy GL4ES 1.1.4 - all versions till 1.21.4, fast</string>
     <string name="mcl_setting_renderer_gles2_5">GL4ES 1.1.5 - extended features, fast</string>
     <string name="mcl_setting_renderer_vulkan_zink">Zink (Vulkan) - all versions, mid</string>

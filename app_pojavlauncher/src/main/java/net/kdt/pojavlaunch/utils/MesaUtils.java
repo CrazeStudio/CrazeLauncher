@@ -25,8 +25,7 @@ public class MesaUtils {
      */
     public static void initEnvironment(Context context, String renderer, Map<String, String> envMap){
         switch(renderer) {
-            case "krypton":
-            case "opengles3_krypton":
+            case "fcl_render":
                 envMap.put("LIBGL_USEVBO", "1");
                 envMap.put("LIBGL_BATCH", "1");
                 envMap.put("LIBGL_SHRINK", "0");
@@ -37,7 +36,7 @@ public class MesaUtils {
                 envMap.put("LIBGL_FORCE_DEPTH16", "0");
                 if (GLInfoUtils.getGlInfo().glesMajorVersion >= 3) {
                     envMap.put("LIBGL_ES", "3");
-                    envMap.put("LIBGL_GL", "30");
+                    envMap.put("LIBGL_GL", "33");
                 }
                 break;
             case "vulkan_zink":

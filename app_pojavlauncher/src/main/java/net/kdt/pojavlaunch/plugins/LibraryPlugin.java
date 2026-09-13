@@ -16,6 +16,7 @@ public class LibraryPlugin {
     public static final String ID_ANGLE_PLUGIN = "git.mojo.angle";
     public static final String ID_FFMPEG_PLUGIN = "git.mojo.ffmpeg";
     public static final String ID_ZINK_PLUGIN = "git.mojo.zink";
+    public static final String ID_FCL_RENDER_PLUGIN = "com.fcl.render";
 
     private String appId;
     private String libraryPath;
@@ -24,7 +25,7 @@ public class LibraryPlugin {
         this.libraryPath = libraryPath;
     }
     public static LibraryPlugin discoverPlugin(Context ctx, String appId){
-
+        if (ctx == null) return null;
         String libraryPath;
         try {
             PackageInfo pluginPackage = ctx.getPackageManager().getPackageInfo(appId, PackageManager.GET_SHARED_LIBRARY_FILES);
