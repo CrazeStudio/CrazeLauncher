@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.utils;
 import android.content.Context;
 
 import net.kdt.pojavlaunch.Architecture;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
@@ -24,6 +25,34 @@ public class MesaUtils {
      * @param envMap environment map
      */
     public static void initEnvironment(Context context, String renderer, Map<String, String> envMap){
+        if (renderer != null && (renderer.startsWith("fcl_pkg:") || renderer.startsWith("fcl_dir:") || renderer.startsWith("com.") || renderer.contains("mobileglues") || renderer.equals("fcl_render"))) {
+            envMap.put("POJAV_RENDERER", renderer);
+            envMap.put("LIBGL_USEVBO", "1");
+            envMap.put("LIBGL_BATCH", "1");
+            envMap.put("LIBGL_SHRINK", "0");
+            envMap.put("LIBGL_MIPMAP", "3");
+            envMap.put("LIBGL_NOERROR", "1");
+            envMap.put("LIBGL_DEFAULTWRAP", "1");
+            envMap.put("LIBGL_NORMALIZE", "1");
+            envMap.put("LIBGL_FORCE_DEPTH16", "0");
+            envMap.put("LIBGL_ES", "3");
+            envMap.put("LIBGL_GL", "33");
+            envMap.put("allow_higher_compat_version", "true");
+            envMap.put("allow_glsl_extension_directive_midshader", "true");
+
+            LibraryPlugin plugin = null;
+            if (renderer.startsWith("fcl_pkg:")) {
+                String pkgId = renderer.substring("fcl_pkg:".length());
+                plugin = LibraryPlugin.discoverPlugin(context, pkgId);
+            } else if (renderer.startsWith("com.")) {
+                plugin = LibraryPlugin.discoverPlugin(context, renderer);
+            }
+            if (plugin != null && plugin.getLibraryPath() != null) {
+                envMap.put("LD_LIBRARY_PATH", plugin.getLibraryPath() + ":" + Tools.NATIVE_LIB_DIR);
+            }
+            return;
+        }
+
         switch(renderer) {
             case "fcl_render":
                 envMap.put("LIBGL_USEVBO", "1");

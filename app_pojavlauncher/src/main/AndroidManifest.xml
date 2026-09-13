@@ -30,6 +30,8 @@
     <queries>
         <package android:name="com.shirosaki.fclrendererplugin" />
         <package android:name="com.commonlauncher.nativeplugin" />
+        <package android:name="com.fcl.plugin.mobileglues" />
+        <package android:name="com.fcl.mobileglues" />
         <package android:name="com.fcl.renderplugin" />
         <package android:name="com.fcl.render" />
         <package android:name="com.zalith.renderplugin" />

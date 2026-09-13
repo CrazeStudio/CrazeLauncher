@@ -51,6 +51,9 @@ public class LibraryPlugin {
         if (ctx == null) return list;
 
         String[] knownAppIds = {
+            "com.fcl.plugin.mobileglues",
+            "com.fcl.mobileglues",
+            "com.mobileglues",
             "com.shirosaki.fclrendererplugin",
             "com.commonlauncher.nativeplugin",
             "com.fcl.renderplugin",
@@ -74,7 +77,7 @@ public class LibraryPlugin {
             for (PackageInfo pkg : packages) {
                 if (pkg.packageName == null) continue;
                 String lower = pkg.packageName.toLowerCase();
-                if ((lower.contains("fcl") || lower.contains("render")) && lower.contains("plugin")) {
+                if (lower.contains("fcl") || lower.contains("mobileglues") || (lower.contains("render") && lower.contains("plugin"))) {
                     boolean alreadyAdded = false;
                     for (LibraryPlugin existing : list) {
                         if (existing.getId().equals(pkg.packageName)) {

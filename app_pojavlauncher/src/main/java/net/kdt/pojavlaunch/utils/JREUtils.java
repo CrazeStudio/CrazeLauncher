@@ -265,7 +265,7 @@ public class JREUtils {
             renderer = "opengles2";
         }
 
-        if (renderer.startsWith("fcl_pkg:") || renderer.startsWith("fcl_dir:") || renderer.startsWith("com.") || renderer.equals("fcl_render") || renderer.contains("plugin")) {
+        if (renderer.startsWith("fcl_pkg:") || renderer.startsWith("fcl_dir:") || renderer.startsWith("com.") || renderer.equals("fcl_render") || renderer.contains("plugin") || renderer.contains("mobileglues")) {
             LibraryPlugin plugin = null;
             if (renderer.startsWith("fcl_pkg:")) {
                 String pkgId = renderer.substring("fcl_pkg:".length());
@@ -284,7 +284,7 @@ public class JREUtils {
 
             if (plugin != null) {
                 String[] candidateLibs = {
-                    "libfcl_render.so", "libkrypton.so", "libgl4es_115.so", "libgl4es_114.so", "libzink.so", "libvirgl.so", "libGL.so", "libEGL_angle.so", "libGLESv2.so"
+                    "libmobileglues.so", "libgl4es_mobileglues.so", "libGL_mobileglues.so", "libfcl_render.so", "libkrypton.so", "libgl4es_115.so", "libgl4es_114.so", "libzink.so", "libvirgl.so", "libGL.so", "libEGL_angle.so", "libGLESv2.so"
                 };
                 String foundLib = null;
                 for (String lib : candidateLibs) {
@@ -310,8 +310,8 @@ public class JREUtils {
                     bypassNamespace = true;
                     useGles = true;
                     glesVersion = 3;
-                    setRendererLibraryPath(plugin.getLibraryPath(), null);
-                    Log.i("JREUtils", "Loaded installed FCLRendererPlugin (" + plugin.getAppName() + ") native library: " + renderLibrary);
+                    setRendererLibraryPath(Tools.NATIVE_LIB_DIR, plugin.getLibraryPath());
+                    Log.i("JREUtils", "Loaded installed FCLRendererPlugin MobileGLues (" + plugin.getAppName() + ") native library: " + renderLibrary);
                 }
             } else {
                 renderLibrary = "libgl4es_114.so";
@@ -351,8 +351,16 @@ public class JREUtils {
         }
 
         if (!MojoExec.prepareEgl(renderLibrary, bypassNamespace, useGles, glesVersion)) {
-            Log.e("RENDER_LIBRARY", "Failed to load renderer " + renderLibrary);
-            return null;
+            Log.w("RENDER_LIBRARY", "Failed to load renderer with namespace bypass: " + renderLibrary + ", retrying standard dlopen...");
+            if (!MojoExec.prepareEgl(renderLibrary, false, useGles, glesVersion)) {
+                Log.e("RENDER_LIBRARY", "Failed to load renderer " + renderLibrary + ", falling back to libgl4es_114.so");
+                renderLibrary = "libgl4es_114.so";
+                setRendererLibraryPath(Tools.NATIVE_LIB_DIR, null);
+                if (!MojoExec.prepareEgl(renderLibrary, false, true, 3)) {
+                    Log.e("RENDER_LIBRARY", "Fatal fallback failed for " + renderLibrary);
+                    return null;
+                }
+            }
         }
         MesaUtils.destroyZink(); // Not needed anymore
         return renderLibrary;
