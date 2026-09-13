@@ -22,6 +22,7 @@ import net.kdt.pojavlaunch.utils.GLInfoUtils;
 import net.kdt.pojavlaunch.utils.GameOptionsUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.JSONUtils;
+import net.kdt.pojavlaunch.utils.JnaNativeManager;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.utils.OldVersionsUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
@@ -257,6 +258,10 @@ public class GameRunner {
         }
         launchClassPath.trimToSize();
 
+        // Detect expected JNA version from classpath/versionId and ensure classloader consistency
+        String expectedJnaVer = JnaNativeManager.getExpectedJnaNativeVersion(launchClassPath, versionId);
+        JnaNativeManager.sanitizeClasspath(launchClassPath, expectedJnaVer);
+
         List<String> javaArgList = new ArrayList<>();
 
         if (versionInfo.logging != null && versionInfo.logging.client != null && versionInfo.logging.client.file != null) {
@@ -284,6 +289,9 @@ public class GameRunner {
         File versionSpecificNativesDir = new File(Tools.DIR_CACHE, "natives/"+versionId);
         FileUtils.ensureDirectory(versionSpecificNativesDir);
 
+        // Clean any stale incompatible (6.1.6) JNA native cache files from previous runs
+        JnaNativeManager.cleanStaleJnaCache();
+
         // Unify built-in native libraries from Tools.NATIVE_LIB_DIR into versionSpecificNativesDir
         // so that versionSpecificNativesDir contains a SINGLE flat directory of all required .so files.
         File nativeLibDirFile = new File(Tools.NATIVE_LIB_DIR);
@@ -292,6 +300,8 @@ public class GameRunner {
             if(nativeFiles != null) {
                 for(File nf : nativeFiles) {
                     if(nf.isFile() && nf.getName().endsWith(".so")) {
+                        // Skip libjnidispatch.so here as it is strictly managed by JnaNativeManager
+                        if(nf.getName().equals("libjnidispatch.so")) continue;
                         File destSo = new File(versionSpecificNativesDir, nf.getName());
                         if(!destSo.exists() || destSo.length() != nf.length()) {
                             try {
@@ -305,8 +315,16 @@ public class GameRunner {
             }
         }
 
+        // Manage and ensure version-aligned, architecture-verified libjnidispatch.so (Expected 7.0.4 for modern Fabric/MC)
+        String primaryAbi = (android.os.Build.SUPPORTED_ABIS != null && android.os.Build.SUPPORTED_ABIS.length > 0)
+                ? android.os.Build.SUPPORTED_ABIS[0] : "arm64-v8a";
+        JnaNativeManager.ensureJnaNative(versionSpecificNativesDir, versionId, expectedJnaVer, primaryAbi, activity);
+
         String libPath = versionSpecificNativesDir.getAbsolutePath();
         javaArgList.add("-Djna.boot.library.path="+libPath);
+        javaArgList.add("-Djna.nosys=true");
+        javaArgList.add("-Djna.debug_load=true");
+        javaArgList.add("-Djna.debug_load.jna=true");
         javaArgList.add("-Djava.library.path="+libPath);
         // CRITICAL: Never pass colon-separated paths to LWJGL 2, use a single absolute directory path
         javaArgList.add("-Dorg.lwjgl.librarypath="+libPath);

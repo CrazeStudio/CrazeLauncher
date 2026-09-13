@@ -18,12 +18,12 @@ if(CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
     target_sources(mojoexec PRIVATE driver_helper/arm64_func_locator.c)
     target_compile_definitions(mojoexec PRIVATE USE_ARM64_LOCATOR)
     target_compile_definitions(mojoexec PRIVATE ENABLE_TURNIP_LOADER)
-
-    add_library(linkerhook SHARED
-            driver_helper/hook.c
-    )
-    target_link_options(linkerhook PRIVATE "-Wl,-z,global")
 endif()
+
+add_library(linkerhook SHARED
+        driver_helper/hook.c
+)
+target_link_options(linkerhook PRIVATE "-Wl,-z,global")
 
 target_link_options(mojoexec PRIVATE "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.script")
 

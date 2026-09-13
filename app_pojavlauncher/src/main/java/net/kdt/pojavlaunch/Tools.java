@@ -468,17 +468,37 @@ public final class Tools {
         MavenName libName = libItem.name;
         String[] version = libName.version.split("\\.");
         if (libName.module.equals("jna") && libName.provider.equals("net.java.dev.jna")) {
-            // Special handling for LabyMod 1.8.9, Forge 1.12.2(?) and oshi
-            // we have libjnidispatch 5.13.0 in jniLibs directory
-            if (Integer.parseInt(version[0]) >= 5 && Integer.parseInt(version[1]) >= 13)
-                return;
-            Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.13.0");
+            // We have libjnidispatch 7.0.4 (JNA 5.18.0) in jniLibs directory.
+            // If the version is >= 5.17, it natively uses JNA 7.0.4 native.
+            // If the version is < 5.17, align to 5.18.0 so Java JNA and libjnidispatch.so (7.0.4) match.
+            try {
+                int major = Integer.parseInt(version[0]);
+                int minor = version.length > 1 ? Integer.parseInt(version[1]) : 0;
+                if (major > 5 || (major == 5 && minor >= 17))
+                    return;
+            } catch (Exception ignored) {}
+            Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.18.0");
             createLibraryInfo(libItem);
-            libItem.name = new MavenName(libName.provider, libName.module, "5.13.0");
-            libItem.downloads.artifact.path = "net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
-            libItem.downloads.artifact.sha1 = "1200e7ebeedbe0d10062093f32925a912020e747";
-            libItem.downloads.artifact.url = MAVEN_CENTRAL+"net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar";
-            libItem.downloads.artifact.size = 1879325;
+            libItem.name = new MavenName(libName.provider, libName.module, "5.18.0");
+            libItem.downloads.artifact.path = "net/java/dev/jna/jna/5.18.0/jna-5.18.0.jar";
+            libItem.downloads.artifact.sha1 = "a443db2a11ebf84923f1fac12f29d2969e78f58d";
+            libItem.downloads.artifact.url = MAVEN_CENTRAL+"net/java/dev/jna/jna/5.18.0/jna-5.18.0.jar";
+            libItem.downloads.artifact.size = 2002989;
+            libItem.replaced = true;
+        } else if (libName.module.equals("jna-platform") && libName.provider.equals("net.java.dev.jna")) {
+            try {
+                int major = Integer.parseInt(version[0]);
+                int minor = version.length > 1 ? Integer.parseInt(version[1]) : 0;
+                if (major > 5 || (major == 5 && minor >= 17))
+                    return;
+            } catch (Exception ignored) {}
+            Log.d(APP_NAME, "Library " + libItem.name + " has been changed to version 5.18.0");
+            createLibraryInfo(libItem);
+            libItem.name = new MavenName(libName.provider, libName.module, "5.18.0");
+            libItem.downloads.artifact.path = "net/java/dev/jna/jna-platform/5.18.0/jna-platform-5.18.0.jar";
+            libItem.downloads.artifact.sha1 = "228c7e8be9be28f823b39149e1cf59f9feac7b33";
+            libItem.downloads.artifact.url = MAVEN_CENTRAL+"net/java/dev/jna/jna-platform/5.18.0/jna-platform-5.18.0.jar";
+            libItem.downloads.artifact.size = 1380746;
             libItem.replaced = true;
         } else if (libName.module.equals("oshi-core") && libName.provider.equals("com.github.oshi")) {
             //if (Integer.parseInt(version[0]) >= 6 && Integer.parseInt(version[1]) >= 3) return;

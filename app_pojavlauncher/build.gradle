@@ -94,6 +94,11 @@ android {
         multiDexEnabled false //important
         resValue 'string', 'curseforge_api_key', getCFApiKey()
         resValue 'string', 'group_id', 'git.artdeell'
+        externalNativeBuild {
+            cmake {
+                targets "pojavexec", "pojavexec_awt", "awt_headless", "awt_xawt", "shaderc", "glfw", "mojoexec", "linkerhook"
+            }
+        }
     }
 
     flavorDimensions  = ["runtime"]
@@ -163,6 +168,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
 
     bundle {
@@ -359,4 +368,5 @@ dependencies {
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    testImplementation 'junit:junit:4.13.2'
 }
