@@ -258,7 +258,14 @@ public class JREUtils {
         boolean preloadVk = true;
         int glesVersion = 3;
 
-        if (renderer != null && (renderer.startsWith("fcl_pkg:") || renderer.startsWith("com.") || renderer.equals("fcl_render"))) {
+        if (renderer == null || renderer.isEmpty()) {
+            renderer = LauncherPreferences.PREF_RENDERER;
+        }
+        if (renderer == null || renderer.isEmpty()) {
+            renderer = "opengles2";
+        }
+
+        if (renderer.startsWith("fcl_pkg:") || renderer.startsWith("com.") || renderer.equals("fcl_render")) {
             LibraryPlugin plugin = null;
             if (renderer.startsWith("fcl_pkg:")) {
                 String pkgId = renderer.substring("fcl_pkg:".length());
@@ -266,7 +273,7 @@ public class JREUtils {
             } else if (renderer.startsWith("com.")) {
                 plugin = LibraryPlugin.discoverPlugin(context, renderer);
             }
-            if (plugin == null) {
+            if (plugin == null && context != null) {
                 plugin = LibraryPlugin.discoverFclPlugin(context);
             }
 
@@ -301,9 +308,13 @@ public class JREUtils {
                     setRendererLibraryPath(plugin.getLibraryPath(), null);
                     Log.i("JREUtils", "Loaded installed FCLRendererPlugin (" + plugin.getAppName() + ") native library: " + renderLibrary);
                 }
+            } else {
+                renderLibrary = "libgl4es_114.so";
+                useGles = true;
+                glesVersion = 3;
             }
         } else {
-            switch (renderer != null ? renderer : ""){
+            switch (renderer) {
                 case "freedreno_kgsl":
                     preloadVk = false;
                 case "vulkan_zink":
@@ -311,15 +322,19 @@ public class JREUtils {
                     useGles = false;
                     bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
                     glesVersion = 3;
-                    if(preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
+                    if (preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
                     break;
                 case "opengles3_ltw":
                     renderLibrary = "libltw.so";
                     useGles = true;
                     glesVersion = 3;
                     break;
-                case "opengles2":
                 case "opengles2_5":
+                    renderLibrary = "libgl4es_115.so";
+                    useGles = true;
+                    glesVersion = 3;
+                    break;
+                case "opengles2":
                 case "opengles3":
                 default:
                     renderLibrary = "libgl4es_114.so";
@@ -331,7 +346,7 @@ public class JREUtils {
         }
 
         if (!MojoExec.prepareEgl(renderLibrary, bypassNamespace, useGles, glesVersion)) {
-            Log.e("RENDER_LIBRARY","Failed to load renderer " + renderLibrary );
+            Log.e("RENDER_LIBRARY", "Failed to load renderer " + renderLibrary);
             return null;
         }
         MesaUtils.destroyZink(); // Not needed anymore
