@@ -12,6 +12,12 @@
             android:icon="@drawable/ic_px_image_renderer"
             app2:useSimpleSummaryProvider="true"/>
 
+        <Preference
+            android:key="fcl_add_plugin_apk"
+            android:title="Renderer Plugins (Add APK)"
+            android:summary="Import external FCLRendererPlugin APK (ShirosakiMio, etc.)"
+            android:icon="@drawable/ic_px_image_renderer" />
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="ignoreNotch"

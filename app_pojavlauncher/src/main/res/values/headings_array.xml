@@ -6,7 +6,6 @@
         <item name="2">@string/mcl_setting_renderer_gles2_5</item>
         <item name="3">@string/mcl_setting_renderer_vulkan_zink</item>
         <item name="4">@string/mcl_setting_renderer_freedreno_kgsl</item>
-        <item name="5">@string/mcl_setting_renderer_ltw</item>
     </string-array>
 
     <string-array name="menu_customcontrol">
@@ -43,7 +42,6 @@
         <item>opengles2_5</item> <!-- gl4es 1.1.5 with extended support -->
         <item>vulkan_zink</item> <!-- zink with OpenGL (Vulkan) -->
         <item>freedreno_kgsl</item> <!-- freedreno gallium driver with OpenGL 4.6 -->
-        <item>opengles3_ltw</item> <!-- GL Core on GLES wrapper with GL3/4 -->
     </string-array>
     <string-array name="download_source_names">
         <item>@string/global_default</item>

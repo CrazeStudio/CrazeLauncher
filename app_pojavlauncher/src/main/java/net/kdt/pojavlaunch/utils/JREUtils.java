@@ -17,6 +17,7 @@ import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.multirt.Runtime;
+import net.kdt.pojavlaunch.plugins.FclPluginManager;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.*;
 
@@ -257,99 +258,69 @@ public class JREUtils {
         boolean bypassNamespace = false;
         boolean preloadVk = true;
         int glesVersion = 3;
-        switch (renderer){
-            case "freedreno_kgsl":
-                preloadVk = false;
-            case "vulkan_zink":
-                renderLibrary = MesaUtils.getPreferredEGL();
-                useGles = false;
-                bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
-                glesVersion = 3;
-                if(preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
-                break;
-            case "opengles3_ltw" :
-                renderLibrary = "libltw.so";
+
+        if (renderer != null && (renderer.startsWith(FclPluginManager.RENDERER_PREFIX) || renderer.equals("fcl_render"))) {
+            FclPluginManager.FclPlugin fclPlugin = FclPluginManager.getPluginById(context, renderer);
+            if (fclPlugin != null) {
+                renderLibrary = fclPlugin.getResolvedMainSoPath();
+                bypassNamespace = true;
                 useGles = true;
                 glesVersion = 3;
-                break;
-            case "fcl_render":
-                LibraryPlugin fclPlugin = LibraryPlugin.discoverFclPlugin(context);
-                if (fclPlugin != null) {
+                setRendererLibraryPath(fclPlugin.libraryPath, null);
+                Log.i("JREUtils", "Loaded selected FCLRendererPlugin (" + fclPlugin.name + ") lib: " + renderLibrary);
+                
+                if (fclPlugin.environmentVars != null) {
+                    for (Map.Entry<String, String> entry : fclPlugin.environmentVars.entrySet()) {
+                        try {
+                            Os.setenv(entry.getKey(), entry.getValue(), true);
+                        } catch (Exception e) {
+                            Log.e("JREUtils", "Failed to setenv " + entry.getKey(), e);
+                        }
+                    }
+                }
+            } else {
+                LibraryPlugin fallback = LibraryPlugin.discoverFclPlugin(context);
+                if (fallback != null) {
                     String[] candidateLibs = {
                         "libfcl_render.so", "libkrypton.so", "libgl4es_115.so", "libgl4es_114.so", "libzink.so", "libvirgl.so", "libGL.so", "libGLESv2.so"
                     };
                     String foundLib = null;
                     for (String lib : candidateLibs) {
-                        if (new File(fclPlugin.getLibraryPath(), lib).exists()) {
+                        if (new File(fallback.getLibraryPath(), lib).exists()) {
                             foundLib = lib;
                             break;
                         }
                     }
-                    if (foundLib == null) {
-                        File nativeDir = new File(fclPlugin.getLibraryPath());
-                        File[] files = nativeDir.listFiles();
-                        if (files != null) {
-                            for (File f : files) {
-                                if (f.getName().endsWith(".so")) {
-                                    foundLib = f.getName();
-                                    break;
-                                }
-                            }
-                        }
-                    }
                     if (foundLib != null) {
-                        renderLibrary = fclPlugin.resolveAbsolutePath(foundLib);
+                        renderLibrary = fallback.resolveAbsolutePath(foundLib);
                         bypassNamespace = true;
                         useGles = true;
                         glesVersion = 3;
-                        setRendererLibraryPath(fclPlugin.getLibraryPath(), null);
-                        Log.i("JREUtils", "Loaded FCL Renderer Plugin (" + fclPlugin.getId() + ") library: " + renderLibrary);
-                        break;
+                        setRendererLibraryPath(fallback.getLibraryPath(), null);
                     }
                 }
-
-                File[] fallbackDirs = {
-                    new File(Tools.DIR_CACHE, "fcl_render"),
-                    new File(Tools.DIR_GAME_HOME, "fcl_render"),
-                    new File("/sdcard/fcl/renders"),
-                    new File("/sdcard/PojavLauncher/plugins")
-                };
-                boolean foundFallback = false;
-                for (File dir : fallbackDirs) {
-                    if (dir.exists() && dir.isDirectory()) {
-                        File[] files = dir.listFiles();
-                        if (files != null) {
-                            for (File f : files) {
-                                if (f.getName().endsWith(".so")) {
-                                    renderLibrary = f.getAbsolutePath();
-                                    bypassNamespace = true;
-                                    useGles = true;
-                                    glesVersion = 3;
-                                    foundFallback = true;
-                                    Log.i("JREUtils", "Loaded custom render library from file: " + renderLibrary);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (foundFallback) break;
-                }
-
-                if (!foundFallback) {
+            }
+        } else {
+            switch (renderer != null ? renderer : ""){
+                case "freedreno_kgsl":
+                    preloadVk = false;
+                case "vulkan_zink":
+                    renderLibrary = MesaUtils.getPreferredEGL();
+                    useGles = false;
+                    bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
+                    glesVersion = 3;
+                    if(preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
+                    break;
+                case "opengles2":
+                case "opengles2_5":
+                case "opengles3":
+                default:
                     renderLibrary = "libgl4es_114.so";
                     useGles = true;
-                    glesVersion = 3;
-                }
-                break;
-            case "opengles2":
-            case "opengles2_5":
-            case "opengles3":
-            default:
-                renderLibrary = "libgl4es_114.so";
-                useGles = true;
-                String openGlVal = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
-                glesVersion = openGlVal != null ? Integer.parseInt(openGlVal) : (GLInfoUtils.getGlInfo().glesMajorVersion >= 3 ? 3 : 2);
-                break;
+                    String openGlVal = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
+                    glesVersion = openGlVal != null ? Integer.parseInt(openGlVal) : (GLInfoUtils.getGlInfo().glesMajorVersion >= 3 ? 3 : 2);
+                    break;
+            }
         }
 
         if (!MojoExec.prepareEgl(renderLibrary, bypassNamespace, useGles, glesVersion)) {

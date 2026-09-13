@@ -4,13 +4,19 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import git.artdeell.mojo.R;
 
 import net.kdt.pojavlaunch.Architecture;
+import net.kdt.pojavlaunch.plugins.FclPluginManager;
 import net.kdt.pojavlaunch.plugins.LibraryPlugin;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -20,6 +26,23 @@ import net.kdt.pojavlaunch.utils.RendererCompatUtil;
  * Fragment for any settings video related
  */
 public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment {
+
+    private final ActivityResultLauncher<String> mPickApkLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            uri -> {
+                if (uri != null && getContext() != null) {
+                    try {
+                        FclPluginManager.FclPlugin plugin = FclPluginManager.importPluginApk(requireContext(), uri);
+                        Toast.makeText(getContext(), "Imported FCLRendererPlugin: " + plugin.name, Toast.LENGTH_LONG).show();
+                        refreshRendererList();
+                    } catch (Exception e) {
+                        Log.e("LauncherPrefVideo", "Failed to import FCLRendererPlugin APK", e);
+                        Toast.makeText(getContext(), "Error importing APK: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+    );
+
     @Override
     public void onCreatePreferences(Bundle b, String str) {
         addPreferencesFromResource(R.xml.pref_video);
@@ -62,13 +85,26 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
             legacyZink.setVisible(false);
         }
 
-        ListPreference rendererListPreference = requirePreference("renderer",
-                ListPreference.class);
-        RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(getContext());
-        rendererListPreference.setEntries(renderersList.rendererDisplayNames);
-        rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
+        Preference addApkPref = findPreference("fcl_add_plugin_apk");
+        if (addApkPref != null) {
+            addApkPref.setOnPreferenceClickListener(preference -> {
+                mPickApkLauncher.launch("*/*");
+                return true;
+            });
+        }
 
+        refreshRendererList();
         computeVisibility();
+    }
+
+    private void refreshRendererList() {
+        ListPreference rendererListPreference = findPreference("renderer");
+        if (rendererListPreference != null && getContext() != null) {
+            RendererCompatUtil.releaseRenderersCache();
+            RendererCompatUtil.RenderersList renderersList = RendererCompatUtil.getCompatibleRenderers(getContext());
+            rendererListPreference.setEntries(renderersList.rendererDisplayNames);
+            rendererListPreference.setEntryValues(renderersList.rendererIds.toArray(new String[0]));
+        }
     }
 
     @Override
@@ -78,6 +114,7 @@ public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment 
         if(activity != null) {
             requirePreference("ignoreNotch").setVisible(LauncherPreferences.hasNotch(activity));
         }
+        refreshRendererList();
     }
 
     @Override
