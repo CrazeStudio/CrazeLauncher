@@ -91,18 +91,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/progress_layout" />
 
-    <!-- Top Floating Account Switcher (Overlay on top-right of the screen) -->
+    <!-- Top Floating Account Switcher (Overlay on top-left of the screen) -->
     <com.kdt.mcgui.AccountSpinner
         android:id="@+id/account_spinner"
         android:layout_width="wrap_content"
         android:layout_height="38dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:background="@drawable/bg_craze_card_clickable"
         android:paddingHorizontal="8dp"
         android:visibility="visible"
         android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sidebar_divider"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Bottom Progress Overlay Layout -->

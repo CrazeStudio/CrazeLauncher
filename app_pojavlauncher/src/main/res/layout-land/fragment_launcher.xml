@@ -15,26 +15,27 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.45" />
 
     <!-- ======================================================== -->
-    <!-- LEFT PANE (55%): MAIN CONTENT & PLAY CONTROLS            -->
+    <!-- RIGHT PANE (55%): MAIN CONTENT & PLAY CONTROLS           -->
     <!-- ======================================================== -->
     
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/left_pane_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginEnd="12dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/split_guideline">
+        app:layout_constraintStart_toEndOf="@id/center_divider"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/instance_card_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="SELECTED PROFILE"
             android:textColor="#8D9AA8"
             android:textSize="12sp"
@@ -258,19 +259,19 @@
         app:layout_constraintEnd_toEndOf="@id/split_guideline" />
 
     <!-- ======================================================== -->
-    <!-- RIGHT PANE (45%): TOOLS & CONTENT                        -->
+    <!-- LEFT PANE (45%): TOOLS & CONTENT                         -->
     <!-- ======================================================== -->
     <ScrollView
         android:id="@+id/right_scroll_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:fillViewport="true"
         android:scrollbars="none"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/center_divider"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/center_divider">
 
         <LinearLayout
             android:layout_width="match_parent"
