@@ -236,6 +236,16 @@ public class LauncherActivity extends BaseActivity {
             attachTouchAnimation(mSettingsButton);
             mSettingsButton.setOnClickListener(mSettingButtonListener);
         }
+        View discordBtn = findViewById(R.id.discord_button);
+        if (discordBtn != null) {
+            attachTouchAnimation(discordBtn);
+            discordBtn.setOnClickListener(v -> Tools.openURL(this, getString(R.string.social_media_invite)));
+        }
+        View githubBtn = findViewById(R.id.github_button);
+        if (githubBtn != null) {
+            attachTouchAnimation(githubBtn);
+            githubBtn.setOnClickListener(v -> Tools.openURL(this, "https://github.com/CrazeStudio/CrazeLauncher"));
+        }
         if (mDownloadButton != null) mDownloadButton.setOnClickListener(mDownloadButtonListener);
         View addAccountBtn = findViewById(R.id.add_account_button);
         if (addAccountBtn != null) {

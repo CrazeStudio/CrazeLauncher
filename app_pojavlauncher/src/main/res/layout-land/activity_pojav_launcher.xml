@@ -9,8 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:paddingHorizontal="24dp"
+        android:layout_height="48dp"
+        android:paddingHorizontal="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -18,8 +18,8 @@
         <!-- Logo Section -->
         <ImageView
             android:id="@+id/logo_icon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:src="@drawable/ic_craze_logo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="14dp"
+            android:layout_marginStart="10dp"
             app:layout_constraintStart_toEndOf="@id/logo_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="CRAZELAUNCHER"
                 android:textColor="#FFFFFF"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.04" />
 
@@ -49,13 +49,13 @@
                 android:layout_height="wrap_content"
                 android:text="PLAY BEYOND LIMITS"
                 android:textColor="#707B88"
-                android:textSize="9sp"
+                android:textSize="8.5sp"
                 android:textStyle="bold"
-                android:letterSpacing="0.3"
+                android:letterSpacing="0.25"
                 android:layout_marginTop="-2dp" />
         </LinearLayout>
 
-        <!-- Right Icons Section -->
+        <!-- Right Controls & Icons Section -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -63,44 +63,61 @@
             android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Discord Icon (Decorative overlay) -->
-            <FrameLayout
-                android:layout_width="32dp"
+            <!-- Real Account Switcher Spinner cleanly inside Top Bar -->
+            <com.kdt.mcgui.AccountSpinner
+                android:id="@+id/account_spinner"
+                android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:layout_marginEnd="20dp">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_discord"
-                    android:padding="2dp" />
-                <Button
-                    android:id="@+id/social_media_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent" />
-            </FrameLayout>
+                android:background="@drawable/bg_landscape_card"
+                android:paddingHorizontal="10dp"
+                android:layout_marginEnd="12dp"
+                android:gravity="center_vertical"
+                android:visibility="visible" />
 
-            <!-- Github Icon (Decorative) -->
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+            <!-- Discord Icon Button -->
+            <ImageButton
+                android:id="@+id/discord_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_discord"
+                android:scaleType="centerInside"
+                android:padding="4dp"
+                android:layout_marginEnd="8dp"
+                android:contentDescription="Discord" />
+
+            <!-- Github Icon Button -->
+            <ImageButton
+                android:id="@+id/github_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_github"
-                android:padding="2dp"
-                android:layout_marginEnd="24dp"
-                android:contentDescription="@null" />
+                android:scaleType="centerInside"
+                android:padding="4dp"
+                android:layout_marginEnd="10dp"
+                android:contentDescription="GitHub" />
 
             <!-- Settings Button -->
             <ImageButton
                 android:id="@+id/setting_button"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_px_sliders"
                 android:scaleType="centerInside"
-                android:padding="2dp"
+                android:padding="4dp"
                 android:contentDescription="@string/preference_category_miscellaneous" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Divider under Top Bar -->
+    <View
+        android:id="@+id/top_bar_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#191E28"
+        app:layout_constraintTop_toBottomOf="@id/top_bar_layout" />
 
     <!-- Main Content Fragment Container -->
     <androidx.fragment.app.FragmentContainerView
@@ -108,26 +125,19 @@
         android:name="net.kdt.pojavlaunch.fragments.MainMenuFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/top_bar_layout"
+        app:layout_constraintTop_toBottomOf="@id/top_bar_divider"
         app:layout_constraintBottom_toTopOf="@+id/progress_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Top Floating Account Switcher (Overlay on top-right of main panel) -->
-    <!-- Mockup shows Account selector in the main content card, on the right. 
-         We'll position it exactly to overlay that space. -->
-    <com.kdt.mcgui.AccountSpinner
-        android:id="@+id/account_spinner"
-        android:layout_width="200dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/bg_landscape_card"
-        android:paddingHorizontal="16dp"
-        android:visibility="visible"
-        android:elevation="6dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_bar_layout" />
+    <!-- Hidden Views to Preserve Bindings -->
+    <Button
+        android:id="@+id/social_media_button"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Hidden Views to Preserve Bindings -->
     <ImageButton

@@ -4,209 +4,241 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="@android:color/transparent"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
-    android:paddingBottom="24dp">
+    android:background="#0B0E14"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="10dp"
+    android:paddingTop="6dp">
 
     <!-- ======================================================== -->
     <!-- LEFT PANE: SIDEBAR NAVIGATION                            -->
     <!-- ======================================================== -->
     <LinearLayout
-        android:layout_width="200dp"
+        android:layout_width="140dp"
         android:layout_height="match_parent"
         android:background="@drawable/bg_landscape_panel"
         android:orientation="vertical"
-        android:paddingVertical="20dp"
-        android:paddingHorizontal="12dp">
+        android:padding="8dp">
 
-        <!-- Home (Active) -->
+        <!-- Tab: Home (Active) -->
         <LinearLayout
+            android:id="@+id/nav_home"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="36dp"
             android:background="@drawable/bg_landscape_active_tab"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="8dp">
+            android:paddingHorizontal="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="4dp">
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:src="@drawable/ic_px_home"
                 android:contentDescription="Home"
                 app:tint="#FFFFFF" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:text="Home"
                 android:textColor="#FFFFFF"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Instances -->
+        <!-- Tab: Instances -->
         <LinearLayout
+            android:id="@+id/nav_instances"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@android:color/transparent"
+            android:layout_height="36dp"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="8dp">
+            android:paddingHorizontal="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="4dp">
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:src="@drawable/ic_craze_cube"
                 android:contentDescription="Instances"
                 app:tint="#A4A8B0" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:text="Instances"
                 android:textColor="#A4A8B0"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
         </LinearLayout>
 
-        <!-- Mods -->
+        <!-- Tab: Mods -->
         <LinearLayout
+            android:id="@+id/nav_mods"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@android:color/transparent"
+            android:layout_height="36dp"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="8dp">
+            android:paddingHorizontal="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="4dp">
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:src="@drawable/ic_craze_folder"
                 android:contentDescription="Mods"
                 app:tint="#A4A8B0" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:text="Mods"
                 android:textColor="#A4A8B0"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
         </LinearLayout>
 
-        <!-- Packs -->
+        <!-- Tab: Packs -->
         <LinearLayout
+            android:id="@+id/nav_packs"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@android:color/transparent"
+            android:layout_height="36dp"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="8dp">
+            android:paddingHorizontal="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="4dp">
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:src="@drawable/ic_craze_layers"
                 android:contentDescription="Packs"
                 app:tint="#A4A8B0" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:text="Packs"
                 android:textColor="#A4A8B0"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
         </LinearLayout>
         
-        <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
-
-        <!-- Settings (Visual only in sidebar, actual button in top bar) -->
-        <LinearLayout
+        <!-- Flexible Spacer to push Settings to bottom -->
+        <View
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@android:color/transparent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Tab: Settings -->
+        <LinearLayout
+            android:id="@+id/nav_settings"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="?selectableItemBackground"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="12dp"
+            android:clickable="true"
+            android:focusable="true">
             <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:src="@drawable/ic_px_sliders"
                 android:contentDescription="Settings"
                 app:tint="#A4A8B0" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="10dp"
                 android:text="Settings"
                 android:textColor="#A4A8B0"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>
 
     <!-- ======================================================== -->
-    <!-- RIGHT PANE: MAIN CONTENT & PLAY CONTROLS                 -->
+    <!-- RIGHT PANE: MAIN CONTENT & CONTROLS                      -->
     <!-- ======================================================== -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/bg_landscape_panel"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="12dp">
 
-        <!-- Top Row: Instance & Account -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Top Row: Instance selector with icon and edit button -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
             
-            <!-- Grass Block -->
+            <!-- Grass Block Icon -->
             <ImageView
                 android:id="@+id/grass_block"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:src="@drawable/ic_craze_grass_block"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                android:contentDescription="Instance" />
 
-            <!-- Version Selector -->
-            <!-- The actual version spinner bound in Java -->
+            <!-- Version Selector Dropdown -->
             <com.kdt.mcgui.mcVersionSpinner
                 android:id="@+id/mc_version_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="8dp"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
                 android:textColor="#FFFFFF"
-                android:textSize="22sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
                 android:drawableEnd="@drawable/spinner_arrow"
                 app:drawableEndSize="@dimen/padding_heavy"
-                app:drawableStartIntegerScaling="true"
-                app:layout_constraintStart_toEndOf="@id/grass_block"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:drawableStartIntegerScaling="true" />
 
-            <!-- Subtitle Fake Overlay if needed, but version_spinner takes care of text -->
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Edit Instance Settings / JVM Button -->
+            <ImageButton
+                android:id="@+id/edit_profile_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_craze_edit_btn"
+                android:src="@drawable/ic_craze_pencil"
+                android:tint="#A4A8B0"
+                android:padding="6dp"
+                android:scaleType="centerInside"
+                android:contentDescription="@string/create_instance" />
+        </LinearLayout>
 
-        <!-- Space before Play Button -->
-        <Space android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
-
-        <!-- Middle Row: PLAY Button -->
-        <FrameLayout
+        <!-- Flexible Space above Play Button -->
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:minHeight="4dp" />
+
+        <!-- Middle: Big PLAY Button -->
+        <FrameLayout
+            android:id="@+id/play_button"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_landscape_play"
+            android:clickable="true"
+            android:focusable="true">
             
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_landscape_play"
                 android:orientation="vertical"
                 android:gravity="center">
                 
@@ -216,18 +248,18 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
                     <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@drawable/ic_craze_play"
                         android:contentDescription="@null"
                         app:tint="#FFFFFF" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="10dp"
                         android:text="PLAY"
                         android:textColor="#FFFFFF"
-                        android:textSize="28sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.04" />
                 </LinearLayout>
@@ -235,281 +267,254 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="1dp"
                     android:text="MINECRAFT JAVA EDITION"
                     android:textColor="#8E98A5"
-                    android:textSize="10sp"
+                    android:textSize="8.5sp"
                     android:textStyle="bold"
-                    android:letterSpacing="0.2" />
+                    android:letterSpacing="0.18" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/play_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?selectableItemBackground" />
         </FrameLayout>
 
-        <!-- Bottom Row: 4 Cards -->
+        <!-- Bottom Row: 4 Quick Action Cards -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="68dp"
+            android:layout_height="48dp"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="8dp">
 
             <!-- Card 1: Mods -->
             <FrameLayout
+                android:id="@+id/card_mods"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginEnd="6dp">
+                android:layout_marginEnd="3dp"
+                android:background="@drawable/bg_landscape_card"
+                android:clickable="true"
+                android:focusable="true">
                 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_landscape_card"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:paddingHorizontal="8dp">
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_craze_folder"
                         app:tint="#FFFFFF" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="8dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mods"
                             android:textColor="#FFFFFF"
-                            android:textSize="13sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="One Click Install"
+                            android:text="Install Mods"
                             android:textColor="#8E98A5"
-                            android:textSize="9sp" />
+                            android:textSize="7.5sp" />
                     </LinearLayout>
                 </LinearLayout>
-                
-                <LinearLayout
-                    android:id="@+id/card_new_instance"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?selectableItemBackground" />
             </FrameLayout>
 
             <!-- Card 2: Modpacks -->
             <FrameLayout
+                android:id="@+id/card_modpacks"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="6dp">
+                android:layout_marginHorizontal="3dp"
+                android:background="@drawable/bg_landscape_card"
+                android:clickable="true"
+                android:focusable="true">
                 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_landscape_card"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:paddingHorizontal="8dp">
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_craze_modpack_folder"
                         app:tint="#FFFFFF" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="8dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Modpacks"
                             android:textColor="#FFFFFF"
-                            android:textSize="13sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Browse &amp; Install"
+                            android:text="Browse Packs"
                             android:textColor="#8E98A5"
-                            android:textSize="9sp" />
+                            android:textSize="7.5sp" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/card_mods_modpacks"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?selectableItemBackground" />
             </FrameLayout>
 
-            <!-- Card 3: Resource Packs -->
+            <!-- Card 3: Custom Controls -->
             <FrameLayout
+                android:id="@+id/custom_control_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="6dp">
+                android:layout_marginHorizontal="3dp"
+                android:background="@drawable/bg_landscape_card"
+                android:clickable="true"
+                android:focusable="true">
                 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_landscape_card"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:paddingHorizontal="8dp">
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_craze_palette"
                         app:tint="#FFFFFF" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="8dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Resource Packs"
+                            android:text="Controls"
                             android:textColor="#FFFFFF"
-                            android:textSize="13sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Install with 1 Click"
+                            android:text="Custom Keys"
                             android:textColor="#8E98A5"
-                            android:textSize="9sp" />
+                            android:textSize="7.5sp" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/custom_control_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent" />
             </FrameLayout>
 
-            <!-- Card 4: Shader Packs -->
+            <!-- Card 4: Install JAR -->
             <FrameLayout
+                android:id="@+id/install_jar_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginStart="6dp">
+                android:layout_marginStart="3dp"
+                android:background="@drawable/bg_landscape_card"
+                android:clickable="true"
+                android:focusable="true">
                 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/bg_landscape_card"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:paddingHorizontal="8dp">
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:src="@drawable/ic_craze_map"
                         app:tint="#FFFFFF" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="8dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Shader Packs"
+                            android:text="Install JAR"
                             android:textColor="#FFFFFF"
-                            android:textSize="13sp"
+                            android:textSize="11sp"
                             android:textStyle="bold" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Get Shaders Easily"
+                            android:text="Forge / Fabric"
                             android:textColor="#8E98A5"
-                            android:textSize="9sp" />
+                            android:textSize="7.5sp" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/install_jar_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent" />
             </FrameLayout>
         </LinearLayout>
 
-        <!-- Lowest Row: News -->
-        <FrameLayout
+        <!-- Lowest Row: News Bar -->
+        <LinearLayout
+            android:id="@+id/news_button"
             android:layout_width="match_parent"
-            android:layout_height="56dp">
+            android:layout_height="38dp"
+            android:background="@drawable/bg_landscape_card"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp"
+            android:clickable="true"
+            android:focusable="true">
             
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_craze_log_doc"
+                app:tint="#FFFFFF" />
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_landscape_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_craze_log_doc"
-                    app:tint="#FFFFFF" />
-                <LinearLayout
-                    android:layout_width="0dp"
+                android:layout_marginStart="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="News"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Stay updated with the latest!"
-                        android:textColor="#8E98A5"
-                        android:textSize="10sp" />
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_craze_chevron_right"
-                    app:tint="#FFFFFF" />
+                    android:text="News: "
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Stay updated with the latest Minecraft and CrazeLauncher news!"
+                    android:textColor="#8E98A5"
+                    android:textSize="10sp"
+                    android:ellipsize="end"
+                    android:singleLine="true" />
             </LinearLayout>
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_craze_chevron_right"
+                app:tint="#FFFFFF" />
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/news_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent" />
-        </FrameLayout>
+        <!-- Stubs to preserve all fragment and activity view-bindings safely -->
+        <View android:id="@+id/open_files_button" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <View android:id="@+id/share_logs_button" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <View android:id="@+id/card_new_instance" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <View android:id="@+id/card_mods_modpacks" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <View android:id="@+id/social_media_button" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <View android:id="@+id/ready_badge" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <View android:id="@+id/instance_card_title" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
 
-        <!-- Hidden Required Bindings for MainMenuFragment -->
-        <Button android:id="@+id/open_files_button" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-        <Button android:id="@+id/share_logs_button" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-        <ImageButton android:id="@+id/edit_profile_button" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-        <LinearLayout android:id="@+id/ready_badge" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-        <TextView android:id="@+id/instance_card_title" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
-        
     </LinearLayout>
 
 </LinearLayout>

@@ -21,12 +21,14 @@ import com.kdt.mcgui.mcVersionSpinner;
 import net.kdt.pojavlaunch.CustomControlsActivity;
 import git.artdeell.mojo.R;
 
+import net.kdt.pojavlaunch.LauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.contracts.OpenDocumentWithExtension;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
+import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.utils.FileUtils;
 
@@ -48,16 +50,45 @@ public class MainMenuFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Button mNewsButton = view.findViewById(R.id.news_button);
-        Button mDiscordButton = view.findViewById(R.id.social_media_button);
-        Button mCustomControlButton = view.findViewById(R.id.custom_control_button);
-        Button mInstallJarButton = view.findViewById(R.id.install_jar_button);
-        Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
-        Button mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
-
-        ImageButton mEditProfileButton = view.findViewById(R.id.edit_profile_button);
+        View mNewsButton = view.findViewById(R.id.news_button);
+        View mDiscordButton = view.findViewById(R.id.social_media_button);
+        View mCustomControlButton = view.findViewById(R.id.custom_control_button);
+        View mInstallJarButton = view.findViewById(R.id.install_jar_button);
+        View mShareLogsButton = view.findViewById(R.id.share_logs_button);
+        View mOpenDirectoryButton = view.findViewById(R.id.open_files_button);
+        View mEditProfileButton = view.findViewById(R.id.edit_profile_button);
         View mPlayButton = view.findViewById(R.id.play_button);
         mVersionSpinner = view.findViewById(R.id.mc_version_spinner);
+
+        // Sidebar Navigation
+        View navHome = view.findViewById(R.id.nav_home);
+        View navInstances = view.findViewById(R.id.nav_instances);
+        View navMods = view.findViewById(R.id.nav_mods);
+        View navPacks = view.findViewById(R.id.nav_packs);
+        View navSettings = view.findViewById(R.id.nav_settings);
+
+        if (navHome != null) {
+            attachTouchAnimation(navHome);
+            navHome.setOnClickListener(v -> {
+                if (mVersionSpinner != null) mVersionSpinner.reloadProfiles();
+            });
+        }
+        if (navInstances != null) {
+            attachTouchAnimation(navInstances);
+            navInstances.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
+        }
+        if (navMods != null) {
+            attachTouchAnimation(navMods);
+            navMods.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
+        }
+        if (navPacks != null) {
+            attachTouchAnimation(navPacks);
+            navPacks.setOnClickListener(v -> openGameDirectory(requireContext()));
+        }
+        if (navSettings != null) {
+            attachTouchAnimation(navSettings);
+            navSettings.setOnClickListener(v -> Tools.swapFragment(requireActivity(), LauncherPreferenceFragment.class, LauncherActivity.SETTING_FRAGMENT_TAG, null));
+        }
 
         if (mPlayButton != null) {
             attachTouchAnimation(mPlayButton);
@@ -95,6 +126,8 @@ public class MainMenuFragment extends Fragment {
 
         View mCardNewInstance = view.findViewById(R.id.card_new_instance);
         View mCardMods = view.findViewById(R.id.card_mods_modpacks);
+        View mCardModsDirect = view.findViewById(R.id.card_mods);
+        View mCardModpacksDirect = view.findViewById(R.id.card_modpacks);
 
         if (mCardNewInstance != null) {
             attachTouchAnimation(mCardNewInstance);
@@ -106,7 +139,18 @@ public class MainMenuFragment extends Fragment {
             mCardMods.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
         }
 
+        if (mCardModsDirect != null) {
+            attachTouchAnimation(mCardModsDirect);
+            mCardModsDirect.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
+        }
+
+        if (mCardModpacksDirect != null) {
+            attachTouchAnimation(mCardModpacksDirect);
+            mCardModpacksDirect.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
+        }
+
         if (mNewsButton != null) {
+            attachTouchAnimation(mNewsButton);
             mNewsButton.setOnClickListener(v -> Tools.openURL(requireActivity(), Tools.URL_HOME));
             mNewsButton.setOnLongClickListener((v) -> {
                 Tools.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
@@ -114,6 +158,7 @@ public class MainMenuFragment extends Fragment {
             });
         }
         if (mDiscordButton != null) {
+            attachTouchAnimation(mDiscordButton);
             mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.social_media_invite)));
         }
     }
