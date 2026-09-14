@@ -90,7 +90,7 @@
                     android:layout_height="48dp"
                     android:background="@drawable/bg_craze_play_btn"
                     android:text="@string/login_online_login_label"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#0A0A0A"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textAllCaps="false" />

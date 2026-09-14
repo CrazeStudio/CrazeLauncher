@@ -415,6 +415,7 @@
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:src="@drawable/ic_craze_play"
+                app:tint="#0A0A0A"
                 android:contentDescription="@null"
                 android:layout_marginEnd="10dp" />
 
@@ -422,7 +423,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PLAY"
-                android:textColor="#FFFFFF"
+                android:textColor="#0A0A0A"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.08" />

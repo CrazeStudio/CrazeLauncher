@@ -137,9 +137,9 @@
                         android:id="@+id/vprof_editor_version_button"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:background="@drawable/bg_craze_play_btn"
+                        android:background="@drawable/bg_craze_edit_btn"
                         android:text="@string/global_select"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/primary_text"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:paddingHorizontal="10dp"/>
@@ -179,9 +179,9 @@
                         android:id="@+id/vprof_editor_ctrl_button"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:background="@drawable/bg_craze_play_btn"
+                        android:background="@drawable/bg_craze_edit_btn"
                         android:text="@string/global_select"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/primary_text"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:paddingHorizontal="10dp"/>
@@ -308,7 +308,7 @@
                 android:layout_marginStart="6dp"
                 android:background="@drawable/bg_craze_play_btn"
                 android:text="@string/global_save"
-                android:textColor="#FFFFFF"
+                android:textColor="#0A0A0A"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"/>

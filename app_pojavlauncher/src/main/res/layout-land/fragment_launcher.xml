@@ -571,13 +571,13 @@
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_craze_play"
                                 android:contentDescription="@null"
-                                app:tint="#FFFFFF" />
+                                app:tint="#0A0A0A" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:text="PLAY"
-                                android:textColor="#FFFFFF"
+                                android:textColor="#0A0A0A"
                                 android:textSize="19sp"
                                 android:textStyle="bold"
                                 android:letterSpacing="0.04" />
@@ -588,7 +588,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
                             android:text="MINECRAFT JAVA EDITION"
-                            android:textColor="#D1FAE5"
+                            android:textColor="#5A5A5A"
                             android:textSize="8sp"
                             android:textStyle="bold"
                             android:letterSpacing="0.16" />

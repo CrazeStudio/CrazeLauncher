@@ -33,7 +33,7 @@
         android:layout_height="36dp"
         android:background="@drawable/bg_craze_edit_btn"
         android:src="@drawable/ic_px_trash"
-        android:tint="#8D9AA8"
+        app:tint="@color/secondary_text"
         android:padding="8dp"
         android:scaleType="centerInside"
         android:contentDescription="@string/global_delete" />
