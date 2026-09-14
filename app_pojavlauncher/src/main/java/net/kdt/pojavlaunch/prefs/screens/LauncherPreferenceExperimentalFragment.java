@@ -8,7 +8,7 @@ import net.kdt.pojavlaunch.utils.GLInfoUtils;
 
 import git.artdeell.mojo.R;
 
-public class LauncherPreferenceExperimentalFragment extends LauncherPreferenceFragment {
+public class LauncherPreferenceExperimentalFragment extends LauncherBasePreferenceFragment {
 
     @Override
     public void onCreatePreferences(Bundle b, String str) {

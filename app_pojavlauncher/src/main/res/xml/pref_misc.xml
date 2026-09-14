@@ -61,6 +61,18 @@
             android:title="@string/preference_show_memory_warning_title"
             android:summary="@string/preference_show_memory_warning_summary"/>
 
+        <SwitchPreference
+            android:title="@string/preference_force_english_title"
+            android:key="force_english"
+            android:summary="@string/preference_force_english_description"
+            android:icon="@drawable/ic_px_translate"/>
+
+        <Preference
+            android:title="@string/preference_ask_for_notification_title"
+            android:summary="@string/preference_ask_for_notification_description"
+            android:key="notification_permission_request"
+            android:icon="@drawable/ic_px_bell" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

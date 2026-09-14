@@ -16,7 +16,7 @@ import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog;
 import net.kdt.pojavlaunch.prefs.CustomSeekBarPreference;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 
-public class LauncherPreferenceJavaFragment extends LauncherPreferenceFragment {
+public class LauncherPreferenceJavaFragment extends LauncherBasePreferenceFragment {
     private MultiRTConfigDialog mDialogScreen;
     private final ActivityResultLauncher<Object> mVmInstallLauncher =
             registerForActivityResult(new OpenDocumentWithExtension("xz"), (data)->{

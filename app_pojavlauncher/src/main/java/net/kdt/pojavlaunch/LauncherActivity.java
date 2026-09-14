@@ -54,7 +54,7 @@ import net.kdt.pojavlaunch.utils.NotificationUtils;
 
 import git.artdeell.mojo.R;
 
-public class LauncherActivity extends BaseActivity {
+public class LauncherActivity extends BaseActivity implements androidx.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     public static final String SETTING_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
 
     private FragmentContainerView mFragmentView;
@@ -92,8 +92,19 @@ public class LauncherActivity extends BaseActivity {
                     if (drawerButton != null) drawerButton.setVisibility(View.GONE);
                     if (screenTitle != null) {
                         String title = "Back";
-                        if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment) {
+                        if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceVideoFragment) {
+                            title = getString(R.string.preference_category_video);
+                        } else if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceControlFragment) {
+                            title = getString(R.string.preference_control_title);
+                        } else if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceJavaFragment) {
+                            title = getString(R.string.preference_category_java_tweaks);
+                        } else if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceMiscellaneousFragment) {
                             title = getString(R.string.preference_category_miscellaneous);
+                        } else if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceExperimentalFragment) {
+                            title = getString(R.string.preference_experimental_title);
+                        } else if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment
+                                || f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceMainFragment) {
+                            title = getString(R.string.settings);
                         } else if (f instanceof net.kdt.pojavlaunch.fragments.ProfileTypeSelectFragment) {
                             title = getString(R.string.create_instance);
                         } else if (f instanceof net.kdt.pojavlaunch.fragments.SearchModFragment) {
@@ -115,6 +126,21 @@ public class LauncherActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    public boolean onPreferenceStartFragment(@NonNull androidx.preference.PreferenceFragmentCompat caller, @NonNull androidx.preference.Preference pref) {
+        final Bundle args = pref.getExtras();
+        final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
+                getClassLoader(),
+                pref.getFragment());
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .addToBackStack(pref.getFragment())
+                .replace(R.id.container_fragment, fragment)
+                .commit();
+        return true;
+    }
 
     /* Listener for the back button in settings */
     private final ExtraListener<String> mBackPreferenceListener = (key, value) -> {

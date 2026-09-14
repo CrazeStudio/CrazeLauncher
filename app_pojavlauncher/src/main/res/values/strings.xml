@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- App name part -->
     <string name="app_short_name">CrazeLauncher</string>
+    <string name="settings">Settings</string>
 
     <!-- Action bar part -->
 

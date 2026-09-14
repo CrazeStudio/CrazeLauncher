@@ -26,7 +26,7 @@ import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 /**
  * Fragment for any settings video related
  */
-public class LauncherPreferenceVideoFragment extends LauncherPreferenceFragment {
+public class LauncherPreferenceVideoFragment extends LauncherBasePreferenceFragment {
 
     private final ActivityResultLauncher<String> mPickApkLauncher = registerForActivityResult(
             new ActivityResultContracts.GetContent(),

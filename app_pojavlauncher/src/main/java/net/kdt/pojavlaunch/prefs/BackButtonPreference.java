@@ -31,6 +31,12 @@ public class BackButtonPreference extends Preference {
     @Override
     public void onBindViewHolder(@androidx.annotation.NonNull androidx.preference.PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
+        boolean isLandscape = holder.itemView.getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+        if (isLandscape) {
+            holder.itemView.setVisibility(android.view.View.GONE);
+            holder.itemView.setLayoutParams(new androidx.recyclerview.widget.RecyclerView.LayoutParams(0, 0));
+            return;
+        }
         android.widget.TextView titleView = (android.widget.TextView) holder.findViewById(android.R.id.title);
         if (titleView != null) {
             titleView.setTextColor(android.graphics.Color.WHITE);

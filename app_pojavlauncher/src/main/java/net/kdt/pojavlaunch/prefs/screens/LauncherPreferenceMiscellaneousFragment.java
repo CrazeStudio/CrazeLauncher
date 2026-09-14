@@ -27,7 +27,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-public class LauncherPreferenceMiscellaneousFragment extends LauncherPreferenceFragment {
+public class LauncherPreferenceMiscellaneousFragment extends LauncherBasePreferenceFragment {
 
     private final ActivityResultLauncher<Uri> mMigrateLauncher = registerForActivityResult(
             new ActivityResultContracts.OpenDocumentTree(), (uri) -> {
