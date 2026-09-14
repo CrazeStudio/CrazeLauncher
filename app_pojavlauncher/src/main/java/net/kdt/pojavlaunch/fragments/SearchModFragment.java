@@ -284,11 +284,11 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             String ver = mSearchFilters.mcVersion;
             if (ver != null && !ver.isEmpty()) {
                 mFilterBadge.setText("MC: " + ver);
-                mFilterBadge.setTextColor(Color.parseColor("#10B981"));
+                mFilterBadge.setTextColor(Color.parseColor("#FFFFFF"));
                 if (mFilterClear != null) mFilterClear.setVisibility(View.VISIBLE);
             } else {
                 mFilterBadge.setText("All MC Versions");
-                mFilterBadge.setTextColor(Color.parseColor("#C0D0E0"));
+                mFilterBadge.setTextColor(Color.parseColor("#9E9E9E"));
                 if (mFilterClear != null) mFilterClear.setVisibility(View.GONE);
             }
         }
@@ -338,7 +338,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             chip.setTypeface(null, android.graphics.Typeface.BOLD);
         } else {
             chip.setBackgroundResource(R.drawable.bg_craze_chip_unselected);
-            chip.setTextColor(Color.parseColor("#8E98A5"));
+            chip.setTextColor(Color.parseColor("#9E9E9E"));
             chip.setTypeface(null, android.graphics.Typeface.NORMAL);
         }
     }

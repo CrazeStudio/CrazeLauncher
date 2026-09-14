@@ -85,6 +85,18 @@ public class JREUtils {
     public static void setupAngleEnv(Context ctx, Map<String, String> envMap) {
         if (!LauncherPreferences.PREF_USE_ANGLE) return;
         LibraryPlugin angle = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_ANGLE_PLUGIN);
+        if (angle == null) {
+            String[] altAnglePkgs = {
+                "com.google.android.angle",
+                "org.chromium.angle",
+                "com.mobileglues.angle",
+                "com.fcl.angle"
+            };
+            for (String pkg : altAnglePkgs) {
+                angle = LibraryPlugin.discoverPlugin(ctx, pkg);
+                if (angle != null) break;
+            }
+        }
         if (angle == null) return;
         String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
         if (!angle.checkLibraries(angleLibs)) {
@@ -93,6 +105,7 @@ public class JREUtils {
         }
         envMap.put("LIBGL_EGL", angle.resolveAbsolutePath(angleLibs[0]));
         envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
+        Log.i("AngleEnvSetup", "ANGLE integration active: EGL=" + envMap.get("LIBGL_EGL"));
     }
 
     public static void setupFfmpegEnv(Context ctx, Map<String, String> envMap) {
@@ -359,6 +372,13 @@ public class JREUtils {
                     String openGlVal = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
                     glesVersion = openGlVal != null ? Integer.parseInt(openGlVal) : (GLInfoUtils.getGlInfo().glesMajorVersion >= 3 ? 3 : 2);
                     break;
+            }
+        }
+
+        if (renderLibrary != null && !renderLibrary.startsWith("/")) {
+            File nativeFile = new File(Tools.NATIVE_LIB_DIR, renderLibrary);
+            if (nativeFile.exists()) {
+                renderLibrary = nativeFile.getAbsolutePath();
             }
         }
 

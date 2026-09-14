@@ -354,6 +354,9 @@ static int extensionSupportedEGL(const char* extension)
 
 static GLFWglproc getProcAddressEGL(const char* procname)
 {
+    if (!procname)
+        return NULL;
+
     const GLFWglproc proc = (GLFWglproc) eglGetProcAddress(procname);
     if (proc)
         return proc;
@@ -365,6 +368,43 @@ static GLFWglproc getProcAddressEGL(const char* procname)
         if (sym)
             return sym;
     }
+
+#if defined(_GLFW_ANDROID)
+    // Direct check in acquired MojoExec driver handle (e.g. libgl4es, libmobileglues)
+    void* mojo_handle = mojoexec_acq_egl_handle();
+    if (mojo_handle != NULL)
+    {
+        GLFWglproc sym = (GLFWglproc) dlsym(mojo_handle, procname);
+        if (sym)
+            return sym;
+    }
+
+    // Fallback to known OpenGL translation libraries
+    static const char* const candidate_gl_libs[] = {
+        "libgl4es_114.so",
+        "libgl4es_115.so",
+        "libmobileglues.so",
+        "libgl4es_mobileglues.so",
+        "libGL_mobileglues.so",
+        "libfcl_render.so",
+        "libGL.so",
+        "libGL.so.1",
+        NULL
+    };
+    for (int i = 0; candidate_gl_libs[i]; i++) {
+        void* h = dlopen(candidate_gl_libs[i], RTLD_LAZY | RTLD_NOLOAD);
+        if (!h && mojoexec_native_dir) {
+            char path[1024];
+            snprintf(path, sizeof(path), "%s/%s", mojoexec_native_dir, candidate_gl_libs[i]);
+            h = dlopen(path, RTLD_LAZY);
+        }
+        if (!h) h = dlopen(candidate_gl_libs[i], RTLD_LAZY);
+        if (h) {
+            GLFWglproc sym = (GLFWglproc) dlsym(h, procname);
+            if (sym) return sym;
+        }
+    }
+#endif
 
     // Fallback to system GLES library / global dlopen for GLES3 / GL33 sampler functions etc.
     void* gles2 = dlopen("libGLESv2.so", RTLD_LAZY | RTLD_NOLOAD);

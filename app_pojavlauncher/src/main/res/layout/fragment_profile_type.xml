@@ -129,7 +129,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/ic_px_zap"
-                app:tint="#F59E0B"
+                app:tint="@color/primary_text"
                 android:contentDescription="@null"
                 android:layout_marginEnd="16dp"/>
 
@@ -499,7 +499,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:src="@drawable/ic_px_volcano"
-                app:tint="#EF4444"
+                app:tint="@color/primary_text"
                 android:contentDescription="@null"
                 android:layout_marginEnd="16dp"/>
 

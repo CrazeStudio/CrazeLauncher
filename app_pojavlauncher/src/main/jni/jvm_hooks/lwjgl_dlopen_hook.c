@@ -25,16 +25,24 @@ static jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
                      jlong filename_ptr,
                      jint jmode) {
     const char* filename = (const char*) filename_ptr;
+    if(filename == NULL) return 0;
 
-    // Oveeride vulkan loading to let us load vulkan ourselves
-    if(strstr(filename, "libvulkan.so") == filename) {
+    // Override vulkan loading to let us load vulkan ourselves
+    if(strstr(filename, "libvulkan.so") != NULL) {
         printf("LWJGL linkerhook: replacing load for libvulkan.so with custom driver\n");
-        return (jlong) mojoexec_acq_vulkan_handle();
+        void* vk_handle = mojoexec_acq_vulkan_handle();
+        if(vk_handle != NULL) return (jlong) vk_handle;
     }
-    // Load renderer using egl_acquire
-    if(strstr(filename, "libGLMojo.so") == filename) {
-        printf("LWJGL linkerhook: replacing OpenGL with renderspec driver\n");
-        return (jlong) mojoexec_acq_egl_handle();
+
+    // Load renderer using egl_acquire for all variations of OpenGL library loading
+    if(strstr(filename, "libGLMojo.so") != NULL ||
+       strstr(filename, "libGL.so") != NULL ||
+       strstr(filename, "libOpenGL.so") != NULL ||
+       strstr(filename, "libgl4es") != NULL ||
+       strstr(filename, "libmobileglues") != NULL) {
+        printf("LWJGL linkerhook: replacing OpenGL (%s) with renderspec driver\n", filename);
+        void* egl_handle = mojoexec_acq_egl_handle();
+        if(egl_handle != NULL) return (jlong) egl_handle;
     }
 
     // This hook also serves the task of mitigating a bug: the idea is that since, on Android 10 and

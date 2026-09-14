@@ -136,9 +136,9 @@ public class LauncherPreferenceFragment extends Fragment {
     private void updateCategoryStyles() {
         if (mCategoryContainers == null) return;
 
-        int activeColor = Color.parseColor("#10B981");
-        int inactiveTextColor = Color.parseColor("#8E98A5");
-        int inactiveIconColor = Color.parseColor("#707B88");
+        int activeColor = Color.WHITE;
+        int inactiveTextColor = Color.parseColor("#9E9E9E");
+        int inactiveIconColor = Color.parseColor("#757575");
 
         for (int i = 0; i < mCategoryContainers.length; i++) {
             boolean isSelected = (i == mSelectedCategory);

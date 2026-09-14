@@ -24,10 +24,10 @@ public abstract class LauncherBasePreferenceFragment extends PreferenceFragmentC
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        view.setBackgroundColor(Color.parseColor("#0B0E14"));
+        view.setBackgroundColor(Color.parseColor("#0A0A0A"));
         super.onViewCreated(view, savedInstanceState);
 
-        setDivider(new ColorDrawable(Color.parseColor("#191E28")));
+        setDivider(new ColorDrawable(Color.parseColor("#242424")));
         setDividerHeight((int) (1 * getResources().getDisplayMetrics().density));
 
         RecyclerView listView = getListView();

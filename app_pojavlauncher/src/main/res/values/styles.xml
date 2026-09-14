@@ -69,14 +69,14 @@
         <item name="dialogPreferenceStyle">@style/CrazePreference</item>
         <item name="editTextPreferenceStyle">@style/CrazePreference</item>
 
-        <item name="colorAccent">#10B981</item>
-        <item name="colorControlActivated">#10B981</item>
-        <item name="colorControlNormal">#8E98A5</item>
-        <item name="colorControlHighlight">#2610B981</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <item name="colorControlActivated">#FFFFFF</item>
+        <item name="colorControlNormal">#9E9E9E</item>
+        <item name="colorControlHighlight">#26FFFFFF</item>
     </style>
 
     <style name="CrazePreferenceCategory" parent="@style/Preference.Category">
-        <item name="android:textColor">#10B981</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">13sp</item>
     </style>

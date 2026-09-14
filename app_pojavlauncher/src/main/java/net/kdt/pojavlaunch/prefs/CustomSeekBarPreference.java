@@ -66,7 +66,7 @@ public class CustomSeekBarPreference extends SeekBarPreference {
         mTextView = (TextView) view.findViewById(R.id.seekbar_value);
         if (mTextView != null) {
             mTextView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-            mTextView.setTextColor(Color.parseColor("#10B981"));
+            mTextView.setTextColor(Color.WHITE);
             mTextView.setTypeface(null, android.graphics.Typeface.BOLD);
         }
 

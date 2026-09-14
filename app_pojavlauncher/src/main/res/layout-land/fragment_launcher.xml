@@ -212,7 +212,7 @@
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="2dp"
                         android:text="MODULES"
-                        android:textColor="#10B981"
+                        android:textColor="#FFFFFF"
                         android:textSize="8.5sp"
                         android:textStyle="bold"
                         android:letterSpacing="0.1" />
@@ -245,7 +245,7 @@
                             android:layout_height="22dp"
                             android:src="@drawable/ic_craze_folder"
                             android:contentDescription="Mods"
-                            app:tint="#10B981" />
+                            app:tint="#FFFFFF" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -421,7 +421,7 @@
                         android:layout_height="16dp"
                         android:src="@drawable/ic_craze_log_doc"
                         android:contentDescription="Updates"
-                        app:tint="#10B981" />
+                        app:tint="#FFFFFF" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -533,7 +533,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="6dp"
                             android:text="Ready to launch"
-                            android:textColor="#10B981"
+                            android:textColor="#FFFFFF"
                             android:textSize="9.5sp"
                             android:textStyle="bold" />
                     </LinearLayout>
