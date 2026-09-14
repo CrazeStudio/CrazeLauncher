@@ -1,0 +1,79 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+  <!-- Main Globe Group Centered (Radius 36) -->
+  <g>
+    <!-- Sphere Radial Base -->
+    <path
+        android:pathData="M54,18 A36,36 0 1,0 54,90 A36,36 0 1,0 54,18 Z">
+      <aapt:attr name="android:fillColor">
+        <radialGradient
+            android:centerX="40"
+            android:centerY="40"
+            android:gradientRadius="48"
+            android:type="radial">
+          <item android:offset="0.0" android:color="#FFFFFF" />
+          <item android:offset="0.25" android:color="#E2E8F0" />
+          <item android:offset="0.6" android:color="#94A3B8" />
+          <item android:offset="0.85" android:color="#475569" />
+          <item android:offset="1.0" android:color="#0F172A" />
+        </radialGradient>
+      </aapt:attr>
+    </path>
+
+    <!-- Globe Grid Lines (Left Side Grooves) -->
+    <path
+        android:pathData="M18,54 L54,54"
+        android:strokeWidth="2.5"
+        android:strokeColor="#090D16" />
+    <path
+        android:pathData="M23,36 A36,14 0 0,1 54,36"
+        android:strokeWidth="2"
+        android:strokeColor="#090D16" />
+    <path
+        android:pathData="M23,72 A36,14 0 0,0 54,72"
+        android:strokeWidth="2"
+        android:strokeColor="#090D16" />
+    <path
+        android:pathData="M54,18 L54,90"
+        android:strokeWidth="2.5"
+        android:strokeColor="#090D16" />
+    <path
+        android:pathData="M54,18 A27,36 0 0,0 54,90"
+        android:strokeWidth="2"
+        android:strokeColor="#090D16" />
+    <path
+        android:pathData="M54,18 A17,36 0 0,0 54,90"
+        android:strokeWidth="2"
+        android:strokeColor="#090D16" />
+
+    <!-- Metallic C Cutout / Gap -->
+    <path
+        android:pathData="M48,32 L82,32 L92,46 L70,46 L58,54 L70,62 L92,62 L82,76 L48,76 C66,70 74,62 74,54 C74,46 66,38 48,32 Z"
+        android:fillColor="#090D16" />
+
+    <!-- Metallic C Front Face -->
+    <path
+        android:pathData="M50,34.5 L79,34.5 L88,48 L68,48 L55,54 L68,60 L88,60 L79,73.5 L50,73.5 C67,67 71.5,60.5 71.5,54 C71.5,47.5 67,41 50,34.5 Z"
+        android:strokeWidth="1"
+        android:strokeColor="#FFFFFF">
+      <aapt:attr name="android:fillColor">
+        <gradient
+            android:startX="50"
+            android:startY="34.5"
+            android:endX="88"
+            android:endY="73.5"
+            android:type="linear">
+          <item android:offset="0.0" android:color="#FFFFFF" />
+          <item android:offset="0.4" android:color="#F1F5F9" />
+          <item android:offset="0.7" android:color="#CBD5E1" />
+          <item android:offset="1.0" android:color="#64748B" />
+        </gradient>
+      </aapt:attr>
+    </path>
+  </g>
+</vector>

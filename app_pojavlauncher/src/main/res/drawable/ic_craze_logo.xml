@@ -1,0 +1,76 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+  <!-- Sphere Radial Base -->
+  <path
+      android:pathData="M24,6 A18,18 0 1,0 24,42 A18,18 0 1,0 24,6 Z">
+    <aapt:attr name="android:fillColor">
+      <radialGradient
+          android:centerX="18"
+          android:centerY="18"
+          android:gradientRadius="24"
+          android:type="radial">
+        <item android:offset="0.0" android:color="#FFFFFF" />
+        <item android:offset="0.25" android:color="#E2E8F0" />
+        <item android:offset="0.6" android:color="#94A3B8" />
+        <item android:offset="0.85" android:color="#475569" />
+        <item android:offset="1.0" android:color="#0F172A" />
+      </radialGradient>
+    </aapt:attr>
+  </path>
+
+  <!-- Globe Grid Lines (Left Side Grooves) -->
+  <path
+      android:pathData="M6,24 L24,24"
+      android:strokeWidth="1.2"
+      android:strokeColor="#090D16" />
+  <path
+      android:pathData="M8.5,15 A18,7 0 0,1 24,15"
+      android:strokeWidth="1"
+      android:strokeColor="#090D16" />
+  <path
+      android:pathData="M8.5,33 A18,7 0 0,0 24,33"
+      android:strokeWidth="1"
+      android:strokeColor="#090D16" />
+  <path
+      android:pathData="M24,6 L24,42"
+      android:strokeWidth="1.2"
+      android:strokeColor="#090D16" />
+  <path
+      android:pathData="M24,6 A13,18 0 0,0 24,42"
+      android:strokeWidth="1"
+      android:strokeColor="#090D16" />
+  <path
+      android:pathData="M24,6 A8,18 0 0,0 24,42"
+      android:strokeWidth="1"
+      android:strokeColor="#090D16" />
+
+  <!-- Metallic C Cutout / Gap -->
+  <path
+      android:pathData="M21,13 L38,13 L43,20 L32,20 L26,24 L32,28 L43,28 L38,35 L21,35 C30,32 34,28 34,24 C34,20 30,16 21,13 Z"
+      android:fillColor="#090D16" />
+
+  <!-- Metallic C Front Face -->
+  <path
+      android:pathData="M22,14.5 L36.5,14.5 L41,21 L31,21 L25,24 L31,27 L41,27 L36.5,33.5 L22,33.5 C30,30.5 32.5,27.5 32.5,24 C32.5,20.5 30,17.5 22,14.5 Z"
+      android:strokeWidth="0.5"
+      android:strokeColor="#FFFFFF">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="22"
+          android:startY="14.5"
+          android:endX="41"
+          android:endY="33.5"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#FFFFFF" />
+        <item android:offset="0.4" android:color="#F1F5F9" />
+        <item android:offset="0.7" android:color="#CBD5E1" />
+        <item android:offset="1.0" android:color="#64748B" />
+      </gradient>
+    </aapt:attr>
+  </path>
+</vector>
