@@ -172,7 +172,7 @@
 
             <!-- Version Selector -->
             <!-- The actual version spinner bound in Java -->
-            <com.kdt.mcgui.VersionSpinner
+            <com.kdt.mcgui.mcVersionSpinner
                 android:id="@+id/mc_version_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
