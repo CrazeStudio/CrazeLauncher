@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch.fragments;
 
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -61,6 +61,11 @@ public class FileSelectorFragment extends Fragment {
 
         mCreateFolderButton.setOnClickListener(v -> {
             final EditText editText = new EditText(getContext());
+            editText.setBackgroundResource(R.drawable.bg_craze_input);
+            editText.setTextColor(getResources().getColor(R.color.primary_text));
+            editText.setHintTextColor(getResources().getColor(R.color.text_tertiary));
+            int pad = (int) (14 * getResources().getDisplayMetrics().density);
+            editText.setPadding(pad, pad, pad, pad);
             new AlertDialog.Builder(getContext())
                     .setTitle(R.string.folder_dialog_insert_name)
                     .setView(editText)

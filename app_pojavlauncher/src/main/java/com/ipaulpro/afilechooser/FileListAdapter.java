@@ -111,11 +111,16 @@ public class FileListAdapter extends BaseAdapter {
 
         // Set the TextView as the file name
         view.setText(file.getName());
+        view.setTextColor(row.getContext().getResources().getColor(R.color.primary_text));
+        view.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 14);
+        int padH = (int) (16 * row.getContext().getResources().getDisplayMetrics().density);
+        int padV = (int) (12 * row.getContext().getResources().getDisplayMetrics().density);
+        view.setPadding(padH, padV, padH, padV);
 
         // If the item is not a directory, use the file icon
         int icon = file.isDirectory() ? ICON_FOLDER : ICON_FILE;
         view.setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0);
-        view.setCompoundDrawablePadding(20);
+        view.setCompoundDrawablePadding((int) (12 * row.getContext().getResources().getDisplayMetrics().density));
         return row;
     }
 

@@ -34,7 +34,7 @@
                     android:layout_height="36dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_auth_local"
-                    app:tint="@color/accent_green"
+                    app:tint="@color/primary_text"
                     android:contentDescription="@null"
                     android:layout_marginBottom="8dp" />
 

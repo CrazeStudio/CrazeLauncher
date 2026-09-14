@@ -33,8 +33,9 @@ public class LauncherPreferenceFragment extends PreferenceFragmentCompat impleme
 
         androidx.recyclerview.widget.RecyclerView listView = getListView();
         if (listView != null) {
-            int paddingSide = (int) (14 * getResources().getDisplayMetrics().density);
-            int paddingTopBottom = (int) (8 * getResources().getDisplayMetrics().density);
+            boolean isLandscape = getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+            int paddingSide = (int) ((isLandscape ? 32 : 16) * getResources().getDisplayMetrics().density);
+            int paddingTopBottom = (int) (12 * getResources().getDisplayMetrics().density);
             listView.setPadding(paddingSide, paddingTopBottom, paddingSide, paddingTopBottom);
             listView.setClipToPadding(false);
         }

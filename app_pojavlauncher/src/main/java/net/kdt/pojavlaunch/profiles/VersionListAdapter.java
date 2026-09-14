@@ -106,7 +106,14 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
         if(convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
 
-        ((TextView) convertView).setText(mGroups[groupPosition]);
+        TextView tv = (TextView) convertView;
+        tv.setText(mGroups[groupPosition]);
+        tv.setTextColor(convertView.getContext().getResources().getColor(R.color.primary_text));
+        tv.setTypeface(null, android.graphics.Typeface.BOLD);
+        tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 14);
+        int padH = (int) (18 * convertView.getContext().getResources().getDisplayMetrics().density);
+        int padV = (int) (12 * convertView.getContext().getResources().getDisplayMetrics().density);
+        tv.setPadding(padH, padV, padH, padV);
 
         return convertView;
     }
@@ -115,7 +122,13 @@ public class VersionListAdapter extends BaseExpandableListAdapter implements Exp
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if(convertView == null)
             convertView = mLayoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, parent, false);
-        ((TextView) convertView).setText(getChild(groupPosition, childPosition));
+        TextView tv = (TextView) convertView;
+        tv.setText(getChild(groupPosition, childPosition));
+        tv.setTextColor(convertView.getContext().getResources().getColor(R.color.secondary_text));
+        tv.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 13);
+        int padH = (int) (32 * convertView.getContext().getResources().getDisplayMetrics().density);
+        int padV = (int) (10 * convertView.getContext().getResources().getDisplayMetrics().density);
+        tv.setPadding(padH, padV, padH, padV);
         return convertView;
     }
 

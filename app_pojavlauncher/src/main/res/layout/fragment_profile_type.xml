@@ -25,7 +25,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_craze_add"
-                app:tint="@color/accent_green"
+                app:tint="@color/primary_text"
                 android:contentDescription="@null"
                 android:layout_marginBottom="8dp"/>
 

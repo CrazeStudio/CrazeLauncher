@@ -271,11 +271,11 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         if (chip == null) return;
         if (isSelected) {
             chip.setBackgroundResource(R.drawable.bg_craze_chip_selected);
-            chip.setTextColor(Color.parseColor("#00D26A"));
+            chip.setTextColor(Color.WHITE);
             chip.setTypeface(null, android.graphics.Typeface.BOLD);
         } else {
             chip.setBackgroundResource(R.drawable.bg_craze_chip_unselected);
-            chip.setTextColor(Color.parseColor("#C0D0E0"));
+            chip.setTextColor(Color.parseColor("#8E98A5"));
             chip.setTypeface(null, android.graphics.Typeface.NORMAL);
         }
     }
