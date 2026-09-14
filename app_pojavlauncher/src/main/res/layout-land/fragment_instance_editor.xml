@@ -10,43 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="24dp"
-        android:paddingVertical="16dp">
-
-        <!-- Top Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_px_sliders"
-                app:tint="@color/primary_text"
-                android:contentDescription="@null"
-                android:layout_marginEnd="12dp"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/mcl_instance_editor"
-                android:textColor="@color/primary_text"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"/>
-        </LinearLayout>
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
 
         <!-- Landscape 2-Column Split Pane -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:baselineAligned="false"
-            android:layout_marginBottom="16dp">
+            android:baselineAligned="false">
 
             <!-- LEFT COLUMN: Identity & Controls -->
             <LinearLayout
@@ -54,19 +26,19 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="6dp"
                 android:background="@drawable/background_card"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Profile Identity"
-                    android:textColor="@color/primary_text"
-                    android:textSize="12sp"
+                    android:text="PROFILE IDENTITY"
+                    android:textColor="#10B981"
+                    android:textSize="11sp"
                     android:textStyle="bold"
-                    android:textAllCaps="true"
-                    android:layout_marginBottom="12dp"/>
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="8dp"/>
 
                 <!-- Icon + Name -->
                 <LinearLayout
@@ -74,29 +46,29 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="8dp">
 
                     <FrameLayout
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginEnd="14dp">
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="10dp">
 
                         <ImageView
                             android:id="@+id/vprof_editor_instance_icon"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/background_card"
-                            android:padding="6dp"
+                            android:padding="4dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_craze_logo"
                             android:contentDescription="@null" />
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:layout_gravity="bottom|end"
                             android:background="@drawable/background_icon_edit"
-                            android:padding="3dp"
+                            android:padding="2dp"
                             android:src="@drawable/ic_px_edit"
                             app:tint="@color/primary_text"
                             android:contentDescription="Edit Icon" />
@@ -113,21 +85,21 @@
                             android:layout_height="wrap_content"
                             android:text="@string/profiles_profile_name"
                             android:textColor="@color/secondary_text"
-                            android:textSize="12sp"
-                            android:layout_marginBottom="4dp"/>
+                            android:textSize="11sp"
+                            android:layout_marginBottom="2dp"/>
 
                         <EditText
                             android:id="@+id/vprof_editor_instance_name"
                             android:layout_width="match_parent"
-                            android:layout_height="44dp"
+                            android:layout_height="38dp"
                             android:background="@drawable/bg_craze_input"
                             android:hint="@string/unnamed"
                             android:imeOptions="actionDone"
                             android:inputType="textPersonName"
-                            android:paddingHorizontal="12dp"
+                            android:paddingHorizontal="10dp"
                             android:textColor="@color/primary_text"
-                            android:textColorHint="@color/text_tertiary"
-                            android:textSize="14sp" />
+                            android:textColorHint="@color/secondary_text"
+                            android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -137,18 +109,18 @@
                     android:layout_height="wrap_content"
                     android:text="@string/profiles_profile_version"
                     android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="4dp"/>
+                    android:textSize="11sp"
+                    android:layout_marginBottom="2dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
+                    android:layout_height="38dp"
                     android:orientation="horizontal"
                     android:background="@drawable/bg_craze_input"
                     android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="4dp"
-                    android:layout_marginBottom="14dp">
+                    android:paddingStart="10dp"
+                    android:paddingEnd="3dp"
+                    android:layout_marginBottom="8dp">
 
                     <TextView
                         android:id="@+id/vprof_editor_version_spinner"
@@ -157,20 +129,20 @@
                         android:layout_weight="1"
                         android:hint="@string/version_select_hint"
                         android:textColor="@color/primary_text"
-                        android:textColorHint="@color/text_tertiary"
+                        android:textColorHint="@color/secondary_text"
                         android:textSize="13sp"
                         android:singleLine="true"/>
 
                     <Button
                         android:id="@+id/vprof_editor_version_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="36dp"
+                        android:layout_height="30dp"
                         android:background="@drawable/bg_craze_play_btn"
                         android:text="@string/global_select"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
                         android:textStyle="bold"
-                        android:paddingHorizontal="12dp"/>
+                        android:paddingHorizontal="10dp"/>
                 </LinearLayout>
 
                 <!-- Control Layout Selection -->
@@ -179,18 +151,18 @@
                     android:layout_height="wrap_content"
                     android:text="@string/default_control"
                     android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="4dp"/>
+                    android:textSize="11sp"
+                    android:layout_marginBottom="2dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
+                    android:layout_height="38dp"
                     android:orientation="horizontal"
                     android:background="@drawable/bg_craze_input"
                     android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="4dp"
-                    android:layout_marginBottom="14dp">
+                    android:paddingStart="10dp"
+                    android:paddingEnd="3dp"
+                    android:layout_marginBottom="8dp">
 
                     <TextView
                         android:id="@+id/vprof_editor_ctrl_spinner"
@@ -199,30 +171,30 @@
                         android:layout_weight="1"
                         android:hint="@string/use_global_default"
                         android:textColor="@color/primary_text"
-                        android:textColorHint="@color/text_tertiary"
+                        android:textColorHint="@color/secondary_text"
                         android:textSize="13sp"
                         android:singleLine="true"/>
 
                     <Button
                         android:id="@+id/vprof_editor_ctrl_button"
                         android:layout_width="wrap_content"
-                        android:layout_height="36dp"
+                        android:layout_height="30dp"
                         android:background="@drawable/bg_craze_play_btn"
                         android:text="@string/global_select"
                         android:textColor="#FFFFFF"
-                        android:textSize="12sp"
+                        android:textSize="11sp"
                         android:textStyle="bold"
-                        android:paddingHorizontal="12dp"/>
+                        android:paddingHorizontal="10dp"/>
                 </LinearLayout>
 
                 <!-- Shared Data Checkbox -->
                 <CheckBox
                     android:id="@+id/vprof_editor_data_checkbox_container"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="32dp"
                     android:text="@string/instance_shared_data_off"
                     android:textColor="@color/primary_text"
-                    android:textSize="13sp"/>
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 
@@ -232,19 +204,19 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="6dp"
                 android:background="@drawable/background_card"
-                android:padding="16dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Java &amp; Graphics"
-                    android:textColor="@color/primary_text"
-                    android:textSize="12sp"
+                    android:text="JAVA &amp; GRAPHICS"
+                    android:textColor="#10B981"
+                    android:textSize="11sp"
                     android:textStyle="bold"
-                    android:textAllCaps="true"
-                    android:layout_marginBottom="12dp"/>
+                    android:letterSpacing="0.05"
+                    android:layout_marginBottom="8dp"/>
 
                 <!-- Java Runtime Selector -->
                 <TextView
@@ -252,16 +224,17 @@
                     android:layout_height="wrap_content"
                     android:text="@string/pedit_java_runtime"
                     android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="4dp"/>
+                    android:textSize="11sp"
+                    android:layout_marginBottom="2dp"/>
 
                 <Spinner
                     android:id="@+id/vprof_editor_spinner_runtime"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_craze_input"
-                    android:paddingHorizontal="12dp"
-                    android:layout_marginBottom="14dp"/>
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_craze_spinner"
+                    android:popupBackground="@drawable/bg_landscape_panel"
+                    android:overlapAnchor="false"
+                    android:layout_marginBottom="8dp"/>
 
                 <!-- Renderer Selector -->
                 <TextView
@@ -269,16 +242,17 @@
                     android:layout_height="wrap_content"
                     android:text="@string/pedit_renderer"
                     android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="4dp"/>
+                    android:textSize="11sp"
+                    android:layout_marginBottom="2dp"/>
 
                 <Spinner
                     android:id="@+id/vprof_editor_instance_renderer"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:background="@drawable/bg_craze_input"
-                    android:paddingHorizontal="12dp"
-                    android:layout_marginBottom="14dp"/>
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_craze_spinner"
+                    android:popupBackground="@drawable/bg_landscape_panel"
+                    android:overlapAnchor="false"
+                    android:layout_marginBottom="8dp"/>
 
                 <!-- JVM Arguments -->
                 <TextView
@@ -286,20 +260,20 @@
                     android:layout_height="wrap_content"
                     android:text="@string/pvc_jvmArgs"
                     android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="4dp"/>
+                    android:textSize="11sp"
+                    android:layout_marginBottom="2dp"/>
 
                 <EditText
                     android:id="@+id/vprof_editor_jre_args"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/bg_craze_input"
                     android:hint="@string/use_global_default"
                     android:imeOptions="actionDone"
                     android:inputType="textNoSuggestions"
-                    android:paddingHorizontal="12dp"
+                    android:paddingHorizontal="10dp"
                     android:textColor="@color/primary_text"
-                    android:textColorHint="@color/text_tertiary"
+                    android:textColorHint="@color/secondary_text"
                     android:textSize="13sp"/>
 
             </LinearLayout>
@@ -309,31 +283,33 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp">
 
             <Button
                 android:id="@+id/vprof_editor_delete_button"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="42dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_craze_edit_btn"
                 android:text="@string/global_delete"
                 android:textColor="#EF4444"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"/>
 
             <Button
                 android:id="@+id/vprof_editor_save_button"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="42dp"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="6dp"
                 android:background="@drawable/bg_craze_play_btn"
                 android:text="@string/global_save"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"/>
         </LinearLayout>

@@ -14,11 +14,15 @@
         <item name="alertDialogTheme">@style/CrazeAlertDialogTheme</item>
         <item name="android:spinnerStyle">@style/CrazeSpinnerStyle</item>
         <item name="spinnerStyle">@style/CrazeSpinnerStyle</item>
+        <item name="android:spinnerDropDownItemStyle">@style/CrazeSpinnerDropDownItem</item>
+        <item name="spinnerDropDownItemStyle">@style/CrazeSpinnerDropDownItem</item>
 
         <item name="colorAccent">#FFFFFF</item>
         <item name="colorControlActivated">#4B5563</item>
         <item name="colorControlNormal">#8E98A5</item>
         <item name="colorControlHighlight">#26FFFFFF</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:editTextColor">#FFFFFF</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:textColorSecondary">#8E98A5</item>
 
@@ -48,6 +52,11 @@
 
     <style name="CrazeSpinnerStyle" parent="Widget.AppCompat.Spinner">
         <item name="android:popupBackground">@drawable/bg_landscape_panel</item>
+    </style>
+
+    <style name="CrazeSpinnerDropDownItem" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
     <style name="CrazePreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">

@@ -80,7 +80,28 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         List<String> renderList = new ArrayList<>(renderersList.rendererDisplayNames.length + 1);
         renderList.addAll(Arrays.asList(renderersList.rendererDisplayNames));
         renderList.add(view.getContext().getString(R.string.global_default));
-        mDefaultRenderer.setAdapter(new ArrayAdapter<>(view.getContext(), R.layout.item_simple_list_1, renderList));
+        ArrayAdapter<String> rendererAdapter = new ArrayAdapter<String>(view.getContext(), R.layout.item_simple_list_1, renderList) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                if (v instanceof TextView) {
+                    ((TextView) v).setTextColor(android.graphics.Color.WHITE);
+                }
+                return v;
+            }
+
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+                if (v instanceof TextView) {
+                    ((TextView) v).setTextColor(android.graphics.Color.WHITE);
+                }
+                return v;
+            }
+        };
+        rendererAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown);
+        mDefaultRenderer.setAdapter(rendererAdapter);
 
         // Set up behaviors
         mSaveButton.setOnClickListener(v -> {

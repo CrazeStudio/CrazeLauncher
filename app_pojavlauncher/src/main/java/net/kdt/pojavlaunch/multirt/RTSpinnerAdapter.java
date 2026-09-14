@@ -59,10 +59,12 @@ public class RTSpinnerAdapter implements SpinnerAdapter {
                 LayoutInflater.from(mContext).inflate(R.layout.item_simple_list_1, parent,false);
 
         Runtime runtime = mRuntimes.get(position);
+        TextView textView = (TextView) view;
+        textView.setTextColor(android.graphics.Color.WHITE);
         if(position == mRuntimes.size() - 1 ){
-            ((TextView) view).setText(runtime.name);
+            textView.setText(runtime.name);
         }else{
-            ((TextView) view).setText(String.format("%s - %s",
+            textView.setText(String.format("%s - %s",
                     runtime.name.replace(".tar.xz", ""),
                     runtime.versionString == null ? view.getResources().getString(R.string.multirt_runtime_corrupt) : runtime.versionString));
         }
@@ -87,7 +89,22 @@ public class RTSpinnerAdapter implements SpinnerAdapter {
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        return getView(position,convertView,parent);
+        View view = convertView != null?
+                convertView:
+                LayoutInflater.from(mContext).inflate(R.layout.item_spinner_dropdown, parent,false);
+
+        Runtime runtime = mRuntimes.get(position);
+        TextView textView = (TextView) view;
+        textView.setTextColor(android.graphics.Color.WHITE);
+        if(position == mRuntimes.size() - 1 ){
+            textView.setText(runtime.name);
+        }else{
+            textView.setText(String.format("%s - %s",
+                    runtime.name.replace(".tar.xz", ""),
+                    runtime.versionString == null ? view.getResources().getString(R.string.multirt_runtime_corrupt) : runtime.versionString));
+        }
+
+        return view;
     }
 
 }
