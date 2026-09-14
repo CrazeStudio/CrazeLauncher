@@ -5,36 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_app"
-    android:paddingHorizontal="16dp"
-    android:paddingTop="8dp">
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="6dp">
 
-    <!-- Top Overlay: Search Bar + Filter + Type Filter Tabs -->
+    <!-- ======================================================== -->
+    <!-- LEFT PANEL: Console Controls, Search, Categories, Import -->
+    <!-- ======================================================== -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_mod_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:translationZ="10dp"
+        android:layout_width="226dp"
+        android:layout_height="match_parent"
         android:background="@drawable/bg_landscape_panel"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:layout_marginTop="4dp"
+        android:padding="8dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Search text input -->
+        <!-- Search input -->
         <EditText
             android:id="@+id/search_mod_edittext"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="36dp"
             android:background="@drawable/bg_craze_input"
             android:textColor="@color/primary_text"
             android:textColorHint="@color/text_tertiary"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:hint="@string/hint_search_content"
             android:inputType="text"
             android:imeOptions="actionSearch"
-            android:paddingHorizontal="14dp"
+            android:paddingHorizontal="10dp"
             android:gravity="center_vertical"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,95 +43,240 @@
 
         <ImageButton
             android:id="@+id/search_mod_filter"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="@drawable/bg_craze_edit_btn"
             android:src="@drawable/ic_filter"
             app:tint="@color/secondary_text"
             android:contentDescription="Filters"
-            android:padding="10dp"
+            android:padding="8dp"
             android:scaleType="fitCenter"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="6dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/search_mod_edittext"
             app:layout_constraintTop_toTopOf="@id/search_mod_edittext"
             app:layout_constraintBottom_toBottomOf="@id/search_mod_edittext" />
 
-        <!-- Category Filter Chips (Modpacks, Mods, Resource Packs, Shaders) -->
-        <HorizontalScrollView
-            android:id="@+id/category_scroll_view"
+        <!-- Filter Status Badge -->
+        <LinearLayout
+            android:id="@+id/filter_badge_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/search_mod_edittext"
+            android:layout_height="26dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_craze_card_dark"
+            android:paddingHorizontal="8dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/search_mod_edittext"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <LinearLayout
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_px_sliders"
+                app:tint="#10B981"
+                android:contentDescription="Filter status" />
+
+            <TextView
+                android:id="@+id/search_mod_filter_badge"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="All MC Versions"
+                android:textColor="#C0D0E0"
+                android:textSize="10.5sp"
+                android:ellipsize="end"
+                android:singleLine="true" />
+
+            <ImageButton
+                android:id="@+id/search_mod_filter_clear"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_craze_close"
+                app:tint="#8E98A5"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                android:contentDescription="Clear filter" />
+        </LinearLayout>
+
+        <!-- Accent Divider -->
+        <View
+            android:id="@+id/divider_categories"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/bg_craze_divider"
+            android:layout_marginTop="6dp"
+            app:layout_constraintTop_toBottomOf="@id/filter_badge_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Category Title -->
+        <TextView
+            android:id="@+id/label_categories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CATEGORIES"
+            android:textColor="#637381"
+            android:textSize="9.5sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/divider_categories"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Vertical Category Switcher -->
+        <LinearLayout
+            android:id="@+id/categories_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/label_categories"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/chip_type_modpack"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text="Modpacks"
+                android:textColor="#FFFFFF"
+                android:textSize="11.5sp"
+                android:textStyle="bold"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:drawableStart="@drawable/ic_craze_cube"
+                android:drawablePadding="8dp"
+                android:background="@drawable/bg_craze_chip_selected"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/chip_type_mod"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text="Mods"
+                android:textColor="@color/secondary_text"
+                android:textSize="11.5sp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:drawableStart="@drawable/ic_craze_layers"
+                android:drawablePadding="8dp"
+                android:background="@drawable/bg_craze_chip_unselected"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/chip_type_resourcepack"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text="Resource Packs"
+                android:textColor="@color/secondary_text"
+                android:textSize="11.5sp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:drawableStart="@drawable/ic_craze_palette"
+                android:drawablePadding="8dp"
+                android:background="@drawable/bg_craze_chip_unselected"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/chip_type_shader"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text="Shaders"
+                android:textColor="@color/secondary_text"
+                android:textSize="11.5sp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:drawableStart="@drawable/ic_craze_sparkle"
+                android:drawablePadding="8dp"
+                android:background="@drawable/bg_craze_chip_unselected"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <!-- Mod Source Tag -->
+        <TextView
+            android:id="@+id/source_attribution_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Modrinth &amp; CurseForge"
+            android:textColor="#4E5D6C"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toTopOf="@id/mineButton_import_local_modpack"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <!-- Import Local Modpack Button -->
+        <com.kdt.mcgui.MineButton
+            android:id="@+id/mineButton_import_local_modpack"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:enabled="false"
+            android:text="@string/import_local_modpack"
+            android:textSize="10.5sp"
+            android:paddingHorizontal="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- ======================================================== -->
+    <!-- RIGHT PANEL: Header, Progress, 2-Column Content Grid     -->
+    <!-- ======================================================== -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_content_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/search_mod_overlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Top Header Bar for Results -->
+        <LinearLayout
+            android:id="@+id/content_header_bar"
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:id="@+id/browse_header_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="EXPLORE MODPACKS"
+                android:textColor="#FFFFFF"
+                android:textSize="11.5sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.04" />
+
+            <TextView
+                android:id="@+id/browse_header_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:text="Tap any item to view &amp; install"
+                android:textColor="#8D9AA8"
+                android:textSize="10.5sp" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/chip_type_modpack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:text="Modpacks"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:background="@drawable/bg_craze_chip_selected"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:id="@+id/chip_type_mod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:text="Mods"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:background="@drawable/bg_craze_chip_unselected"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:id="@+id/chip_type_resourcepack"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:text="Resource Packs"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:background="@drawable/bg_craze_chip_unselected"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginEnd="8dp" />
-
-                <TextView
-                    android:id="@+id/chip_type_shader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:text="Shaders"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:paddingHorizontal="14dp"
-                    android:background="@drawable/bg_craze_chip_unselected"
-                    android:clickable="true"
-                    android:focusable="true" />
-            </LinearLayout>
-        </HorizontalScrollView>
-
+        <!-- Progress bar line -->
         <ProgressBar
             android:id="@+id/search_mod_progressbar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -138,47 +284,39 @@
             android:layout_height="3dp"
             android:indeterminate="true"
             android:visibility="gone"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/category_scroll_view"
+            android:progressDrawable="@drawable/bg_craze_progressbar"
+            android:layout_marginTop="2dp"
+            app:layout_constraintTop_toBottomOf="@id/content_header_bar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- 2-Column Modpack/Mod List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_mod_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingTop="2dp"
+            android:paddingBottom="4dp"
+            app:layout_constraintTop_toBottomOf="@id/search_mod_progressbar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Status / Empty Text -->
+        <TextView
+            android:id="@+id/search_mod_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondary_text"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/search_mod_list"
+            app:layout_constraintEnd_toEndOf="@id/search_mod_list"
+            app:layout_constraintStart_toStartOf="@id/search_mod_list"
+            app:layout_constraintTop_toTopOf="@id/search_mod_list" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Mod List (2-column in landscape) -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_mod_list"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/mineButton_import_local_modpack"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="8dp" />
-
-    <TextView
-        android:id="@+id/search_mod_status_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/secondary_text"
-        android:textSize="14sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/search_mod_list"
-        app:layout_constraintEnd_toEndOf="@+id/search_mod_list"
-        app:layout_constraintStart_toStartOf="@+id/search_mod_list"
-        app:layout_constraintTop_toTopOf="@+id/search_mod_list" />
-
-    <com.kdt.mcgui.MineButton
-        android:id="@+id/mineButton_import_local_modpack"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:enabled="false"
-        android:layout_marginBottom="8dp"
-        android:text="@string/import_local_modpack"
-        android:paddingHorizontal="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

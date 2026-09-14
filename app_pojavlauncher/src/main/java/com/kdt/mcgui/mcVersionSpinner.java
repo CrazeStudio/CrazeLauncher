@@ -149,7 +149,15 @@ public class mcVersionSpinner extends ExtendedTextView {
             }
         });
 
-        mPopupWindow = new PopupWindow(mListView, MATCH_PARENT, getContext().getResources().getDimensionPixelOffset(R.dimen._184sdp));
+        boolean isLandscape = getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+        int popupWidth = isLandscape
+                ? (getWidth() > 0 ? Math.max(getWidth(), (int) (260 * getResources().getDisplayMetrics().density)) : (int) (280 * getResources().getDisplayMetrics().density))
+                : MATCH_PARENT;
+        int popupHeight = isLandscape
+                ? Math.min(getContext().getResources().getDimensionPixelOffset(R.dimen._184sdp), (int) (180 * getResources().getDisplayMetrics().density))
+                : getContext().getResources().getDimensionPixelOffset(R.dimen._184sdp);
+
+        mPopupWindow = new PopupWindow(mListView, popupWidth, popupHeight);
         mPopupWindow.setElevation(5);
         mPopupWindow.setClippingEnabled(false);
 

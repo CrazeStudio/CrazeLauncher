@@ -69,8 +69,50 @@ public class LauncherActivity extends BaseActivity {
     private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
+            boolean isMainMenu = f instanceof MainMenuFragment;
+            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), isMainMenu
                     ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+
+            View backButton = findViewById(R.id.top_bar_back_button);
+            View logoIcon = findViewById(R.id.logo_icon);
+            View logoContainer = findViewById(R.id.logo_container);
+            View drawerButton = findViewById(R.id.drawer_button);
+            android.widget.TextView screenTitle = findViewById(R.id.top_bar_screen_title);
+
+            if (backButton != null) {
+                if (isMainMenu) {
+                    backButton.setVisibility(View.GONE);
+                    if (logoIcon != null) logoIcon.setVisibility(View.VISIBLE);
+                    if (logoContainer != null) logoContainer.setVisibility(View.VISIBLE);
+                    if (drawerButton != null) drawerButton.setVisibility(View.VISIBLE);
+                } else {
+                    backButton.setVisibility(View.VISIBLE);
+                    if (logoIcon != null) logoIcon.setVisibility(View.GONE);
+                    if (logoContainer != null) logoContainer.setVisibility(View.GONE);
+                    if (drawerButton != null) drawerButton.setVisibility(View.GONE);
+                    if (screenTitle != null) {
+                        String title = "Back";
+                        if (f instanceof net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment) {
+                            title = getString(R.string.preference_category_miscellaneous);
+                        } else if (f instanceof net.kdt.pojavlaunch.fragments.ProfileTypeSelectFragment) {
+                            title = getString(R.string.create_instance);
+                        } else if (f instanceof net.kdt.pojavlaunch.fragments.SearchModFragment) {
+                            title = "Browse Content";
+                        } else if (f instanceof net.kdt.pojavlaunch.fragments.SelectAuthFragment
+                                || f instanceof net.kdt.pojavlaunch.fragments.LocalLoginFragment
+                                || f instanceof net.kdt.pojavlaunch.fragments.MicrosoftLoginFragment
+                                || f instanceof net.kdt.pojavlaunch.fragments.ElyByLoginFragment) {
+                            title = getString(R.string.main_add_account);
+                        } else if (f instanceof net.kdt.pojavlaunch.fragments.InstanceEditorFragment) {
+                            title = getString(R.string.mcl_instance_editor);
+                        } else if (f instanceof net.kdt.pojavlaunch.fragments.FileSelectorFragment) {
+                            title = getString(R.string.folder_fragment_select);
+                        }
+                        screenTitle.setText(title);
+                    }
+                    backButton.setOnClickListener(v -> onBackPressed());
+                }
+            }
         }
     };
 

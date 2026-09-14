@@ -83,6 +83,11 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private final SearchFilters mSearchFilters;
 
     private Button mImportButton;
+    private TextView mFilterBadge;
+    private View mFilterClear;
+    private TextView mBrowseHeaderTitle;
+    private TextView mBrowseHeaderSubtitle;
+    private boolean mIsLandscape;
     private TaskCountListener mTaskCountListener;
 
     ActivityResultLauncher<String> mImportLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
@@ -179,10 +184,23 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
 
         mDefaultTextColor = mStatusTextView.getTextColors();
 
+        mFilterBadge = view.findViewById(R.id.search_mod_filter_badge);
+        mFilterClear = view.findViewById(R.id.search_mod_filter_clear);
+        mBrowseHeaderTitle = view.findViewById(R.id.browse_header_title);
+        mBrowseHeaderSubtitle = view.findViewById(R.id.browse_header_subtitle);
+
+        if (mFilterClear != null) {
+            mFilterClear.setOnClickListener(v -> {
+                mSearchFilters.mcVersion = "";
+                updateFilterBadge();
+                searchMods(mSearchEditText != null ? mSearchEditText.getText().toString() : "");
+            });
+        }
+
+        mIsLandscape = getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
         Context ctx = getContext();
         if (ctx != null) {
-            boolean isLandscape = getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-            if (isLandscape) {
+            if (mIsLandscape) {
                 mRecyclerview.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(ctx, 2));
             } else {
                 mRecyclerview.setLayoutManager(new LinearLayoutManager(ctx));
@@ -190,7 +208,16 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         }
         mRecyclerview.setAdapter(mModItemAdapter);
 
-        mRecyclerview.addOnScrollListener(mOverlayPositionListener);
+        if (!mIsLandscape) {
+            mRecyclerview.addOnScrollListener(mOverlayPositionListener);
+            mOverlay.post(()->{
+               int overlayHeight = mOverlay.getHeight();
+               mRecyclerview.setPadding(mRecyclerview.getPaddingLeft(),
+                       mRecyclerview.getPaddingTop() + overlayHeight,
+                       mRecyclerview.getPaddingRight(),
+                       mRecyclerview.getPaddingBottom());
+            });
+        }
 
         mSearchEditText.setOnEditorActionListener((v, actionId, event) -> {
             searchMods(mSearchEditText.getText().toString());
@@ -198,13 +225,6 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             return false;
         });
 
-        mOverlay.post(()->{
-           int overlayHeight = mOverlay.getHeight();
-           mRecyclerview.setPadding(mRecyclerview.getPaddingLeft(),
-                   mRecyclerview.getPaddingTop() + overlayHeight,
-                   mRecyclerview.getPaddingRight(),
-                   mRecyclerview.getPaddingBottom());
-        });
         mFilterButton.setOnClickListener(v -> displayFilterDialog());
         mImportButton = view.findViewById(R.id.mineButton_import_local_modpack);
         if (mImportButton != null) {
@@ -225,6 +245,8 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         };
         ProgressKeeper.addTaskCountListener(mTaskCountListener);
 
+        updateFilterBadge();
+        updateHeaderLabels(mSearchFilters.projectType);
         searchMods(null);
     }
 
@@ -252,7 +274,48 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             }
         }
         updateChipVisuals();
+        updateFilterBadge();
+        updateHeaderLabels(type);
         searchMods(mSearchEditText != null ? mSearchEditText.getText().toString() : "");
+    }
+
+    private void updateFilterBadge() {
+        if (mFilterBadge != null) {
+            String ver = mSearchFilters.mcVersion;
+            if (ver != null && !ver.isEmpty()) {
+                mFilterBadge.setText("MC: " + ver);
+                mFilterBadge.setTextColor(Color.parseColor("#10B981"));
+                if (mFilterClear != null) mFilterClear.setVisibility(View.VISIBLE);
+            } else {
+                mFilterBadge.setText("All MC Versions");
+                mFilterBadge.setTextColor(Color.parseColor("#C0D0E0"));
+                if (mFilterClear != null) mFilterClear.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void updateHeaderLabels(String type) {
+        if (mBrowseHeaderTitle != null) {
+            String title;
+            switch (type != null ? type : "modpack") {
+                case "mod":
+                    title = "EXPLORE MODS";
+                    break;
+                case "resourcepack":
+                    title = "RESOURCE PACKS";
+                    break;
+                case "shader":
+                    title = "SHADERS";
+                    break;
+                default:
+                    title = "EXPLORE MODPACKS";
+                    break;
+            }
+            mBrowseHeaderTitle.setText(title);
+        }
+        if (mBrowseHeaderSubtitle != null) {
+            mBrowseHeaderSubtitle.setText("Tap any item to view & install");
+        }
     }
 
     private void updateChipVisuals() {
@@ -284,7 +347,9 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     public void onDestroyView() {
         super.onDestroyView();
         ProgressKeeper.removeTaskCountListener(mModItemAdapter);
-        mRecyclerview.removeOnScrollListener(mOverlayPositionListener);
+        if (!mIsLandscape && mRecyclerview != null) {
+            mRecyclerview.removeOnScrollListener(mOverlayPositionListener);
+        }
         if (mTaskCountListener != null) { ProgressKeeper.removeTaskCountListener(mTaskCountListener); }
     }
 
@@ -328,10 +393,15 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             TextView mSelectedVersion = dialog.findViewById(R.id.search_mod_selected_mc_version_textview);
             Button mSelectVersionButton = dialog.findViewById(R.id.search_mod_mc_version_button);
             Button mApplyButton = dialog.findViewById(R.id.search_mod_apply_filters);
+            View mClearButton = dialog.findViewById(R.id.search_mod_clear_filters);
 
             assert mSelectVersionButton != null;
             assert mSelectedVersion != null;
             assert mApplyButton != null;
+
+            if (mClearButton != null) {
+                mClearButton.setOnClickListener(v -> mSelectedVersion.setText(""));
+            }
 
             // Setup the expendable list behavior
             mSelectVersionButton.setOnClickListener(v -> VersionSelectorDialog.open(v.getContext(), true, (id, snapshot)-> mSelectedVersion.setText(id)));
@@ -349,6 +419,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             // Apply the new settings
             mApplyButton.setOnClickListener(v -> {
                 mSearchFilters.mcVersion = mSelectedVersion.getText().toString();
+                updateFilterBadge();
                 searchMods(mSearchEditText.getText().toString());
                 dialogInterface.dismiss();
             });
