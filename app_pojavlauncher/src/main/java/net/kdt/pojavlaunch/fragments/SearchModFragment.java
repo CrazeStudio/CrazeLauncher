@@ -41,6 +41,7 @@ import net.kdt.pojavlaunch.modloaders.modpacks.models.SearchFilters;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.progresskeeper.TaskCountListener;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 
 import org.apache.commons.io.IOUtils;
 
@@ -190,6 +191,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         mBrowseHeaderSubtitle = view.findViewById(R.id.browse_header_subtitle);
 
         if (mFilterClear != null) {
+            CrazeAnimationUtils.attachTouchFeedback(mFilterClear);
             mFilterClear.setOnClickListener(v -> {
                 mSearchFilters.mcVersion = "";
                 updateFilterBadge();
@@ -225,9 +227,11 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             return false;
         });
 
+        CrazeAnimationUtils.attachTouchFeedback(mFilterButton);
         mFilterButton.setOnClickListener(v -> displayFilterDialog());
         mImportButton = view.findViewById(R.id.mineButton_import_local_modpack);
         if (mImportButton != null) {
+            CrazeAnimationUtils.attachTouchFeedback(mImportButton);
             mImportButton.setOnClickListener(v -> {
                 mImportLauncher.launch("*/*");
             });
@@ -248,10 +252,17 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         updateFilterBadge();
         updateHeaderLabels(mSearchFilters.projectType);
         searchMods(null);
+
+        CrazeAnimationUtils.animateEntrance(view, 0);
     }
 
     private void setupChips() {
         if (mChipModpack == null) return;
+
+        CrazeAnimationUtils.attachTouchFeedback(mChipModpack);
+        CrazeAnimationUtils.attachTouchFeedback(mChipMod);
+        CrazeAnimationUtils.attachTouchFeedback(mChipResourcepack);
+        CrazeAnimationUtils.attachTouchFeedback(mChipShader);
 
         mChipModpack.setOnClickListener(v -> selectType("modpack"));
         mChipMod.setOnClickListener(v -> selectType("mod"));

@@ -4,37 +4,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="#0B0E14">
+    android:background="#0A0D14"
+    android:padding="8dp">
 
-    <!-- Left Sidebar: Category Deck (Fixed 240dp) -->
+    <!-- Left Sidebar: Category Deck (Fixed 240dp) with Frosted Glass -->
     <LinearLayout
         android:id="@+id/settings_sidebar"
-        android:layout_width="240dp"
+        android:layout_width="230dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#0E121A"
-        android:paddingHorizontal="14dp"
+        android:background="@drawable/bg_landscape_panel"
+        android:paddingHorizontal="12dp"
         android:paddingTop="12dp"
-        android:paddingBottom="10dp">
+        android:paddingBottom="10dp"
+        android:layout_marginEnd="8dp">
 
-        <!-- Title & Subtitle -->
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Header: Back Button + Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SETTINGS"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.06" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Graphics, controls &amp; runtime"
-            android:textColor="#707B88"
-            android:textSize="10.5sp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="12dp" />
+            <ImageButton
+                android:id="@+id/btn_settings_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_craze_card_clickable"
+                android:src="@drawable/ic_craze_back"
+                android:contentDescription="Back"
+                app:tint="#FFFFFF"
+                android:padding="6dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SETTINGS"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.06" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Graphics, controls &amp; runtime"
+                    android:textColor="#8D9AA8"
+                    android:textSize="9.5sp"
+                    android:layout_marginTop="1dp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <!-- Category Items Scrollable Container -->
         <ScrollView
@@ -44,6 +71,7 @@
             android:scrollbars="none">
 
             <LinearLayout
+                android:id="@+id/categories_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -52,7 +80,7 @@
                 <LinearLayout
                     android:id="@+id/category_video"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="42dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="12dp"
@@ -83,7 +111,7 @@
                 <LinearLayout
                     android:id="@+id/category_controls"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="42dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="12dp"
@@ -97,7 +125,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_px_gamepad"
-                        app:tint="#707B88" />
+                        app:tint="#8D9AA8" />
 
                     <TextView
                         android:id="@+id/text_controls"
@@ -105,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="Control Settings"
-                        android:textColor="#8E98A5"
+                        android:textColor="#8D9AA8"
                         android:textSize="12sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -114,7 +142,7 @@
                 <LinearLayout
                     android:id="@+id/category_java"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="42dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="12dp"
@@ -128,7 +156,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_px_java"
-                        app:tint="#707B88" />
+                        app:tint="#8D9AA8" />
 
                     <TextView
                         android:id="@+id/text_java"
@@ -136,7 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="Java &amp; Memory"
-                        android:textColor="#8E98A5"
+                        android:textColor="#8D9AA8"
                         android:textSize="12sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -145,7 +173,7 @@
                 <LinearLayout
                     android:id="@+id/category_misc"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="42dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="12dp"
@@ -159,7 +187,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_px_alt_sliders"
-                        app:tint="#707B88" />
+                        app:tint="#8D9AA8" />
 
                     <TextView
                         android:id="@+id/text_misc"
@@ -167,7 +195,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="Miscellaneous"
-                        android:textColor="#8E98A5"
+                        android:textColor="#8D9AA8"
                         android:textSize="12sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -176,7 +204,7 @@
                 <LinearLayout
                     android:id="@+id/category_experimental"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="42dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:paddingHorizontal="12dp"
@@ -190,7 +218,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_px_experiment"
-                        app:tint="#707B88" />
+                        app:tint="#8D9AA8" />
 
                     <TextView
                         android:id="@+id/text_experimental"
@@ -198,7 +226,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="Experimental"
-                        android:textColor="#8E98A5"
+                        android:textColor="#8D9AA8"
                         android:textSize="12sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -226,24 +254,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings auto-save on change"
-                android:textColor="#707B88"
+                android:textColor="#8D9AA8"
                 android:textSize="9.5sp" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <!-- Vertical Divider -->
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#191E28" />
-
-    <!-- Right Pane: Preference Content Container -->
+    <!-- Right Pane: Preference Content Container in Frosted Glass Panel -->
     <FrameLayout
         android:id="@+id/settings_content_frame"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#0B0E14" />
+        android:background="@drawable/bg_landscape_panel"
+        android:padding="8dp" />
 
 </LinearLayout>

@@ -33,6 +33,7 @@ import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.instances.InstanceIconProvider;
 import net.kdt.pojavlaunch.profiles.VersionSelectorDialog;
 import net.kdt.pojavlaunch.utils.CropperUtils;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 
 import java.io.IOException;
@@ -104,6 +105,12 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         mDefaultRenderer.setAdapter(rendererAdapter);
 
         // Set up behaviors
+        CrazeAnimationUtils.attachTouchFeedback(mSaveButton);
+        CrazeAnimationUtils.attachTouchFeedback(mDeleteButton);
+        CrazeAnimationUtils.attachTouchFeedback(mControlSelectButton);
+        CrazeAnimationUtils.attachTouchFeedback(mVersionSelectButton);
+        CrazeAnimationUtils.attachTouchFeedback(mInstanceIcon);
+
         mSaveButton.setOnClickListener(v -> {
             InstanceIconProvider.dropIcon(mInstance);
             save();
@@ -146,6 +153,8 @@ public class InstanceEditorFragment extends Fragment implements CropperUtils.Cro
         }else {
             loadValues(selectedInstance, context);
         }
+
+        CrazeAnimationUtils.animateEntrance(view, 0);
     }
 
     private View.OnClickListener getControlSelectListener() {

@@ -752,8 +752,13 @@ public final class Tools {
     public static void swapFragment(FragmentActivity fragmentActivity , Class<? extends Fragment> fragmentClass,
                                     @Nullable String fragmentTag, @Nullable Bundle bundle) {
         // When people tab out, it might happen
-        //TODO handle custom animations
         fragmentActivity.getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(
+                        R.anim.fragment_fade_slide_enter,
+                        R.anim.fragment_fade_slide_exit,
+                        R.anim.fragment_fade_slide_pop_enter,
+                        R.anim.fragment_fade_slide_pop_exit
+                )
                 .setReorderingAllowed(true)
                 .addToBackStack(fragmentClass.getName())
                 .replace(R.id.container_fragment, fragmentClass, bundle, fragmentTag).commit();

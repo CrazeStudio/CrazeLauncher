@@ -7,8 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -30,6 +29,7 @@ import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 
 import java.io.File;
@@ -68,35 +68,35 @@ public class MainMenuFragment extends Fragment {
         View navSettings = view.findViewById(R.id.nav_settings);
 
         if (navHome != null) {
-            attachTouchAnimation(navHome);
+            CrazeAnimationUtils.attachTouchFeedback(navHome);
             navHome.setOnClickListener(v -> {
                 if (mVersionSpinner != null) mVersionSpinner.reloadProfiles();
             });
         }
         if (navInstances != null) {
-            attachTouchAnimation(navInstances);
+            CrazeAnimationUtils.attachTouchFeedback(navInstances);
             navInstances.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
         }
         if (navMods != null) {
-            attachTouchAnimation(navMods);
+            CrazeAnimationUtils.attachTouchFeedback(navMods);
             navMods.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
         }
         if (navPacks != null) {
-            attachTouchAnimation(navPacks);
+            CrazeAnimationUtils.attachTouchFeedback(navPacks);
             navPacks.setOnClickListener(v -> openGameDirectory(requireContext()));
         }
         if (navSettings != null) {
-            attachTouchAnimation(navSettings);
+            CrazeAnimationUtils.attachTouchFeedback(navSettings);
             navSettings.setOnClickListener(v -> Tools.swapFragment(requireActivity(), LauncherPreferenceFragment.class, LauncherActivity.SETTING_FRAGMENT_TAG, null));
         }
 
         if (mPlayButton != null) {
-            attachTouchAnimation(mPlayButton);
+            CrazeAnimationUtils.attachTouchFeedback(mPlayButton);
             mPlayButton.setOnClickListener(v -> ExtraCore.setValue(ExtraConstants.LAUNCH_GAME, true));
         }
 
         if (mEditProfileButton != null) {
-            attachTouchAnimation(mEditProfileButton);
+            CrazeAnimationUtils.attachTouchFeedback(mEditProfileButton);
             mEditProfileButton.setOnClickListener(v -> {
                 if (mVersionSpinner != null) {
                     mVersionSpinner.openProfileEditor(requireActivity());
@@ -105,22 +105,22 @@ public class MainMenuFragment extends Fragment {
         }
 
         if (mCustomControlButton != null) {
-            attachTouchAnimation(mCustomControlButton);
+            CrazeAnimationUtils.attachTouchFeedback(mCustomControlButton);
             mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
         }
 
         if (mInstallJarButton != null) {
-            attachTouchAnimation(mInstallJarButton);
+            CrazeAnimationUtils.attachTouchFeedback(mInstallJarButton);
             mInstallJarButton.setOnClickListener(v -> runInstallerWithConfirmation());
         }
 
         if (mShareLogsButton != null) {
-            attachTouchAnimation(mShareLogsButton);
+            CrazeAnimationUtils.attachTouchFeedback(mShareLogsButton);
             mShareLogsButton.setOnClickListener(v -> shareLog(requireContext()));
         }
 
         if (mOpenDirectoryButton != null) {
-            attachTouchAnimation(mOpenDirectoryButton);
+            CrazeAnimationUtils.attachTouchFeedback(mOpenDirectoryButton);
             mOpenDirectoryButton.setOnClickListener(v -> openGameDirectory(requireContext()));
         }
 
@@ -130,27 +130,27 @@ public class MainMenuFragment extends Fragment {
         View mCardModpacksDirect = view.findViewById(R.id.card_modpacks);
 
         if (mCardNewInstance != null) {
-            attachTouchAnimation(mCardNewInstance);
+            CrazeAnimationUtils.attachTouchFeedback(mCardNewInstance);
             mCardNewInstance.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
         }
 
         if (mCardMods != null) {
-            attachTouchAnimation(mCardMods);
+            CrazeAnimationUtils.attachTouchFeedback(mCardMods);
             mCardMods.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
         }
 
         if (mCardModsDirect != null) {
-            attachTouchAnimation(mCardModsDirect);
+            CrazeAnimationUtils.attachTouchFeedback(mCardModsDirect);
             mCardModsDirect.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
         }
 
         if (mCardModpacksDirect != null) {
-            attachTouchAnimation(mCardModpacksDirect);
+            CrazeAnimationUtils.attachTouchFeedback(mCardModpacksDirect);
             mCardModpacksDirect.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
         }
 
         if (mNewsButton != null) {
-            attachTouchAnimation(mNewsButton);
+            CrazeAnimationUtils.attachTouchFeedback(mNewsButton);
             mNewsButton.setOnClickListener(v -> Tools.openURL(requireActivity(), Tools.URL_HOME));
             mNewsButton.setOnLongClickListener((v) -> {
                 Tools.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
@@ -158,9 +158,11 @@ public class MainMenuFragment extends Fragment {
             });
         }
         if (mDiscordButton != null) {
-            attachTouchAnimation(mDiscordButton);
+            CrazeAnimationUtils.attachTouchFeedback(mDiscordButton);
             mDiscordButton.setOnClickListener(v -> Tools.openURL(requireActivity(), getString(R.string.social_media_invite)));
         }
+
+        CrazeAnimationUtils.animateEntrance(view, 0);
     }
 
     private void openGameDirectory(Context context) {
@@ -187,22 +189,5 @@ public class MainMenuFragment extends Fragment {
         if (ProgressKeeper.getTaskCount() == 0) {
             mModInstallerLauncher.launch(null);
         } else Toast.makeText(requireContext(), R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
-    }
-
-    @android.annotation.SuppressLint("ClickableViewAccessibility")
-    private static void attachTouchAnimation(View v) {
-        if (v == null) return;
-        v.setOnTouchListener((view, event) -> {
-            switch (event.getAction()) {
-                case android.view.MotionEvent.ACTION_DOWN:
-                    view.animate().scaleX(0.96f).scaleY(0.96f).setDuration(80).start();
-                    break;
-                case android.view.MotionEvent.ACTION_UP:
-                case android.view.MotionEvent.ACTION_CANCEL:
-                    view.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start();
-                    break;
-            }
-            return false;
-        });
     }
 }

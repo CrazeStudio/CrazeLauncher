@@ -11,11 +11,17 @@
     <color name="background_bottom_bar">#121212</color>
     <color name="icon_outline_color">#9E9E9E</color>
 
-    <color name="card_surface">#141414</color>
-    <color name="card_surface_elevated">#1E1E1E</color>
-    <color name="card_surface_hover">#282828</color>
-    <color name="card_border">#2A2A2A</color>
-    <color name="card_border_highlight">#444444</color>
+    <color name="card_surface">#141720</color>
+    <color name="card_surface_elevated">#1A202C</color>
+    <color name="card_surface_hover">#242C3D</color>
+    <color name="card_border">#22FFFFFF</color>
+    <color name="card_border_highlight">#44FFFFFF</color>
+
+    <color name="glass_bg_panel">#10131B</color>
+    <color name="glass_bg_card">#141720</color>
+    <color name="glass_stroke">#22FFFFFF</color>
+    <color name="glass_stroke_bright">#48FFFFFF</color>
+    <color name="glass_glow">#30FFFFFF</color>
 
     <color name="primary_text">#FFFFFF</color>
     <color name="secondary_text">#9E9E9E</color>

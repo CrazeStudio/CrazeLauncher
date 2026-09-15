@@ -13,6 +13,7 @@ import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,24 +32,29 @@ public class LocalLoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mUsernameEditText = view.findViewById(R.id.login_edit_email);
-        view.findViewById(R.id.login_button).setOnClickListener(v -> {
-            if(!checkEditText()) {
-                Context context = v.getContext();
-                Tools.dialog(context, context.getString(R.string.local_login_bad_username_title), context.getString(R.string.local_login_bad_username_text));
-                return;
-            }
+        View loginButton = view.findViewById(R.id.login_button);
+        if (loginButton != null) {
+            CrazeAnimationUtils.attachTouchFeedback(loginButton);
+            loginButton.setOnClickListener(v -> {
+                if(!checkEditText()) {
+                    Context context = v.getContext();
+                    Tools.dialog(context, context.getString(R.string.local_login_bad_username_title), context.getString(R.string.local_login_bad_username_text));
+                    return;
+                }
 
-            ExtraCore.setValue(ExtraConstants.MOJANG_LOGIN_TODO, new String[]{
-                    mUsernameEditText.getText().toString(), "" });
+                ExtraCore.setValue(ExtraConstants.MOJANG_LOGIN_TODO, new String[]{
+                        mUsernameEditText.getText().toString(), "" });
 
-            Tools.swapFragment(requireActivity(), MainMenuFragment.class, MainMenuFragment.TAG, null);
-        });
+                Tools.swapFragment(requireActivity(), MainMenuFragment.class, MainMenuFragment.TAG, null);
+            });
+        }
+
+        CrazeAnimationUtils.animateEntrance(view, 0);
     }
 
 
     /** @return Whether the mail (and password) text are eligible to make an auth request  */
     private boolean checkEditText(){
-
         String text = mUsernameEditText.getText().toString();
 
         Matcher matcher = mUsernameValidationPattern.matcher(text);

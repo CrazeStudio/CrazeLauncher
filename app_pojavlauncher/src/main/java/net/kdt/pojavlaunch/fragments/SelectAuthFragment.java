@@ -14,6 +14,7 @@ import com.kdt.mcgui.ProgressLayout;
 import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 
 public class SelectAuthFragment extends Fragment {
     public static final String TAG = "AUTH_SELECT_FRAGMENT";
@@ -28,9 +29,20 @@ public class SelectAuthFragment extends Fragment {
         Button mLocalButton = view.findViewById(R.id.button_local_authentication);
         Button mElyByButton = view.findViewById(R.id.button_elyby_authentication);
 
-        mMicrosoftButton.setOnClickListener(v -> launchAuthFragment(MicrosoftLoginFragment.class, MicrosoftLoginFragment.TAG));
-        mLocalButton.setOnClickListener(v -> launchAuthFragment(LocalLoginFragment.class, LocalLoginFragment.TAG));
-        mElyByButton.setOnClickListener(v -> launchAuthFragment(ElyByLoginFragment.class, ElyByLoginFragment.TAG));
+        if (mMicrosoftButton != null) {
+            CrazeAnimationUtils.attachTouchFeedback(mMicrosoftButton);
+            mMicrosoftButton.setOnClickListener(v -> launchAuthFragment(MicrosoftLoginFragment.class, MicrosoftLoginFragment.TAG));
+        }
+        if (mLocalButton != null) {
+            CrazeAnimationUtils.attachTouchFeedback(mLocalButton);
+            mLocalButton.setOnClickListener(v -> launchAuthFragment(LocalLoginFragment.class, LocalLoginFragment.TAG));
+        }
+        if (mElyByButton != null) {
+            CrazeAnimationUtils.attachTouchFeedback(mElyByButton);
+            mElyByButton.setOnClickListener(v -> launchAuthFragment(ElyByLoginFragment.class, ElyByLoginFragment.TAG));
+        }
+
+        CrazeAnimationUtils.animateEntrance(view, 0);
     }
 
     private void launchAuthFragment(Class<? extends  Fragment> fragmentClass, String fragmentTag) {

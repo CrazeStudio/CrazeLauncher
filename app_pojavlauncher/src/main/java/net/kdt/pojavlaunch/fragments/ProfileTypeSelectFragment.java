@@ -11,6 +11,7 @@ import git.artdeell.mojo.R;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 
 import java.io.IOException;
 
@@ -23,6 +24,26 @@ public class ProfileTypeSelectFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        int[] clickableIds = {
+                R.id.vanilla_profile,
+                R.id.optifine_profile,
+                R.id.modded_profile_fabric,
+                R.id.modded_profile_forge,
+                R.id.modded_profile_modpack,
+                R.id.modded_profile_quilt,
+                R.id.modded_profile_bta,
+                R.id.modded_profile_neoforge,
+                R.id.modded_profile_legacy_fabric
+        };
+
+        for (int id : clickableIds) {
+            View item = view.findViewById(id);
+            if (item != null) {
+                CrazeAnimationUtils.attachTouchFeedback(item);
+            }
+        }
+
         view.findViewById(R.id.vanilla_profile).setOnClickListener(v -> {
             try {
                 Instance instance = Instances.createDefaultInstance();
@@ -34,9 +55,6 @@ public class ProfileTypeSelectFragment extends Fragment {
             }
         });
 
-        // NOTE: Special care needed! If you wll decide to add these to the back stack, please read
-        // the comment in FabricInstallFragment.onDownloadFinished() and amend the code
-        // in FabricInstallFragment.onDownloadFinished() and ModVersionListFragment.onDownloadFinished()
         view.findViewById(R.id.optifine_profile).setOnClickListener(v -> Tools.swapFragment(requireActivity(), OptiFineInstallFragment.class,
                 OptiFineInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_fabric).setOnClickListener((v)->
@@ -53,5 +71,7 @@ public class ProfileTypeSelectFragment extends Fragment {
                 Tools.swapFragment(requireActivity(), NeoforgeInstallFragment.class, NeoforgeInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_legacy_fabric).setOnClickListener((v) ->
                 Tools.swapFragment(requireActivity(), LegacyFabricInstallFragment.class, LegacyFabricInstallFragment.TAG, null));
+
+        CrazeAnimationUtils.animateEntrance(view, 0);
     }
 }

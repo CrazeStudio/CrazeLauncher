@@ -15,10 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 
 /**
  * Root Settings Fragment for CrazeLauncher.
- * Features a modern master-detail dual pane layout in landscape mode,
+ * Features a modern master-detail dual pane layout with frosted glass aesthetic in landscape mode,
  * and a standard clean categorized preference layout in portrait mode.
  */
 public class LauncherPreferenceFragment extends Fragment {
@@ -43,12 +45,20 @@ public class LauncherPreferenceFragment extends Fragment {
             mSelectedCategory = savedInstanceState.getInt("selected_category", 0);
         }
 
+        View backButton = view.findViewById(R.id.btn_settings_back);
+        if (backButton != null) {
+            CrazeAnimationUtils.attachTouchFeedback(backButton);
+            backButton.setOnClickListener(v -> Tools.backToMainMenu(requireActivity()));
+        }
+
         boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         if (isLandscape) {
             setupLandscapeDeck(view);
         } else {
             setupPortraitContainer();
         }
+
+        CrazeAnimationUtils.animateEntrance(view, 0);
     }
 
     @Override
@@ -60,6 +70,7 @@ public class LauncherPreferenceFragment extends Fragment {
     private void setupPortraitContainer() {
         if (getChildFragmentManager().findFragmentById(R.id.settings_content_frame) == null) {
             getChildFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.fragment_fade_slide_enter, R.anim.fragment_fade_slide_exit)
                     .replace(R.id.settings_content_frame, new LauncherPreferenceMainFragment())
                     .commit();
         }
@@ -93,8 +104,14 @@ public class LauncherPreferenceFragment extends Fragment {
         for (int i = 0; i < mCategoryContainers.length; i++) {
             final int index = i;
             if (mCategoryContainers[i] != null) {
+                CrazeAnimationUtils.attachTouchFeedback(mCategoryContainers[i]);
                 mCategoryContainers[i].setOnClickListener(v -> selectCategory(index));
             }
+        }
+
+        ViewGroup categoriesContainer = root.findViewById(R.id.categories_container);
+        if (categoriesContainer != null) {
+            CrazeAnimationUtils.animateStaggeredChildren(categoriesContainer);
         }
 
         selectCategory(mSelectedCategory);
@@ -129,6 +146,7 @@ public class LauncherPreferenceFragment extends Fragment {
         }
 
         getChildFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit)
                 .replace(R.id.settings_content_frame, targetFragment)
                 .commit();
     }
@@ -137,8 +155,8 @@ public class LauncherPreferenceFragment extends Fragment {
         if (mCategoryContainers == null) return;
 
         int activeColor = Color.WHITE;
-        int inactiveTextColor = Color.parseColor("#9E9E9E");
-        int inactiveIconColor = Color.parseColor("#757575");
+        int inactiveTextColor = Color.parseColor("#8D9AA8");
+        int inactiveIconColor = Color.parseColor("#8D9AA8");
 
         for (int i = 0; i < mCategoryContainers.length; i++) {
             boolean isSelected = (i == mSelectedCategory);
