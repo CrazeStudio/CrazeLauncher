@@ -95,6 +95,16 @@ public class CrazeRecorderManager {
         return mLastSavedFilePath;
     }
 
+    public void toggleRecording(Context context) {
+        if (isIdle()) {
+            if (context instanceof Activity) {
+                requestStartRecording((Activity) context);
+            }
+        } else {
+            stop(context);
+        }
+    }
+
     public void requestStartRecording(Activity activity) {
         if (mCurrentState != STATE_IDLE) {
             return;
