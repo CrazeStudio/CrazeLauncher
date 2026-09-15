@@ -380,57 +380,6 @@
                 android:contentDescription="@null"/>
         </LinearLayout>
 
-        <!-- Modpack Card -->
-        <LinearLayout
-            android:id="@+id/modded_profile_modpack"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/bg_craze_card_clickable"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="16dp"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_craze_modpack_folder"
-                android:contentDescription="@null"
-                android:layout_marginEnd="16dp"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/modpack_install_instance_button"
-                    android:textColor="@color/primary_text"
-                    android:textSize="16sp"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Browse and install ready-to-play modpacks from Modrinth"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="12sp"
-                    android:layout_marginTop="2dp"/>
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/spinner_arrow_right"
-                app:tint="@color/secondary_text"
-                android:contentDescription="@null"/>
-        </LinearLayout>
-
         <!-- Legacy Fabric Card -->
         <LinearLayout
             android:id="@+id/modded_profile_legacy_fabric"

@@ -200,6 +200,22 @@
                 android:drawablePadding="8dp"
                 android:background="@drawable/bg_craze_chip_unselected"
                 android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/chip_type_world"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:text="Worlds &amp; Maps"
+                android:textColor="@color/secondary_text"
+                android:textSize="11.5sp"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:drawableStart="@drawable/ic_craze_map"
+                android:drawablePadding="8dp"
+                android:background="@drawable/bg_craze_chip_unselected"
+                android:clickable="true"
                 android:focusable="true" />
         </LinearLayout>
 

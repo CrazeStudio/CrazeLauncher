@@ -383,7 +383,7 @@
 
         </LinearLayout>
 
-        <!-- Row 4: Modpack & Legacy Fabric -->
+        <!-- Row 4: Legacy Fabric -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -391,61 +391,9 @@
             android:layout_marginBottom="12dp">
 
             <LinearLayout
-                android:id="@+id/modded_profile_modpack"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_craze_card_clickable"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="14dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_craze_modpack_folder"
-                    android:contentDescription="@null"
-                    android:layout_marginEnd="12dp"/>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/modpack_install_instance_button"
-                        android:textColor="@color/primary_text"
-                        android:textSize="15sp"
-                        android:textStyle="bold"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Browse Modrinth packs"
-                        android:textColor="@color/secondary_text"
-                        android:textSize="12sp"/>
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/spinner_arrow_right"
-                    app:tint="@color/secondary_text"
-                    android:contentDescription="@null"/>
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/modded_profile_legacy_fabric"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
                 android:orientation="horizontal"
                 android:background="@drawable/bg_craze_card_clickable"
                 android:clickable="true"

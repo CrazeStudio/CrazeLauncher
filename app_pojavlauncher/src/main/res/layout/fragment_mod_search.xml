@@ -113,6 +113,18 @@
                     android:textSize="12sp"
                     android:background="@drawable/bg_craze_chip_unselected"
                     android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginEnd="6dp" />
+
+                <TextView
+                    android:id="@+id/chip_type_world"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Worlds &amp; Maps"
+                    android:textColor="#C0D0E0"
+                    android:textSize="12sp"
+                    android:background="@drawable/bg_craze_chip_unselected"
+                    android:clickable="true"
                     android:focusable="true" />
             </LinearLayout>
         </HorizontalScrollView>

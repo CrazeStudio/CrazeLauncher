@@ -68,6 +68,7 @@ public class CurseforgeApi implements ModpackApi{
         if (isModpack || "modpack".equals(projectType)) return CURSEFORGE_MODPACK_CLASS_ID;
         if ("resourcepack".equals(projectType)) return 12;
         if ("shader".equals(projectType)) return 6552;
+        if ("world".equals(projectType) || "map".equals(projectType)) return 17;
         return CURSEFORGE_MOD_CLASS_ID;
     }
 
@@ -190,10 +191,13 @@ public class CurseforgeApi implements ModpackApi{
 
         File targetFolder;
         String type = modDetail.projectType;
+        boolean isWorld = "world".equals(type) || "map".equals(type);
         if ("shader".equals(type)) {
             targetFolder = new File(gameDir, "shaderpacks");
         } else if ("resourcepack".equals(type)) {
             targetFolder = new File(gameDir, "resourcepacks");
+        } else if (isWorld) {
+            targetFolder = new File(gameDir, "saves");
         } else {
             targetFolder = new File(gameDir, "mods");
         }
@@ -212,7 +216,7 @@ public class CurseforgeApi implements ModpackApi{
             if (url != null && url.contains("/")) {
                 fileName = url.substring(url.lastIndexOf('/') + 1);
             } else {
-                fileName = FileUtils.escapeFileName(modDetail.title + ".jar");
+                fileName = FileUtils.escapeFileName(modDetail.title + (isWorld ? ".zip" : ".jar"));
             }
         }
 
@@ -230,15 +234,41 @@ public class CurseforgeApi implements ModpackApi{
                 );
                 return null;
             });
+            if (isWorld && (fileName.endsWith(".zip") || fileName.endsWith(".mcworld"))) {
+                unpackWorldZip(destinationFile, targetFolder, modDetail.title);
+            }
             final String finalFileName = fileName;
             ContextExecutor.executeActivity(activity ->
-                    Toast.makeText(activity, "Installed " + finalFileName, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, (isWorld ? "World installed: " : "Installed ") + finalFileName, Toast.LENGTH_SHORT).show()
             );
         } catch (Exception e) {
             destinationFile.delete();
             throw new IOException("Failed to download " + fileName, e);
         } finally {
             ProgressLayout.clearProgress(ProgressLayout.INSTALL_MODPACK);
+        }
+    }
+
+    private void unpackWorldZip(File zipFile, File savesFolder, String worldName) {
+        try (ZipFile zip = new ZipFile(zipFile)) {
+            boolean hasTopLevelLevelDat = false;
+            java.util.Enumeration<? extends java.util.zip.ZipEntry> entries = zip.entries();
+            while (entries.hasMoreElements()) {
+                java.util.zip.ZipEntry entry = entries.nextElement();
+                String name = entry.getName();
+                if ("level.dat".equals(name) || name.endsWith("/level.dat")) {
+                    if ("level.dat".equals(name)) {
+                        hasTopLevelLevelDat = true;
+                    }
+                    break;
+                }
+            }
+            File dest = hasTopLevelLevelDat ? new File(savesFolder, FileUtils.escapeFileName(worldName)) : savesFolder;
+            FileUtils.ensureDirectory(dest);
+            ZipUtils.zipExtract(zip, "", dest);
+            zipFile.delete();
+        } catch (Exception e) {
+            Log.e("CurseforgeApi", "Failed to unpack world zip", e);
         }
     }
 

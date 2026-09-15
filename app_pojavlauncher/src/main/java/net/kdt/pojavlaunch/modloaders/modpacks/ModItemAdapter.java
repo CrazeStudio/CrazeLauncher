@@ -26,6 +26,7 @@ import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.instances.Instance;
 import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.modloaders.modpacks.api.ModpackApi;
+import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ImageReceiver;
 import net.kdt.pojavlaunch.modloaders.modpacks.imagecache.ModIconCache;
 import net.kdt.pojavlaunch.modloaders.modpacks.models.Constants;
@@ -170,6 +171,7 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public ViewHolder(View view) {
             super(view);
             mViewHolderSet.add(this);
+            CrazeAnimationUtils.attachTouchFeedback(view);
             view.setOnClickListener(v -> {
                 if(!hasExtended()){
                     // Inflate the ViewStub

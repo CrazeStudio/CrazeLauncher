@@ -80,6 +80,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private TextView mChipMod;
     private TextView mChipResourcepack;
     private TextView mChipShader;
+    private TextView mChipWorld;
 
     private final SearchFilters mSearchFilters;
 
@@ -180,6 +181,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         mChipMod = view.findViewById(R.id.chip_type_mod);
         mChipResourcepack = view.findViewById(R.id.chip_type_resourcepack);
         mChipShader = view.findViewById(R.id.chip_type_shader);
+        mChipWorld = view.findViewById(R.id.chip_type_world);
 
         setupChips();
 
@@ -263,11 +265,13 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         CrazeAnimationUtils.attachTouchFeedback(mChipMod);
         CrazeAnimationUtils.attachTouchFeedback(mChipResourcepack);
         CrazeAnimationUtils.attachTouchFeedback(mChipShader);
+        if (mChipWorld != null) CrazeAnimationUtils.attachTouchFeedback(mChipWorld);
 
         mChipModpack.setOnClickListener(v -> selectType("modpack"));
         mChipMod.setOnClickListener(v -> selectType("mod"));
         mChipResourcepack.setOnClickListener(v -> selectType("resourcepack"));
         mChipShader.setOnClickListener(v -> selectType("shader"));
+        if (mChipWorld != null) mChipWorld.setOnClickListener(v -> selectType("world"));
 
         updateChipVisuals();
     }
@@ -318,6 +322,9 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
                 case "shader":
                     title = "SHADERS";
                     break;
+                case "world":
+                    title = "WORLDS & MAPS";
+                    break;
                 default:
                     title = "EXPLORE MODPACKS";
                     break;
@@ -335,6 +342,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
         setChipStyle(mChipMod, "mod".equals(current));
         setChipStyle(mChipResourcepack, "resourcepack".equals(current));
         setChipStyle(mChipShader, "shader".equals(current));
+        setChipStyle(mChipWorld, "world".equals(current));
 
         if (mImportButton != null) {
             mImportButton.setVisibility("modpack".equals(current) ? View.VISIBLE : View.GONE);

@@ -268,7 +268,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Card: Modpacks -->
+                    <!-- Card: Instances -->
                     <LinearLayout
                         android:id="@+id/card_modpacks"
                         android:layout_width="0dp"
@@ -285,9 +285,9 @@
                         <ImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
-                            android:src="@drawable/ic_craze_modpack_folder"
-                            android:contentDescription="Modpacks"
-                            app:tint="#06B6D4" />
+                            android:src="@drawable/ic_craze_cube"
+                            android:contentDescription="Instances"
+                            app:tint="#FFFFFF" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -297,14 +297,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Modpacks"
+                                android:text="Instances"
                                 android:textColor="#FFFFFF"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="CurseForge &amp; Modrinth"
+                                android:text="Create &amp; Manage"
                                 android:textColor="#8E98A5"
                                 android:textSize="8.5sp" />
                         </LinearLayout>

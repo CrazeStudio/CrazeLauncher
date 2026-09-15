@@ -30,7 +30,6 @@ public class ProfileTypeSelectFragment extends Fragment {
                 R.id.optifine_profile,
                 R.id.modded_profile_fabric,
                 R.id.modded_profile_forge,
-                R.id.modded_profile_modpack,
                 R.id.modded_profile_quilt,
                 R.id.modded_profile_bta,
                 R.id.modded_profile_neoforge,
@@ -61,8 +60,6 @@ public class ProfileTypeSelectFragment extends Fragment {
                 Tools.swapFragment(requireActivity(), FabricInstallFragment.class, FabricInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_forge).setOnClickListener((v)->
                 Tools.swapFragment(requireActivity(), ForgeInstallFragment.class, ForgeInstallFragment.TAG, null));
-        view.findViewById(R.id.modded_profile_modpack).setOnClickListener((v)->
-                Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
         view.findViewById(R.id.modded_profile_quilt).setOnClickListener((v)->
                 Tools.swapFragment(requireActivity(), QuiltInstallFragment.class, QuiltInstallFragment.TAG, null));
         view.findViewById(R.id.modded_profile_bta).setOnClickListener((v)->
