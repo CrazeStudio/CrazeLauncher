@@ -708,7 +708,8 @@ public class ControlLayout extends FrameLayout {
 
 	public void updateButtonOpacity() {
 		mButtonsOpacity = Math.max(0f, Math.min(1f, (float) LauncherPreferences.PREF_BUTTON_TRANSPARENCY / 100));
-		float effectiveOpacity = mRecordingHideControls ? 0.0f : mButtonsOpacity;
+		float recordingOpacity = Math.max(0f, Math.min(1f, (float) LauncherPreferences.PREF_RECORDER_BUTTON_OPACITY / 100));
+		float effectiveOpacity = mRecordingHideControls ? recordingOpacity : mButtonsOpacity;
 		for(ControlInterface button : getButtonChildren()) {
 			// In edit mode, all controls have to be shown
 			if(mModifiable) button.setVisible(true);

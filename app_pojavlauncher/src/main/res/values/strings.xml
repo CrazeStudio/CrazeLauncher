@@ -535,7 +535,8 @@
     <string name="crazer_recorder_pause">Pause</string>
     <string name="crazer_recorder_resume">Resume</string>
     <string name="crazer_recorder_exclude_controls">Exclude On-Screen Controls</string>
-    <string name="crazer_recorder_exclude_controls_desc">Keeps touch controls fully active for gameplay while hiding them completely from the recorded video</string>
+    <string name="crazer_recorder_exclude_controls_desc">Adjusts touch controls visibility during recording while keeping all touch hitboxes and buttons 100% active for playing</string>
+    <string name="crazer_recorder_control_opacity">In-Recording Opacity</string>
     <string name="crazer_recorder_mic">Microphone Audio</string>
     <string name="crazer_recorder_mic_desc">Record voice commentary with device microphone</string>
     <string name="crazer_recorder_hud">Floating HUD</string>

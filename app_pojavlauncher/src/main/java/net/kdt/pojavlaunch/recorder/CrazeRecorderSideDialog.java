@@ -27,6 +27,8 @@ public class CrazeRecorderSideDialog extends SideDialogView implements CrazeReco
     private Button mBtnPauseAction;
 
     private Switch mSwitchExcludeControls;
+    private View mLayoutOpacity;
+    private Spinner mSpinnerOpacity;
     private Switch mSwitchMic;
     private Switch mSwitchHud;
 
@@ -34,6 +36,9 @@ public class CrazeRecorderSideDialog extends SideDialogView implements CrazeReco
     private Spinner mSpinnerFps;
     private Spinner mSpinnerBitrate;
     private Button mBtnRecordings;
+
+    private static final String[] OPACITIES = {"0% (Clean / Invisible)", "15% (Ghost Outline)", "30% (Subtle)", "50% (Semi-Transparent)", "100% (Normal)"};
+    private static final int[] OPACITY_VALUES = {0, 15, 30, 50, 100};
 
     private static final String[] RESOLUTIONS = {"1080p (1920x1080)", "720p (1280x720)", "Native Display"};
     private static final int[] RESOLUTION_VALUES = {1080, 720, 0};
@@ -61,6 +66,8 @@ public class CrazeRecorderSideDialog extends SideDialogView implements CrazeReco
         mBtnPauseAction = mDialogContent.findViewById(R.id.crazerecorder_btn_pause_action);
 
         mSwitchExcludeControls = mDialogContent.findViewById(R.id.crazerecorder_switch_exclude_controls);
+        mLayoutOpacity = mDialogContent.findViewById(R.id.crazerecorder_layout_opacity);
+        mSpinnerOpacity = mDialogContent.findViewById(R.id.crazerecorder_spinner_opacity);
         mSwitchMic = mDialogContent.findViewById(R.id.crazerecorder_switch_mic);
         mSwitchHud = mDialogContent.findViewById(R.id.crazerecorder_switch_hud);
 
@@ -96,9 +103,11 @@ public class CrazeRecorderSideDialog extends SideDialogView implements CrazeReco
 
     private void setupSwitches() {
         mSwitchExcludeControls.setChecked(LauncherPreferences.PREF_RECORDER_EXCLUDE_CONTROLS);
+        mLayoutOpacity.setVisibility(LauncherPreferences.PREF_RECORDER_EXCLUDE_CONTROLS ? View.VISIBLE : View.GONE);
         mSwitchExcludeControls.setOnCheckedChangeListener((buttonView, isChecked) -> {
             LauncherPreferences.PREF_RECORDER_EXCLUDE_CONTROLS = isChecked;
             LauncherPreferences.DEFAULT_PREF.edit().putBoolean("recorder_exclude_controls", isChecked).apply();
+            mLayoutOpacity.setVisibility(isChecked ? View.VISIBLE : View.GONE);
             if (CrazeRecorderManager.getInstance().isRecording() || CrazeRecorderManager.getInstance().isPaused()) {
                 CrazeRecorderManager.getInstance().setControlsHidden(isChecked);
             }
@@ -119,6 +128,29 @@ public class CrazeRecorderSideDialog extends SideDialogView implements CrazeReco
 
     private void setupSpinners() {
         Context context = mActivity;
+
+        // Opacity Spinner
+        ArrayAdapter<String> opacityAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, OPACITIES);
+        mSpinnerOpacity.setAdapter(opacityAdapter);
+        int selectedOpacityIdx = 0;
+        for (int i = 0; i < OPACITY_VALUES.length; i++) {
+            if (OPACITY_VALUES[i] == LauncherPreferences.PREF_RECORDER_BUTTON_OPACITY) {
+                selectedOpacityIdx = i;
+                break;
+            }
+        }
+        mSpinnerOpacity.setSelection(selectedOpacityIdx);
+        mSpinnerOpacity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                LauncherPreferences.PREF_RECORDER_BUTTON_OPACITY = OPACITY_VALUES[position];
+                LauncherPreferences.DEFAULT_PREF.edit().putInt("recorder_button_opacity", OPACITY_VALUES[position]).apply();
+                if (CrazeRecorderManager.getInstance().isRecording() || CrazeRecorderManager.getInstance().isPaused()) {
+                    CrazeRecorderManager.getInstance().updateControlsVisibility();
+                }
+            }
+            @Override public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         // Resolution Spinner
         ArrayAdapter<String> resAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, RESOLUTIONS);

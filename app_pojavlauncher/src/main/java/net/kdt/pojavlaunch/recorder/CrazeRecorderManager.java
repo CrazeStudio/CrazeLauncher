@@ -226,6 +226,15 @@ public class CrazeRecorderManager {
         });
     }
 
+    public void updateControlsVisibility() {
+        Tools.runOnUiThread(() -> {
+            ControlLayout layout = getControlLayout();
+            if (layout != null) {
+                layout.updateButtonOpacity();
+            }
+        });
+    }
+
     private ControlLayout getControlLayout() {
         return mControlLayoutRef != null ? mControlLayoutRef.get() : null;
     }

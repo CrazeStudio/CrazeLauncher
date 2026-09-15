@@ -81,6 +81,7 @@ public class LauncherPreferences {
 
     // CrazeRecorder preferences
     public static boolean PREF_RECORDER_EXCLUDE_CONTROLS = true;
+    public static int PREF_RECORDER_BUTTON_OPACITY = 0; // 0 (Clean/Invisible), 15 (Ghost Outline), 30, 50, 100
     public static boolean PREF_RECORDER_MIC_ENABLED = false;
     public static int PREF_RECORDER_RESOLUTION = 1080; // 1080, 720, 0 (native)
     public static int PREF_RECORDER_FPS = 60; // 60, 30
@@ -137,6 +138,7 @@ public class LauncherPreferences {
         PREF_BUTTON_TRANSPARENCY = (short) DEFAULT_PREF.getInt("buttonTransparency", 100);
 
         PREF_RECORDER_EXCLUDE_CONTROLS = DEFAULT_PREF.getBoolean("recorder_exclude_controls", true);
+        PREF_RECORDER_BUTTON_OPACITY = DEFAULT_PREF.getInt("recorder_button_opacity", 0);
         PREF_RECORDER_MIC_ENABLED = DEFAULT_PREF.getBoolean("recorder_mic_enabled", false);
         PREF_RECORDER_RESOLUTION = DEFAULT_PREF.getInt("recorder_resolution", 1080);
         PREF_RECORDER_FPS = DEFAULT_PREF.getInt("recorder_fps", 60);
