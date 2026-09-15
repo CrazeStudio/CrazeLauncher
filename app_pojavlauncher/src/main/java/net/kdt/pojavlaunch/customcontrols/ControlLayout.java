@@ -58,6 +58,7 @@ public class ControlLayout extends FrameLayout {
 	private boolean mControlVisible = false;
 
 	private float mButtonsOpacity = 1.0f;
+	private boolean mRecordingHideControls = false;
 
 	private EditControlSideDialog mControlDialog = null;
 	private ControlHandleView mHandleView;
@@ -707,10 +708,21 @@ public class ControlLayout extends FrameLayout {
 
 	public void updateButtonOpacity() {
 		mButtonsOpacity = Math.max(0f, Math.min(1f, (float) LauncherPreferences.PREF_BUTTON_TRANSPARENCY / 100));
+		float effectiveOpacity = mRecordingHideControls ? 0.0f : mButtonsOpacity;
 		for(ControlInterface button : getButtonChildren()) {
 			// In edit mode, all controls have to be shown
 			if(mModifiable) button.setVisible(true);
-			button.getControlView().setAlpha(mModifiable ? button.getProperties().opacity : mButtonsOpacity * button.getProperties().opacity);
+			button.getControlView().setAlpha(mModifiable ? button.getProperties().opacity : effectiveOpacity * button.getProperties().opacity);
 		}
+	}
+
+	public void setRecordingHideControls(boolean hide) {
+		if (this.mRecordingHideControls == hide) return;
+		this.mRecordingHideControls = hide;
+		updateButtonOpacity();
+	}
+
+	public boolean isRecordingHideControls() {
+		return mRecordingHideControls;
 	}
 }

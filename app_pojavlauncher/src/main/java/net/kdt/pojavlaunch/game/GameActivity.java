@@ -73,6 +73,9 @@ import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.authenticator.accounts.Account;
 import net.kdt.pojavlaunch.utils.RendererCompatUtil;
 import net.kdt.pojavlaunch.utils.jre.GameRunner;
+import net.kdt.pojavlaunch.recorder.CrazeRecorderFloatingHUD;
+import net.kdt.pojavlaunch.recorder.CrazeRecorderManager;
+import net.kdt.pojavlaunch.recorder.CrazeRecorderSideDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,7 +84,7 @@ import java.util.Objects;
 
 import git.artdeell.mojo.R;
 
-public class GameActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection {
+public class GameActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable, ServiceConnection, CrazeRecorderFloatingHUD.CrazeRecorderDialogHost {
     public static final String INTENT_LAUNCH_VERSION = "intent_version";
     public static final String INTENT_LAUNCH_CLASSPATH = "intent_classpath";
 
@@ -107,6 +110,8 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     private GameService.LocalBinder mServiceBinder;
 
     private QuickSettingSideDialog mQuickSettingSideDialog;
+    private CrazeRecorderSideDialog mCrazeRecorderSideDialog;
+    private CrazeRecorderFloatingHUD mRecorderFloatingHUD;
 
     public static int mForcedPanningHeight = 0;
     public static int mImeHeight = 0;
@@ -243,6 +248,7 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                      case 2: dialogSendCustomKey(); break;
                      case 3: openQuickSettings(); break;
                      case 4: openCustomControls(); break;
+                     case 5: openCrazeRecorder(); break;
                 }
                 drawerLayout.closeDrawers();
             };
@@ -301,6 +307,10 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
         mDrawerPullButton = findViewById(R.id.drawer_button);
         mHotbarView = findViewById(R.id.hotbar_view);
         mLoadingScreen = findViewById(R.id.main_loading_screen);
+
+        CrazeRecorderManager.getInstance().setControlLayout(mControlLayout);
+        mRecorderFloatingHUD = new CrazeRecorderFloatingHUD(this, findViewById(R.id.content_frame));
+        mRecorderFloatingHUD.attach();
     }
 
     @Override
@@ -322,6 +332,9 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
         if(mQuickSettingSideDialog != null) {
             mQuickSettingSideDialog.cancel();
         }
+        if(mCrazeRecorderSideDialog != null) {
+            mCrazeRecorderSideDialog.cancel();
+        }
         PLATFORM.setHovered(false);
         super.onPause();
     }
@@ -341,6 +354,9 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(mRecorderFloatingHUD != null) {
+            mRecorderFloatingHUD.detach();
+        }
         ContextExecutor.clearActivity();
     }
 
@@ -373,6 +389,11 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == CrazeRecorderManager.REQUEST_CODE_MEDIA_PROJECTION) {
+            CrazeRecorderManager.getInstance().onMediaProjectionResult(this, resultCode, data);
+            return;
+        }
+
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             // Reload PREF_DEFAULTCTRL_PATH
             // If the storage root got unmounted/unreadable we won't be able to load the file anyway,
@@ -385,6 +406,26 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CrazeRecorderManager.REQUEST_CODE_AUDIO_PERMISSION) {
+            CrazeRecorderManager.getInstance().requestStartRecording(this);
+        }
+    }
+
+    public void openCrazeRecorder() {
+        if (mCrazeRecorderSideDialog == null) {
+            mCrazeRecorderSideDialog = new CrazeRecorderSideDialog(this, mControlLayout);
+        }
+        mCrazeRecorderSideDialog.appear(true);
+    }
+
+    @Override
+    public void openCrazeRecorderDialog() {
+        openCrazeRecorder();
     }
 
     private void runCraft(String versionId, File[] classpath) throws Throwable {

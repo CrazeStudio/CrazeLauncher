@@ -79,6 +79,14 @@ public class LauncherPreferences {
     public static boolean PREF_SHOW_MEMORY_WARNING_DIALOG = true;
     public static short PREF_BUTTON_TRANSPARENCY = 100;
 
+    // CrazeRecorder preferences
+    public static boolean PREF_RECORDER_EXCLUDE_CONTROLS = true;
+    public static boolean PREF_RECORDER_MIC_ENABLED = false;
+    public static int PREF_RECORDER_RESOLUTION = 1080; // 1080, 720, 0 (native)
+    public static int PREF_RECORDER_FPS = 60; // 60, 30
+    public static int PREF_RECORDER_BITRATE = 8000000; // 8 Mbps
+    public static boolean PREF_RECORDER_SHOW_HUD = true;
+
     public static void loadPreferences(Context ctx) {
         //Required for CTRLDEF_FILE and MultiRT
         Tools.initStorageConstants(ctx);
@@ -127,6 +135,13 @@ public class LauncherPreferences {
         PREF_ALSOFT_FORCE_OPENSL = DEFAULT_PREF.getBoolean("alsoftForceOpenSL", false);
         PREF_SHOW_MEMORY_WARNING_DIALOG = DEFAULT_PREF.getBoolean("showMemoryWarning", true);
         PREF_BUTTON_TRANSPARENCY = (short) DEFAULT_PREF.getInt("buttonTransparency", 100);
+
+        PREF_RECORDER_EXCLUDE_CONTROLS = DEFAULT_PREF.getBoolean("recorder_exclude_controls", true);
+        PREF_RECORDER_MIC_ENABLED = DEFAULT_PREF.getBoolean("recorder_mic_enabled", false);
+        PREF_RECORDER_RESOLUTION = DEFAULT_PREF.getInt("recorder_resolution", 1080);
+        PREF_RECORDER_FPS = DEFAULT_PREF.getInt("recorder_fps", 60);
+        PREF_RECORDER_BITRATE = DEFAULT_PREF.getInt("recorder_bitrate", 8000000);
+        PREF_RECORDER_SHOW_HUD = DEFAULT_PREF.getBoolean("recorder_show_hud", true);
 
         String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
         for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {

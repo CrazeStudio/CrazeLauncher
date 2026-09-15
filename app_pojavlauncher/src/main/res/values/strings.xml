@@ -526,4 +526,30 @@
     <string name="mcl_download_versions">Download Versions &amp; Modloaders</string>
     <string name="mcl_browse_mods">Browse Mods &amp; Modpacks</string>
     <string name="mcl_instance_editor">Instance Settings &amp; Icon</string>
+
+    <!-- CrazeRecorder Strings -->
+    <string name="crazer_recorder_title">CrazeRecorder</string>
+    <string name="crazer_recorder_desc">Gameplay &amp; screen recorder for Minecraft creators</string>
+    <string name="crazer_recorder_start">Start Recording</string>
+    <string name="crazer_recorder_stop">Stop Recording</string>
+    <string name="crazer_recorder_pause">Pause</string>
+    <string name="crazer_recorder_resume">Resume</string>
+    <string name="crazer_recorder_exclude_controls">Exclude On-Screen Controls</string>
+    <string name="crazer_recorder_exclude_controls_desc">Keeps touch controls fully active for gameplay while hiding them completely from the recorded video</string>
+    <string name="crazer_recorder_mic">Microphone Audio</string>
+    <string name="crazer_recorder_mic_desc">Record voice commentary with device microphone</string>
+    <string name="crazer_recorder_hud">Floating HUD</string>
+    <string name="crazer_recorder_hud_desc">Show minimal in-game timer and recording controls pill</string>
+    <string name="crazer_recorder_resolution">Resolution</string>
+    <string name="crazer_recorder_fps">Frame Rate</string>
+    <string name="crazer_recorder_bitrate">Bitrate</string>
+    <string name="crazer_recorder_view_recordings">View Recordings</string>
+    <string name="crazer_recorder_saved_toast">Recording saved to CrazeLauncher/Recordings</string>
+    <string name="crazer_recorder_status_idle">Ready to Record</string>
+    <string name="crazer_recorder_status_recording">Recording in progress…</string>
+    <string name="crazer_recorder_status_paused">Recording paused</string>
+    <string name="crazer_recorder_channel_name">CrazeRecorder</string>
+    <string name="crazer_recorder_channel_desc">Active screen and gameplay recording notifications</string>
+    <string name="crazer_recorder_no_recordings">No gameplay recordings found yet.</string>
+    <string name="crazer_recorder_delete_confirm">Delete this recording?</string>
 </resources>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/crazerecorder_hud_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/bg_crazerecorder_hud"
+    android:elevation="12dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Drag / Status Indicator with Pulsing Dot -->
+    <LinearLayout
+        android:id="@+id/crazerecorder_hud_drag_area"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="4dp"
+        android:paddingEnd="6dp">
+
+        <ImageView
+            android:id="@+id/crazerecorder_hud_dot"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/ic_record_dot"
+            android:contentDescription="@string/crazer_recorder_title" />
+
+        <TextView
+            android:id="@+id/crazerecorder_hud_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            tools:text="00:00" />
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:id="@+id/crazerecorder_hud_divider"
+        android:layout_width="1dp"
+        android:layout_height="18dp"
+        android:layout_marginHorizontal="4dp"
+        android:background="#33FFFFFF" />
+
+    <!-- Actions Container (Collapsible) -->
+    <LinearLayout
+        android:id="@+id/crazerecorder_hud_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Pause / Resume Button -->
+        <ImageButton
+            android:id="@+id/crazerecorder_hud_btn_pause"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_record_pause"
+            android:contentDescription="@string/crazer_recorder_pause"
+            android:padding="5dp" />
+
+        <!-- Stop & Save Button -->
+        <ImageButton
+            android:id="@+id/crazerecorder_hud_btn_stop"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_record_stop"
+            android:contentDescription="@string/crazer_recorder_stop"
+            android:padding="5dp" />
+
+        <!-- Controls Visibility Toggle (Ghost mode toggle) -->
+        <ImageButton
+            android:id="@+id/crazerecorder_hud_btn_controls"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_eye_hidden"
+            android:contentDescription="@string/crazer_recorder_exclude_controls"
+            android:padding="5dp" />
+
+        <!-- Microphone Toggle -->
+        <ImageButton
+            android:id="@+id/crazerecorder_hud_btn_mic"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_record_mic_off"
+            android:contentDescription="@string/crazer_recorder_mic"
+            android:padding="5dp" />
+
+        <!-- Settings / Expand Dialog Button -->
+        <ImageButton
+            android:id="@+id/crazerecorder_hud_btn_settings"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_craze_palette"
+            android:contentDescription="@string/settings"
+            android:padding="6dp" />
+    </LinearLayout>
+
+    <!-- Minimize / Expand Toggle Button -->
+    <ImageButton
+        android:id="@+id/crazerecorder_hud_btn_collapse"
+        android:layout_width="28dp"
+        android:layout_height="32dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_craze_chevron_right"
+        android:contentDescription="@string/error_show_less"
+        android:padding="6dp" />
+
+</LinearLayout>
