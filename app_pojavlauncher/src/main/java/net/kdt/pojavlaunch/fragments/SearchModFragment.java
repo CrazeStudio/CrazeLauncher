@@ -153,18 +153,6 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             }
         }
 
-        // Auto-select MC version filter if not already set and not in modpack mode
-        if (mSearchFilters.mcVersion == null || mSearchFilters.mcVersion.isEmpty()) {
-            Instance selectedInstance = Instances.loadSelectedInstance();
-            if (selectedInstance != null) {
-                String mcVer = selectedInstance.getMinecraftVersion();
-                if (mcVer != null && !mcVer.isEmpty()) {
-                    if (!"modpack".equals(mSearchFilters.projectType) && !mSearchFilters.isModpack) {
-                        mSearchFilters.mcVersion = mcVer;
-                    }
-                }
-            }
-        }
         // You can only access resources after attaching to current context
         mModItemAdapter = new ModItemAdapter(getResources(), modpackApi, this);
         ProgressKeeper.addTaskCountListener(mModItemAdapter);
@@ -279,15 +267,6 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
     private void selectType(String type) {
         mSearchFilters.projectType = type;
         mSearchFilters.isModpack = "modpack".equals(type);
-        if (!"modpack".equals(type) && (mSearchFilters.mcVersion == null || mSearchFilters.mcVersion.isEmpty())) {
-            Instance selectedInstance = Instances.loadSelectedInstance();
-            if (selectedInstance != null) {
-                String mcVer = selectedInstance.getMinecraftVersion();
-                if (mcVer != null && !mcVer.isEmpty()) {
-                    mSearchFilters.mcVersion = mcVer;
-                }
-            }
-        }
         updateChipVisuals();
         updateFilterBadge();
         updateHeaderLabels(type);
@@ -426,14 +405,7 @@ public class SearchModFragment extends Fragment implements ModItemAdapter.Search
             mSelectVersionButton.setOnClickListener(v -> VersionSelectorDialog.open(v.getContext(), true, (id, snapshot)-> mSelectedVersion.setText(id)));
 
             // Apply visually all the current settings
-            String currentFilterVersion = mSearchFilters.mcVersion;
-            if (currentFilterVersion == null || currentFilterVersion.isEmpty()) {
-                Instance selectedInstance = Instances.loadSelectedInstance();
-                if (selectedInstance != null) {
-                    currentFilterVersion = selectedInstance.getMinecraftVersion();
-                }
-            }
-            mSelectedVersion.setText(currentFilterVersion != null ? currentFilterVersion : "");
+            mSelectedVersion.setText(mSearchFilters.mcVersion != null ? mSearchFilters.mcVersion : "");
 
             // Apply the new settings
             mApplyButton.setOnClickListener(v -> {

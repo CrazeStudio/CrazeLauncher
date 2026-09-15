@@ -60,6 +60,10 @@ public class ApiHandler {
         Log.d("ApiHandler", url);
         try {
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000);
+            conn.setRequestProperty("User-Agent", "CrazeLauncher/1.0 (Android)");
+            conn.setRequestProperty("Accept", "application/json");
             addHeaders(conn, headers);
             InputStream inputStream = conn.getInputStream();
             String data = Tools.read(inputStream);
@@ -80,9 +84,12 @@ public class ApiHandler {
     public static String postRaw(Map<String, String> headers, String url, String body) {
         try {
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(15000);
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
+            conn.setRequestProperty("User-Agent", "CrazeLauncher/1.0 (Android)");
             addHeaders(conn, headers);
             conn.setDoOutput(true);
 
@@ -111,14 +118,19 @@ public class ApiHandler {
     }
 
     private static String parseQueries(HashMap<String, Object> query) {
+        if (query == null || query.isEmpty()) return "";
         StringBuilder params = new StringBuilder("?");
         for (String param : query.keySet()) {
-            String value = Objects.toString(query.get(param));
+            Object obj = query.get(param);
+            if (obj == null) continue;
+            String value = obj.toString();
+            if (value.isEmpty()) continue;
             params.append(urlEncodeUTF8(param))
                     .append("=")
                     .append(urlEncodeUTF8(value))
                     .append("&");
         }
+        if (params.length() == 1) return "";
         return params.substring(0, params.length() - 1);
     }
 

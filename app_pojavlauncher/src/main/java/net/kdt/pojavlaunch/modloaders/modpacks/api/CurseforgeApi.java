@@ -59,8 +59,13 @@ public class CurseforgeApi implements ModpackApi{
     private static final int CURSEFORGE_PAGINATION_END_REACHED = -1;
     private static final int CURSEFORGE_PAGINATION_ERROR = -2;
 
+    public static final String DEFAULT_CURSEFORGE_API_KEY = "$2a$10$bL4bIL5pUWqfcO7KQtnMReakwtfHbNKh6v1uTpKlzhwoueEJQnPnm";
+
     private final ApiHandler mApiHandler;
     public CurseforgeApi(String apiKey) {
+        if (apiKey == null || apiKey.isEmpty() || "DUMMY".equalsIgnoreCase(apiKey)) {
+            apiKey = DEFAULT_CURSEFORGE_API_KEY;
+        }
         mApiHandler = new ApiHandler("https://api.curseforge.com/v1", apiKey);
     }
 
@@ -79,13 +84,16 @@ public class CurseforgeApi implements ModpackApi{
         HashMap<String, Object> params = new HashMap<>();
         params.put("gameId", CURSEFORGE_MC_GAME_ID);
         params.put("classId", getCurseforgeClassId(searchFilters.projectType, searchFilters.isModpack));
-        params.put("searchFilter", searchFilters.name);
+        if (searchFilters.name != null && !searchFilters.name.trim().isEmpty()) {
+            params.put("searchFilter", searchFilters.name.trim());
+        }
         params.put("sortField", CURSEFORGE_SORT_RELEVANCY);
         params.put("sortOrder", "desc");
-        if(searchFilters.mcVersion != null && !searchFilters.mcVersion.isEmpty())
-            params.put("gameVersion", searchFilters.mcVersion);
-        if(previousPageResult != null)
-            params.put("index", curseforgeSearchResult.previousOffset);
+        params.put("pageSize", CURSEFORGE_PAGINATION_SIZE);
+        if (searchFilters.mcVersion != null && !searchFilters.mcVersion.trim().isEmpty()) {
+            params.put("gameVersion", searchFilters.mcVersion.trim());
+        }
+        params.put("index", curseforgeSearchResult != null ? curseforgeSearchResult.previousOffset : 0);
 
         JsonObject response = mApiHandler.get("mods/search", params, JsonObject.class);
         if(response == null) return null;
