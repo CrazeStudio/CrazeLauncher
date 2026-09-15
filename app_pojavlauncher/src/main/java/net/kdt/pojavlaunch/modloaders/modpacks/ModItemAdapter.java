@@ -80,6 +80,9 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         this.mSearchFilters = searchFilters;
         this.mLastPage = false;
+        this.mCurrentResult = null;
+        this.mModItems = MOD_ITEMS_EMPTY;
+        notifyDataSetChanged();
         mTaskInProgress = new SelfReferencingFuture(new SearchApiTask(mSearchFilters, null))
                 .startOnExecutor(PojavApplication.sExecutorService);
     }
@@ -444,29 +447,33 @@ public class ModItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if(myFuture.isCancelled()) return;
                 mTaskInProgress = null;
                 if(finalModItems == null) {
+                    mModItems = MOD_ITEMS_EMPTY;
+                    notifyDataSetChanged();
                     mSearchResultCallback.onSearchError(SearchResultCallback.ERROR_INTERNAL);
+                    return;
                 }else if(finalModItems.length == 0) {
                     if(mPreviousResult != null) {
                         mLastPage = true;
-                        notifyItemChanged(mModItems.length);
+                        notifyItemRemoved(mModItems.length);
                         mSearchResultCallback.onSearchFinished();
                         return;
                     }
+                    mModItems = MOD_ITEMS_EMPTY;
+                    notifyDataSetChanged();
                     mSearchResultCallback.onSearchError(SearchResultCallback.ERROR_NO_RESULTS);
+                    return;
                 }else{
                     mSearchResultCallback.onSearchFinished();
                 }
                 mCurrentResult = result;
-                if(finalModItems == null) {
-                    mModItems = MOD_ITEMS_EMPTY;
-                    notifyDataSetChanged();
-                    return;
-                }
                 if(mPreviousResult != null) {
                     int prevLength = mModItems.length;
+                    int newItemsCount = finalModItems.length - prevLength;
                     mModItems = finalModItems;
-                    notifyItemChanged(prevLength);
-                    notifyItemRangeInserted(prevLength+1, mModItems.length);
+                    if(newItemsCount > 0) {
+                        notifyItemChanged(prevLength);
+                        notifyItemRangeInserted(prevLength + 1, newItemsCount);
+                    }
                 }else {
                     mModItems = finalModItems;
                     notifyDataSetChanged();

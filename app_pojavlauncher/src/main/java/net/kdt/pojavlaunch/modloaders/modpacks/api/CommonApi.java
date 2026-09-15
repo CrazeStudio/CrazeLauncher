@@ -47,6 +47,10 @@ public class CommonApi implements ModpackApi {
 
     @Override
     public SearchResult searchMod(SearchFilters searchFilters, SearchResult previousPageResult) {
+        boolean isWorld = "world".equals(searchFilters.projectType) || "map".equals(searchFilters.projectType);
+        if (isWorld && mCurseforgeApi != null) {
+            return mCurseforgeApi.searchMod(searchFilters, previousPageResult);
+        }
         CommonApiSearchResult commonApiSearchResult = (CommonApiSearchResult) previousPageResult;
         // If there are no previous page results, create a new array. Otherwise, use the one from the previous page
         SearchResult[] results = commonApiSearchResult == null ?

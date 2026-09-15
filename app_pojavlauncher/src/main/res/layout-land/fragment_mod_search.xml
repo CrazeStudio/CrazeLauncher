@@ -127,97 +127,109 @@
             app:layout_constraintTop_toBottomOf="@id/divider_categories"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Vertical Category Switcher -->
-        <LinearLayout
-            android:id="@+id/categories_container"
+        <!-- Scrollable Vertical Category Switcher -->
+        <ScrollView
+            android:id="@+id/categories_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:overScrollMode="always"
             android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             app:layout_constraintTop_toBottomOf="@id/label_categories"
+            app:layout_constraintBottom_toTopOf="@id/source_attribution_label"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:id="@+id/chip_type_modpack"
+            <LinearLayout
+                android:id="@+id/categories_container"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:text="Modpacks"
-                android:textColor="#FFFFFF"
-                android:textSize="11.5sp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="10dp"
-                android:drawableStart="@drawable/ic_craze_cube"
-                android:drawablePadding="8dp"
-                android:background="@drawable/bg_craze_chip_selected"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="3dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/chip_type_mod"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:text="Mods"
-                android:textColor="@color/secondary_text"
-                android:textSize="11.5sp"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="10dp"
-                android:drawableStart="@drawable/ic_craze_layers"
-                android:drawablePadding="8dp"
-                android:background="@drawable/bg_craze_chip_unselected"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="3dp" />
+                <TextView
+                    android:id="@+id/chip_type_modpack"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="Modpacks"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:drawableStart="@drawable/ic_craze_cube"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/bg_craze_chip_selected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="3dp" />
 
-            <TextView
-                android:id="@+id/chip_type_resourcepack"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:text="Resource Packs"
-                android:textColor="@color/secondary_text"
-                android:textSize="11.5sp"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="10dp"
-                android:drawableStart="@drawable/ic_craze_palette"
-                android:drawablePadding="8dp"
-                android:background="@drawable/bg_craze_chip_unselected"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="3dp" />
+                <TextView
+                    android:id="@+id/chip_type_mod"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="Mods"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="11.5sp"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:drawableStart="@drawable/ic_craze_layers"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/bg_craze_chip_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="3dp" />
 
-            <TextView
-                android:id="@+id/chip_type_shader"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:text="Shaders"
-                android:textColor="@color/secondary_text"
-                android:textSize="11.5sp"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="10dp"
-                android:drawableStart="@drawable/ic_craze_sparkle"
-                android:drawablePadding="8dp"
-                android:background="@drawable/bg_craze_chip_unselected"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="3dp" />
+                <TextView
+                    android:id="@+id/chip_type_resourcepack"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="Resource Packs"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="11.5sp"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:drawableStart="@drawable/ic_craze_palette"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/bg_craze_chip_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="3dp" />
 
-            <TextView
-                android:id="@+id/chip_type_world"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:text="Worlds &amp; Maps"
-                android:textColor="@color/secondary_text"
-                android:textSize="11.5sp"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="10dp"
-                android:drawableStart="@drawable/ic_craze_map"
-                android:drawablePadding="8dp"
-                android:background="@drawable/bg_craze_chip_unselected"
-                android:clickable="true"
-                android:focusable="true" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/chip_type_shader"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="Shaders"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="11.5sp"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:drawableStart="@drawable/ic_craze_sparkle"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/bg_craze_chip_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="3dp" />
+
+                <TextView
+                    android:id="@+id/chip_type_world"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:text="Worlds &amp; Maps"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="11.5sp"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:drawableStart="@drawable/ic_craze_map"
+                    android:drawablePadding="8dp"
+                    android:background="@drawable/bg_craze_chip_unselected"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_marginBottom="3dp" />
+            </LinearLayout>
+        </ScrollView>
 
         <!-- Mod Source Tag -->
         <TextView
