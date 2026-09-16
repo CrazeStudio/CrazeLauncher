@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_craze_card_clickable"
+    android:padding="10dp"
+    android:layout_margin="4dp">
+
+    <ImageView
+        android:id="@+id/mod_thumbnail_imageview"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/ic_launcher_foreground" />
+
+    <ImageView
+        android:id="@+id/mod_source_imageview"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@mipmap/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/mod_title_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/primary_text"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintEnd_toStartOf="@+id/mod_source_imageview"
+        app:layout_constraintStart_toEndOf="@+id/mod_thumbnail_imageview"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Better Adventures [Forge]" />
+
+    <TextView
+        android:id="@+id/mod_body_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/secondary_text"
+        android:textSize="11.5sp"
+        android:lineSpacingExtra="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/mod_title_textview"
+        app:layout_constraintTop_toBottomOf="@+id/mod_title_textview"
+        tools:text="An enhanced survival experience with dungeons, bosses, and RPG mechanics." />
+
+    <!--
+        When clicked for the first time, the view is extended with more information.
+     -->
+    <ViewStub
+        android:id="@+id/mod_limited_state_stub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout="@layout/view_mod_extended"
+        app:layout_constraintTop_toBottomOf="@id/mod_thumbnail_imageview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

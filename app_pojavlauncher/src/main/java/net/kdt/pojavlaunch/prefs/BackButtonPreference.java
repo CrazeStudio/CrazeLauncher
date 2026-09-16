@@ -1,0 +1,54 @@
+package net.kdt.pojavlaunch.prefs;
+
+import android.content.Context;
+import android.util.AttributeSet;
+
+import androidx.preference.Preference;
+
+import git.artdeell.mojo.R;
+import net.kdt.pojavlaunch.extra.ExtraConstants;
+import net.kdt.pojavlaunch.extra.ExtraCore;
+
+public class BackButtonPreference extends Preference {
+    public BackButtonPreference(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    @SuppressWarnings("unused") public BackButtonPreference(Context context) {
+        this(context, null);
+    }
+
+    private void init(){
+        if(getTitle() == null){
+            setTitle(R.string.preference_back_title);
+        }
+        if(getIcon() == null){
+            setIcon(R.drawable.ic_craze_back);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@androidx.annotation.NonNull androidx.preference.PreferenceViewHolder holder) {
+        super.onBindViewHolder(holder);
+        boolean isLandscape = holder.itemView.getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+        if (isLandscape) {
+            holder.itemView.setVisibility(android.view.View.GONE);
+            holder.itemView.setLayoutParams(new androidx.recyclerview.widget.RecyclerView.LayoutParams(0, 0));
+            return;
+        }
+        android.widget.TextView titleView = (android.widget.TextView) holder.findViewById(android.R.id.title);
+        if (titleView != null) {
+            titleView.setTextColor(android.graphics.Color.WHITE);
+            titleView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 16);
+            titleView.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+        }
+    }
+
+
+    @Override
+    protected void onClick() {
+        // It is caught by an ExtraListener in the LauncherActivity
+        ExtraCore.setValue(ExtraConstants.BACK_PREFERENCE, "true");
+    }
+}

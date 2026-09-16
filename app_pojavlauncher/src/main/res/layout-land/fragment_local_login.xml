@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="16dp">
+
+            <!-- Card Container with fixed landscape width -->
+            <LinearLayout
+                android:layout_width="480dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_card"
+                android:orientation="vertical"
+                android:paddingHorizontal="28dp"
+                android:paddingVertical="24dp">
+
+                <!-- Header Icon -->
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_auth_local"
+                    app:tint="@color/primary_text"
+                    android:contentDescription="@null"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Title & Subtitle -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/auth_select_local"
+                    android:textColor="@color/primary_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/login_online_username_hint"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Username Input Field -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_online_username_hint"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <EditText
+                    android:id="@+id/login_edit_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:background="@drawable/bg_craze_input"
+                    android:hint="PlayerName"
+                    android:textColor="@color/primary_text"
+                    android:textColorHint="@color/text_tertiary"
+                    android:textSize="14sp"
+                    android:imeOptions="flagNoExtractUi|actionDone"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:paddingHorizontal="14dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Submit Button -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_craze_play_btn"
+                    android:text="@string/login_online_login_label"
+                    android:textColor="#0A0A0A"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="false" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

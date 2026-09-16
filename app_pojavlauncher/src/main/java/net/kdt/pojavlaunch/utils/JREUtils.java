@@ -1,0 +1,420 @@
+package net.kdt.pojavlaunch.utils;
+
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DUMP_SHADERS;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_VSYNC_IN_ZINK;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
+
+import android.content.*;
+import android.system.*;
+import android.util.*;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.util.*;
+import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.extra.ExtraConstants;
+import net.kdt.pojavlaunch.extra.ExtraCore;
+import net.kdt.pojavlaunch.multirt.Runtime;
+import net.kdt.pojavlaunch.plugins.LibraryPlugin;
+import net.kdt.pojavlaunch.prefs.*;
+
+import git.artdeell.mojoexec.MojoExec;
+
+public class JREUtils {
+    public static void redirectAndPrintJRELog() {
+        Log.v("jrelog","Log starts here");
+        new Thread(new Runnable(){
+            int failTime = 0;
+            ProcessBuilder logcatPb;
+            @Override
+            public void run() {
+                try {
+                    if (logcatPb == null) {
+                        // No filtering by tag anymore as that relied on incorrect log levels set in log.h
+                        logcatPb = new ProcessBuilder().command("logcat", /* "-G", "1mb", */ "-v", "brief", "-s", "jrelog", "LIBGL", "NativeInput").redirectErrorStream(true);
+                    }
+
+                    Log.i("jrelog-logcat","Clearing logcat");
+                    new ProcessBuilder().command("logcat", "-c").redirectErrorStream(true).start();
+                    Log.i("jrelog-logcat","Starting logcat");
+                    java.lang.Process p = logcatPb.start();
+
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = p.getInputStream().read(buf)) != -1) {
+                        String currStr = new String(buf, 0, len);
+                        Logger.appendToLog(currStr);
+                    }
+
+                    if (p.waitFor() != 0) {
+                        Log.e("jrelog-logcat", "Logcat exited with code " + p.exitValue());
+                        failTime++;
+                        Log.i("jrelog-logcat", (failTime <= 10 ? "Restarting logcat" : "Too many restart fails") + " (attempt " + failTime + "/10");
+                        if (failTime <= 10) {
+                            run();
+                        } else {
+                            Logger.appendToLog("ERROR: Unable to get more log.");
+                        }
+                    }
+                } catch (Throwable e) {
+                    Log.e("jrelog-logcat", "Exception on logging thread", e);
+                    Logger.appendToLog("Exception on logging thread:\n" + Log.getStackTraceString(e));
+                }
+            }
+        }).start();
+        Log.i("jrelog-logcat","Logcat thread started");
+
+    }
+
+    private static void overrideEnvVars(Map<String, String> envMap) throws IOException {
+        File customEnvFile = new File(Tools.DIR_GAME_HOME, "custom_env.txt");
+        if(!customEnvFile.exists() || !customEnvFile.isFile()) return;
+        BufferedReader reader = new BufferedReader(new FileReader(customEnvFile));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            // Not use split() as only split first one
+            int index = line.indexOf("=");
+            envMap.put(line.substring(0, index), line.substring(index + 1));
+        }
+        reader.close();
+    }
+
+    // Sets up ANGLE driver environment
+    public static void setupAngleEnv(Context ctx, Map<String, String> envMap) {
+        if (!LauncherPreferences.PREF_USE_ANGLE) return;
+        LibraryPlugin angle = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_ANGLE_PLUGIN);
+        if (angle == null) {
+            String[] altAnglePkgs = {
+                "com.google.android.angle",
+                "org.chromium.angle",
+                "com.mobileglues.angle",
+                "com.fcl.angle"
+            };
+            for (String pkg : altAnglePkgs) {
+                angle = LibraryPlugin.discoverPlugin(ctx, pkg);
+                if (angle != null) break;
+            }
+        }
+        if (angle == null) return;
+        String[] angleLibs = {"libEGL_angle.so", "libGLESv2_angle.so"};
+        if (!angle.checkLibraries(angleLibs)) {
+            Log.e("AngleEnvSetup", "AnglePlugin exists, but the ANGLE libraries are not present. Is the plugin corrupted?");
+            return;
+        }
+        envMap.put("LIBGL_EGL", angle.resolveAbsolutePath(angleLibs[0]));
+        envMap.put("LIBGL_GLES", angle.resolveAbsolutePath(angleLibs[1]));
+        Log.i("AngleEnvSetup", "ANGLE integration active: EGL=" + envMap.get("LIBGL_EGL"));
+    }
+
+    public static void setupFfmpegEnv(Context ctx, Map<String, String> envMap) {
+        LibraryPlugin ffmpeg = LibraryPlugin.discoverPlugin(ctx, LibraryPlugin.ID_FFMPEG_PLUGIN);
+        if(ffmpeg == null) return;
+        envMap.put("POJAV_FFMPEG_PATH", ffmpeg.resolveAbsolutePath("libffmpeg.so"));
+    }
+    public static void setEnviroimentForGame(Context context, String renderer) throws Throwable {
+        Map<String, String> envMap = new ArrayMap<>();
+        envMap.put("LIBGL_MIPMAP", "0");
+
+        // Prevent OptiFine (and other error-reporting stuff in Minecraft) from balooning the log
+        envMap.put("LIBGL_NOERROR", "1");
+
+        // On certain GLES drivers, overloading default functions shader hack fails, so disable it
+        envMap.put("LIBGL_NOINTOVLHACK", "1");
+
+        // Fix white color on banner and sheep, since GL4ES 1.1.5
+        envMap.put("LIBGL_NORMALIZE", "1");
+
+        if(PREF_DUMP_SHADERS)
+            envMap.put("LIBGL_VGPU_DUMP", "1");
+        if(PREF_VSYNC_IN_ZINK)
+            envMap.put("POJAV_VSYNC_IN_ZINK", "1");
+
+        // The OPEN GL version is changed according
+        String openGlVersion = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
+        int detectedGles = GLInfoUtils.getGlInfo().glesMajorVersion;
+        int parsedGlVersion = 2;
+        try {
+            parsedGlVersion = openGlVersion != null ? Integer.parseInt(openGlVersion) : (detectedGles >= 3 ? 3 : 2);
+        } catch (Exception e) {
+            parsedGlVersion = detectedGles >= 3 ? 3 : 2;
+        }
+        envMap.put("LIBGL_ES", String.valueOf(parsedGlVersion));
+        if (parsedGlVersion >= 3 || detectedGles >= 3) {
+            envMap.put("LIBGL_GL", "33");
+            envMap.put("LIBGL_ES", "3");
+        }
+
+        envMap.put("FORCE_VSYNC", String.valueOf(LauncherPreferences.PREF_FORCE_VSYNC));
+
+        envMap.put("MESA_GLSL_CACHE_DIR", Tools.DIR_CACHE.getAbsolutePath());
+        envMap.put("force_glsl_extensions_warn", "true");
+        envMap.put("allow_higher_compat_version", "true");
+        envMap.put("allow_glsl_extension_directive_midshader", "true");
+		// This is currently required for YSM mod to function
+		File modRuntimeDir = new File(Tools.DIR_CACHE, "app_runtime_mod");
+		if (!modRuntimeDir.exists()) {
+    		modRuntimeDir.mkdirs();
+		}
+		envMap.put("MOD_ANDROID_RUNTIME", modRuntimeDir.getAbsolutePath());
+
+        setupAngleEnv(context, envMap);
+        setupFfmpegEnv(context, envMap);
+        // Init mesa renderers
+        MesaUtils.initEnvironment(context, renderer, envMap);
+
+        setRendererLibraryPath(Tools.NATIVE_LIB_DIR, MesaUtils.getCustomZinkLibraryPath());
+
+        if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
+        if(LauncherPreferences.PREF_ALSOFT_FORCE_OPENSL) envMap.put("ALSOFT_DRIVERS", "opensl");
+
+        if(GLInfoUtils.getGlInfo().isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
+            MojoExec.setUseTurnip(true);
+        }
+
+        if(LauncherPreferences.PREF_FREEDRENO_SYSMEM) {
+            // We could also apply the FD_MESA_DEBUG only if freedreno is active but why making things complicated?
+            Logger.appendToLog("Will use sysmem rendering for Turnip/Freedreno");
+            envMap.put("FD_MESA_DEBUG", "sysmem");
+            envMap.put("TU_DEBUG", "sysmem");
+        }
+
+        overrideEnvVars(envMap);
+
+        // Hide MobileGlues launcher env level signature from Sodium
+        envMap.put("hideMGEnvLevel", "1");
+        envMap.put("HIDE_MG_ENV_LEVEL", "1");
+        envMap.remove("POJAV_LAUNCHER");
+
+        try {
+            Os.unsetenv("POJAV_LAUNCHER");
+        } catch (Throwable t) {
+            Log.w("JREUtils", "Failed to unset POJAV_LAUNCHER env var", t);
+        }
+
+        for (Map.Entry<String, String> env : envMap.entrySet()) {
+            if ("POJAV_LAUNCHER".equalsIgnoreCase(env.getKey())) continue;
+            Logger.appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
+            try {
+                Os.setenv(env.getKey(), env.getValue(), true);
+            }catch (NullPointerException exception){
+                Log.e("JREUtils", exception.toString());
+            }
+        }
+    }
+
+    public static void launchJavaVM(final AppCompatActivity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
+
+        // Force LWJGL to use the Freetype library intended for it, instead of using the one
+        // that we ship with Java (since it may be older than what's needed)
+        //
+        Tools.fullyExit();
+    }
+
+    /**
+     * Parse and separate java arguments in a user friendly fashion
+     * It supports multi line and absence of spaces between arguments
+     * The function also supports auto-removal of improper arguments, although it may miss some.
+     *
+     * @param args The un-parsed argument list.
+     * @return Parsed args as an ArrayList
+     */
+    public static ArrayList<String> parseJavaArguments(String args){
+        ArrayList<String> parsedArguments = new ArrayList<>(0);
+        args = args.trim().replace(" ", "");
+        //For each prefixes, we separate args.
+        String[] separators = new String[]{"-XX:-","-XX:+", "-XX:","--", "-D", "-X", "-javaagent:", "-verbose"};
+        for(String prefix : separators){
+            while (true){
+                int start = args.indexOf(prefix);
+                if(start == -1) break;
+                //Get the end of the current argument by checking the nearest separator
+                int end = -1;
+                for(String separator: separators){
+                    int tempEnd = args.indexOf(separator, start + prefix.length());
+                    if(tempEnd == -1) continue;
+                    if(end == -1){
+                        end = tempEnd;
+                        continue;
+                    }
+                    end = Math.min(end, tempEnd);
+                }
+                //Fallback
+                if(end == -1) end = args.length();
+
+                //Extract it
+                String parsedSubString = args.substring(start, end);
+                args = args.replace(parsedSubString, "");
+
+                //Check if two args aren't bundled together by mistake
+                if(parsedSubString.indexOf('=') == parsedSubString.lastIndexOf('=')) {
+                    int arraySize = parsedArguments.size();
+                    if(arraySize > 0){
+                        String lastString = parsedArguments.get(arraySize - 1);
+                        // Looking for list elements
+                        if(lastString.charAt(lastString.length() - 1) == ',' ||
+                                parsedSubString.contains(",")){
+                            parsedArguments.set(arraySize - 1, lastString + parsedSubString);
+                            continue;
+                        }
+                    }
+                    parsedArguments.add(parsedSubString);
+                }
+                // --a-b= handling (with multiple signs so we don't accidentally remove mandatory args)
+                else if(parsedSubString.startsWith("--") && parsedSubString.indexOf('=') != -1) {
+                    parsedArguments.add(parsedSubString);
+                }
+                else Log.w("JAVA ARGS PARSER", "Removed improper arguments: " + parsedSubString);
+            }
+        }
+        return parsedArguments;
+    }
+
+    /**
+     * Open the render library in accordance to the settings.
+     * It will fallback if it fails to load the library.
+     * @return The name of the loaded library
+     */
+    public static String loadGraphicsLibrary(Context context, String renderer){
+        String renderLibrary = "libgl4es_114.so";
+        boolean useGles = true;
+        boolean bypassNamespace = false;
+        boolean preloadVk = true;
+        int glesVersion = 3;
+
+        if (renderer == null || renderer.isEmpty()) {
+            renderer = LauncherPreferences.PREF_RENDERER;
+        }
+        if (renderer == null || renderer.isEmpty()) {
+            renderer = "opengles2";
+        }
+
+        if (renderer.startsWith("fcl_pkg:") || renderer.startsWith("fcl_dir:") || renderer.startsWith("com.") || renderer.equals("fcl_render") || renderer.contains("plugin") || renderer.contains("mobileglues")) {
+            LibraryPlugin plugin = null;
+            if (renderer.startsWith("fcl_pkg:")) {
+                String pkgId = renderer.substring("fcl_pkg:".length());
+                plugin = LibraryPlugin.discoverPlugin(context, pkgId);
+            } else if (renderer.startsWith("fcl_dir:")) {
+                String dirPath = renderer.substring("fcl_dir:".length());
+                if (new File(dirPath).exists()) {
+                    plugin = new LibraryPlugin(renderer, dirPath, "FCL Override (" + new File(dirPath).getName() + ")");
+                }
+            } else if (renderer.startsWith("com.")) {
+                plugin = LibraryPlugin.discoverPlugin(context, renderer);
+            }
+            if (plugin == null && context != null) {
+                plugin = LibraryPlugin.discoverFclPlugin(context);
+            }
+
+            if (plugin != null) {
+                String[] candidateLibs = {
+                    "libmobileglues.so", "libgl4es_mobileglues.so", "libGL_mobileglues.so", "libfcl_render.so", "libkrypton.so", "libgl4es_115.so", "libgl4es_114.so", "libzink.so", "libvirgl.so", "libGL.so", "libEGL_angle.so", "libGLESv2.so"
+                };
+                String foundLib = null;
+                for (String lib : candidateLibs) {
+                    if (new File(plugin.getLibraryPath(), lib).exists()) {
+                        foundLib = lib;
+                        break;
+                    }
+                }
+                if (foundLib == null) {
+                    File nativeDir = new File(plugin.getLibraryPath());
+                    File[] files = nativeDir.listFiles();
+                    if (files != null) {
+                        for (File f : files) {
+                            if (f.getName().endsWith(".so")) {
+                                foundLib = f.getName();
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (foundLib != null) {
+                    renderLibrary = plugin.resolveAbsolutePath(foundLib);
+                    bypassNamespace = true;
+                    useGles = true;
+                    glesVersion = 3;
+                    setRendererLibraryPath(Tools.NATIVE_LIB_DIR, plugin.getLibraryPath());
+                    Log.i("JREUtils", "Loaded installed FCLRendererPlugin MobileGLues (" + plugin.getAppName() + ") native library: " + renderLibrary);
+                }
+            } else {
+                renderLibrary = "libgl4es_114.so";
+                useGles = true;
+                glesVersion = 3;
+            }
+        } else {
+            switch (renderer) {
+                case "freedreno_kgsl":
+                    preloadVk = false;
+                case "vulkan_zink":
+                    renderLibrary = MesaUtils.getPreferredEGL();
+                    useGles = false;
+                    bypassNamespace = true; // Mesa is linked to a bunch of libraries not available in the pojavexec namespace
+                    glesVersion = 3;
+                    if (preloadVk) MojoExec.preloadVulkan(); // Zink requires Vulkan library to be preloaded
+                    break;
+                case "opengles3_ltw":
+                    renderLibrary = "libltw.so";
+                    useGles = true;
+                    glesVersion = 3;
+                    break;
+                case "opengles2_5":
+                    renderLibrary = "libgl4es_115.so";
+                    useGles = true;
+                    glesVersion = 3;
+                    break;
+                case "opengles2":
+                case "opengles3":
+                default:
+                    renderLibrary = "libgl4es_114.so";
+                    useGles = true;
+                    String openGlVal = (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION);
+                    glesVersion = openGlVal != null ? Integer.parseInt(openGlVal) : (GLInfoUtils.getGlInfo().glesMajorVersion >= 3 ? 3 : 2);
+                    break;
+            }
+        }
+
+        if (renderLibrary != null && !renderLibrary.startsWith("/")) {
+            File nativeFile = new File(Tools.NATIVE_LIB_DIR, renderLibrary);
+            if (nativeFile.exists()) {
+                renderLibrary = nativeFile.getAbsolutePath();
+            }
+        }
+
+        if (!MojoExec.prepareEgl(renderLibrary, bypassNamespace, useGles, glesVersion)) {
+            Log.w("RENDER_LIBRARY", "Failed to load renderer with namespace bypass: " + renderLibrary + ", retrying standard dlopen...");
+            if (!MojoExec.prepareEgl(renderLibrary, false, useGles, glesVersion)) {
+                Log.e("RENDER_LIBRARY", "Failed to load renderer " + renderLibrary + ", falling back to libgl4es_114.so");
+                renderLibrary = "libgl4es_114.so";
+                setRendererLibraryPath(Tools.NATIVE_LIB_DIR, null);
+                if (!MojoExec.prepareEgl(renderLibrary, false, true, 3)) {
+                    Log.e("RENDER_LIBRARY", "Fatal fallback failed for " + renderLibrary);
+                    return null;
+                }
+            }
+        }
+        MesaUtils.destroyZink(); // Not needed anymore
+        return renderLibrary;
+    }
+
+    public static String loadGraphicsLibrary(String renderer){
+        return loadGraphicsLibrary((Context) null, renderer);
+    }
+
+    public static int getDetectedVersion() {
+        return GLInfoUtils.getGlInfo().glesMajorVersion;
+    }
+    public static void setRendererLibraryPath(String mainPath, String additionalPath){
+        if(additionalPath != null)
+            mainPath = additionalPath + ":" + mainPath;
+        MojoExec.setNativeLibraryDir(mainPath);
+    }
+    public static native int chdir(String path);
+
+    public static native void setLdLibraryPath(String ldLibraryPath);
+    static {
+        System.loadLibrary("pojavexec");
+        System.loadLibrary("pojavexec_awt");
+    }
+}

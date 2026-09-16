@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/crazerecorder_dialog_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_moderate">
+
+    <!-- Status & Action Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_crazerecorder_card"
+        android:orientation="vertical"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/crazerecorder_status_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_crazerecorder"
+                android:contentDescription="@string/crazer_recorder_title" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/crazerecorder_status_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/crazer_recorder_status_idle"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/crazerecorder_status_timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00:00"
+                    android:textColor="#AAAAAA"
+                    android:textSize="13sp"
+                    android:fontFamily="monospace" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Big Start / Stop Button -->
+        <Button
+            android:id="@+id/crazerecorder_btn_main_action"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#D32F2F"
+            android:text="@string/crazer_recorder_start"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <!-- Pause / Resume secondary button (Visible when recording) -->
+        <Button
+            android:id="@+id/crazerecorder_btn_pause_action"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="6dp"
+            android:visibility="gone"
+            android:backgroundTint="#333333"
+            android:text="@string/crazer_recorder_pause"
+            android:textColor="#FFFFFF" />
+
+        <!-- Clean Minecraft Screenshot Button -->
+        <Button
+            android:id="@+id/crazerecorder_btn_screenshot"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#2E7D32"
+            android:text="@string/crazer_recorder_take_screenshot"
+            android:textColor="#FFFFFF"
+            android:drawableStart="@drawable/ic_craze_screenshot"
+            android:drawablePadding="8dp" />
+    </LinearLayout>
+
+    <!-- Recording Controls & Gameplay Settings Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_crazerecorder_card"
+        android:orientation="vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RECORDING BEHAVIOR"
+            android:textColor="#80FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Exclude Controls Switch -->
+        <Switch
+            android:id="@+id/crazerecorder_switch_exclude_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/crazer_recorder_exclude_controls"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-4dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/crazer_recorder_exclude_controls_desc"
+            android:textColor="#888888"
+            android:textSize="12sp" />
+
+        <!-- Opacity Option Row -->
+        <LinearLayout
+            android:id="@+id/crazerecorder_layout_opacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/crazer_recorder_control_opacity"
+                android:textColor="#DDDDDD"
+                android:textSize="13sp" />
+
+            <Spinner
+                android:id="@+id/crazerecorder_spinner_opacity"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:backgroundTint="#FFFFFF"
+                android:popupTheme="@android:style/ThemeOverlay.Material.Dark" />
+        </LinearLayout>
+
+        <!-- Microphone Switch -->
+        <Switch
+            android:id="@+id/crazerecorder_switch_mic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/crazer_recorder_mic"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-4dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/crazer_recorder_mic_desc"
+            android:textColor="#888888"
+            android:textSize="12sp" />
+
+        <!-- Floating HUD Switch -->
+        <Switch
+            android:id="@+id/crazerecorder_switch_hud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/crazer_recorder_hud"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-4dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/crazer_recorder_hud_desc"
+            android:textColor="#888888"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <!-- Video Quality Settings Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_crazerecorder_card"
+        android:orientation="vertical"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VIDEO QUALITY"
+            android:textColor="#80FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Resolution Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/crazer_recorder_resolution"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/crazerecorder_spinner_resolution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="140dp" />
+        </LinearLayout>
+
+        <!-- FPS Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/crazer_recorder_fps"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/crazerecorder_spinner_fps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="140dp" />
+        </LinearLayout>
+
+        <!-- Bitrate Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/crazer_recorder_bitrate"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/crazerecorder_spinner_bitrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="140dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Recordings Library Button -->
+    <Button
+        android:id="@+id/crazerecorder_btn_recordings"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:backgroundTint="#262626"
+        android:text="@string/crazer_recorder_view_recordings"
+        android:textColor="#FFD54F"
+        android:drawableStart="@drawable/ic_craze_video_library"
+        android:drawablePadding="8dp" />
+
+</LinearLayout>

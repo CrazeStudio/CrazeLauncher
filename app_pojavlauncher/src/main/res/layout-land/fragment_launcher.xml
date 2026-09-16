@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="#0B0E14"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="4dp">
+
+    <!-- ======================================================== -->
+    <!-- LEFT PANE: SIDEBAR NAVIGATION                            -->
+    <!-- ======================================================== -->
+    <LinearLayout
+        android:layout_width="128dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_landscape_panel"
+        android:orientation="vertical"
+        android:padding="6dp">
+
+        <!-- Tab: Home (Active) -->
+        <LinearLayout
+            android:id="@+id/nav_home"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="@drawable/bg_landscape_active_tab"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="3dp">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_px_home"
+                android:contentDescription="Home"
+                app:tint="#FFFFFF" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Home"
+                android:textColor="#FFFFFF"
+                android:textSize="12.5sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Tab: Instances -->
+        <LinearLayout
+            android:id="@+id/nav_instances"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="?selectableItemBackground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="3dp">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_craze_cube"
+                android:contentDescription="Instances"
+                app:tint="#A4A8B0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Instances"
+                android:textColor="#A4A8B0"
+                android:textSize="12.5sp" />
+        </LinearLayout>
+
+        <!-- Tab: Mods -->
+        <LinearLayout
+            android:id="@+id/nav_mods"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="?selectableItemBackground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="3dp">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_craze_folder"
+                android:contentDescription="Mods"
+                app:tint="#A4A8B0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Mods"
+                android:textColor="#A4A8B0"
+                android:textSize="12.5sp" />
+        </LinearLayout>
+
+        <!-- Tab: Packs -->
+        <LinearLayout
+            android:id="@+id/nav_packs"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="?selectableItemBackground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="3dp">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_craze_layers"
+                android:contentDescription="Packs"
+                app:tint="#A4A8B0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Packs"
+                android:textColor="#A4A8B0"
+                android:textSize="12.5sp" />
+        </LinearLayout>
+
+        <!-- Flexible Spacer to push Settings to bottom -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Tab: Settings -->
+        <LinearLayout
+            android:id="@+id/nav_settings"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:background="?selectableItemBackground"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_px_sliders"
+                android:contentDescription="Settings"
+                app:tint="#A4A8B0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Settings"
+                android:textColor="#A4A8B0"
+                android:textSize="12.5sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ======================================================== -->
+    <!-- RIGHT PANE: TWO ERGONOMIC LANDSCAPE PANELS (HUB + DOCK) -->
+    <!-- ======================================================== -->
+    <com.kdt.DefocusableScrollView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="8dp"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <!-- Panel 1: Quick Actions & Modules Hub -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_landscape_panel"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- Hub Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="QUICK ACTIONS"
+                        android:textColor="#8E98A5"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_craze_edit_btn"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="2dp"
+                        android:text="MODULES"
+                        android:textColor="#FFFFFF"
+                        android:textSize="8.5sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1" />
+                </LinearLayout>
+
+                <!-- 2x2 Grid: Row 1 (Mods & Modpacks) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="6dp">
+
+                    <!-- Card: Mods -->
+                    <LinearLayout
+                        android:id="@+id/card_mods"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/bg_craze_card_clickable"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_craze_folder"
+                            android:contentDescription="Mods"
+                            app:tint="#FFFFFF" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mods"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Browse &amp; Manage"
+                                android:textColor="#8E98A5"
+                                android:textSize="8.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Card: Instances -->
+                    <LinearLayout
+                        android:id="@+id/card_modpacks"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/bg_craze_card_clickable"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_craze_cube"
+                            android:contentDescription="Instances"
+                            app:tint="#FFFFFF" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Instances"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Create &amp; Manage"
+                                android:textColor="#8E98A5"
+                                android:textSize="8.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- 2x2 Grid: Row 2 (Custom Controls & Install JAR) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="6dp">
+
+                    <!-- Card: Custom Controls -->
+                    <LinearLayout
+                        android:id="@+id/custom_control_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/bg_craze_card_clickable"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_craze_palette"
+                            android:contentDescription="Custom Controls"
+                            app:tint="#8B5CF6" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Controls"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Touch Layout Editor"
+                                android:textColor="#8E98A5"
+                                android:textSize="8.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Card: Install JAR -->
+                    <LinearLayout
+                        android:id="@+id/install_jar_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/bg_craze_card_clickable"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_craze_map"
+                            android:contentDescription="Install JAR"
+                            app:tint="#F59E0B" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="8dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Install JAR"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Forge / Fabric / Opti"
+                                android:textColor="#8E98A5"
+                                android:textSize="8.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Row 3: Community & Updates Banner -->
+                <LinearLayout
+                    android:id="@+id/news_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_landscape_card"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="10dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_craze_log_doc"
+                        android:contentDescription="Updates"
+                        app:tint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="News: Check latest Minecraft &amp; CrazeLauncher releases"
+                        android:textColor="#A4A8B0"
+                        android:textSize="9.5sp"
+                        android:ellipsize="end"
+                        android:singleLine="true" />
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/ic_craze_chevron_right"
+                        android:contentDescription="@null"
+                        app:tint="#8E98A5" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Panel 2: Launch Console Dock (Instance Info + Big PLAY Button) -->
+            <LinearLayout
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_landscape_panel"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- Instance Card -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_craze_card"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:id="@+id/grass_block"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_craze_grass_block"
+                            android:contentDescription="Instance Icon" />
+
+                        <TextView
+                            android:id="@+id/instance_card_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:text="SELECTED INSTANCE"
+                            android:textColor="#8E98A5"
+                            android:textSize="9sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.1" />
+
+                        <ImageButton
+                            android:id="@+id/edit_profile_button"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:background="@drawable/bg_craze_edit_btn"
+                            android:src="@drawable/ic_craze_pencil"
+                            app:tint="#FFFFFF"
+                            android:padding="6dp"
+                            android:scaleType="centerInside"
+                            android:contentDescription="@string/create_instance" />
+                    </LinearLayout>
+
+                    <!-- Version Selector Spinner -->
+                    <com.kdt.mcgui.mcVersionSpinner
+                        android:id="@+id/mc_version_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/bg_craze_edit_btn"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13.5sp"
+                        android:textStyle="bold"
+                        android:drawableEnd="@drawable/spinner_arrow"
+                        app:drawableEndSize="@dimen/padding_heavy"
+                        app:drawableStartIntegerScaling="true" />
+
+                    <!-- Ready Status Indicator -->
+                    <LinearLayout
+                        android:id="@+id/ready_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="6dp">
+
+                        <View
+                            android:layout_width="6dp"
+                            android:layout_height="6dp"
+                            android:background="@drawable/bg_landscape_active_tab" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Ready to launch"
+                            android:textColor="#FFFFFF"
+                            android:textSize="9.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Spacer between Instance Card and Play Button -->
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:minHeight="6dp" />
+
+                <!-- Big PLAY Button -->
+                <FrameLayout
+                    android:id="@+id/play_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:background="@drawable/bg_landscape_play"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_craze_play"
+                                android:contentDescription="@null"
+                                app:tint="#0A0A0A" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="PLAY"
+                                android:textColor="#0A0A0A"
+                                android:textSize="19sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.04" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:text="MINECRAFT JAVA EDITION"
+                            android:textColor="#5A5A5A"
+                            android:textSize="8sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.16" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <!-- Utility Row: Logs & Files -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="6dp">
+
+                    <!-- Share Logs Button -->
+                    <LinearLayout
+                        android:id="@+id/share_logs_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="3dp"
+                        android:background="@drawable/bg_craze_card_clickable"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_craze_log_doc"
+                            android:contentDescription="Logs"
+                            app:tint="#8E98A5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Logs"
+                            android:textColor="#A4A8B0"
+                            android:textSize="10.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Open Directory / Files Button -->
+                    <LinearLayout
+                        android:id="@+id/open_files_button"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="3dp"
+                        android:background="@drawable/bg_craze_card_clickable"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_craze_folder"
+                            android:contentDescription="Files"
+                            app:tint="#8E98A5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="Files"
+                            android:textColor="#A4A8B0"
+                            android:textSize="10.5sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.kdt.DefocusableScrollView>
+
+    <!-- Stubs to preserve optional fragment and activity view-bindings safely -->
+    <View android:id="@+id/card_new_instance" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+    <View android:id="@+id/card_mods_modpacks" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+    <View android:id="@+id/social_media_button" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+
+</LinearLayout>
