@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0A0D14">
+
+    <!-- Top App Bar with Frosted Glass -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_craze_card"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:layout_margin="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_settings_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_craze_card_clickable"
+            android:src="@drawable/ic_craze_back"
+            android:contentDescription="Back"
+            app:tint="#FFFFFF"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="14dp"
+            android:text="SETTINGS"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.06" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/settings_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="8dp"
+        android:paddingBottom="8dp" />
+
+</LinearLayout>

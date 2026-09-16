@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="12dp"
+    android:layout_marginBottom="6dp"
+    android:background="@drawable/bg_crazerecorder_card">
+
+    <ImageView
+        android:id="@+id/video_item_icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_craze_video_library"
+        android:contentDescription="@string/crazer_recorder_title" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="12dp">
+
+        <TextView
+            android:id="@+id/video_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            tools:text="CrazeRecorder_20260915_120000.mp4" />
+
+        <TextView
+            android:id="@+id/video_item_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#888888"
+            android:textSize="12sp"
+            tools:text="14.2 MB • Sep 15, 2026" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/video_item_btn_play"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_record_play"
+        android:contentDescription="@string/mcl_launch_download_assets"
+        android:padding="6dp" />
+
+    <ImageButton
+        android:id="@+id/video_item_btn_share"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_craze_sparkle"
+        android:contentDescription="@string/mcl_tab_wiki"
+        android:padding="6dp" />
+
+    <ImageButton
+        android:id="@+id/video_item_btn_delete"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_craze_close"
+        android:contentDescription="@string/instance_delete"
+        android:padding="6dp" />
+
+</LinearLayout>
