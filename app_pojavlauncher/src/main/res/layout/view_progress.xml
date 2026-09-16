@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/progress_main_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_craze_card_dark"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Stack / Layers Icon -->
+        <ImageView
+            android:id="@+id/progress_stack_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_craze_layers"
+            android:contentDescription="@null" />
+
+        <!-- TASKS (Count) Title -->
+        <TextView
+            android:id="@+id/progress_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TASKS (1)"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.06"
+            android:layout_marginStart="8dp" />
+
+        <!-- Progress Bar & Description Container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="12dp">
+
+            <ProgressBar
+                android:id="@+id/progress_generic_progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:progressDrawable="@drawable/bg_craze_progressbar"
+                android:indeterminate="false"
+                android:progress="68" />
+
+            <TextView
+                android:id="@+id/progress_subtitle_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Processing tasks..."
+                android:textColor="#8D9AA8"
+                android:textSize="10sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- Percentage Text -->
+        <TextView
+            android:id="@+id/progress_percentage_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="68%"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="6dp" />
+
+        <!-- Flip Arrow -->
+        <ImageView
+            android:id="@+id/progress_flip_arrow"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            app:srcCompat="@drawable/spinner_arrow"
+            android:contentDescription="@null" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/progress_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/progress_main_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</merge>

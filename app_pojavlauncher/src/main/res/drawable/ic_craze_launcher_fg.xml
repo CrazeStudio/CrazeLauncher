@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+  <!-- Ambient Outer Glow / Halo Ring -->
+  <path
+      android:pathData="M54,20 A34,34 0 1,0 54,88 A34,34 0 1,0 54,20 Z"
+      android:strokeWidth="1.2"
+      android:strokeColor="#20FFFFFF" />
+
+  <!-- Outer Orbit Segment Accents -->
+  <path
+      android:pathData="M54,16 L54,20 M54,88 L54,92 M16,54 L20,54 M88,54 L92,54"
+      android:strokeWidth="2"
+      android:strokeColor="#80FFFFFF"
+      android:strokeLineCap="round" />
+
+  <!-- Corner Tech Brackets -->
+  <path
+      android:pathData="M27,33 L24,37 L24,45 M81,33 L84,37 L84,45 M27,75 L24,71 L24,63 M81,75 L84,71 L84,63"
+      android:strokeWidth="1.5"
+      android:strokeColor="#60FFFFFF"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round" />
+
+  <!-- Dimensional Shadow Base (Isometric Hexagon) -->
+  <path
+      android:pathData="M54,24 L80,39 L80,69 L54,84 L28,69 L28,39 Z"
+      android:fillColor="#040609" />
+
+  <!-- Top Isometric Facet (Pure Specular White to Crisp Silver) -->
+  <path
+      android:pathData="M54,24 L80,39 L54,54 L28,39 Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="54"
+          android:startY="24"
+          android:endX="54"
+          android:endY="54"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#FFFFFF" />
+        <item android:offset="0.55" android:color="#E2E8F0" />
+        <item android:offset="1.0" android:color="#CBD5E1" />
+      </gradient>
+    </aapt:attr>
+  </path>
+
+  <!-- Right Isometric Facet (High Contrast Polished Platinum/Silver) -->
+  <path
+      android:pathData="M54,54 L80,39 L80,69 L54,84 Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="80"
+          android:startY="39"
+          android:endX="54"
+          android:endY="84"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#E2E8F0" />
+        <item android:offset="0.4" android:color="#94A3B8" />
+        <item android:offset="0.85" android:color="#64748B" />
+        <item android:offset="1.0" android:color="#334155" />
+      </gradient>
+    </aapt:attr>
+  </path>
+
+  <!-- Left Isometric Facet (Obsidian / Deep Slate Chrome) -->
+  <path
+      android:pathData="M28,39 L54,54 L54,84 L28,69 Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="28"
+          android:startY="39"
+          android:endX="54"
+          android:endY="84"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#94A3B8" />
+        <item android:offset="0.35" android:color="#475569" />
+        <item android:offset="0.75" android:color="#1E293B" />
+        <item android:offset="1.0" android:color="#0F172A" />
+      </gradient>
+    </aapt:attr>
+  </path>
+
+  <!-- Negative Space Geometric Cutouts / Grooves -->
+  <!-- Top Face Channel Groove -->
+  <path
+      android:pathData="M54,28 L72,38.5 L54,49 L36,38.5 Z"
+      android:fillColor="#040609" />
+
+  <!-- Left Face Geometric Speed Slots -->
+  <path
+      android:pathData="M33,45 L50,55 L50,60 L33,50 Z M33,54 L50,64 L50,69 L33,59 Z"
+      android:fillColor="#040609" />
+
+  <!-- Right Face Geometric Chevron Slot -->
+  <path
+      android:pathData="M58,55 L75,45 L75,50 L58,60 Z M58,64 L75,54 L75,59 L58,69 Z"
+      android:fillColor="#040609" />
+
+  <!-- Central Floating Nexus Diamond (Pure Brilliant White Core) -->
+  <path
+      android:pathData="M54,34 L67,41.5 L54,49 L41,41.5 Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="54"
+          android:startY="34"
+          android:endX="54"
+          android:endY="49"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#FFFFFF" />
+        <item android:offset="1.0" android:color="#E2E8F0" />
+      </gradient>
+    </aapt:attr>
+  </path>
+
+  <!-- Central Prism Lower Facets -->
+  <path
+      android:pathData="M41,41.5 L54,49 L54,63 L41,55.5 Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="41"
+          android:startY="41.5"
+          android:endX="54"
+          android:endY="63"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#CBD5E1" />
+        <item android:offset="1.0" android:color="#64748B" />
+      </gradient>
+    </aapt:attr>
+  </path>
+
+  <path
+      android:pathData="M54,49 L67,41.5 L67,55.5 L54,63 Z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startX="67"
+          android:startY="41.5"
+          android:endX="54"
+          android:endY="63"
+          android:type="linear">
+        <item android:offset="0.0" android:color="#FFFFFF" />
+        <item android:offset="1.0" android:color="#94A3B8" />
+      </gradient>
+    </aapt:attr>
+  </path>
+
+  <!-- Inner High-Power Focus Spark -->
+  <path
+      android:pathData="M54,45 L56.5,49 L60.5,49 L57.5,51.5 L58.5,55.5 L54,53 L49.5,55.5 L50.5,51.5 L47.5,49 L51.5,49 Z"
+      android:fillColor="#FFFFFF" />
+
+  <!-- Outer Specular Wireframe Edge Highlights -->
+  <path
+      android:pathData="M54,24 L80,39 L80,69 L54,84 L28,69 L28,39 Z"
+      android:strokeWidth="1.2"
+      android:strokeColor="#FFFFFF" />
+
+  <path
+      android:pathData="M54,24 L54,54 M54,54 L28,39 M54,54 L80,39 M54,54 L54,84"
+      android:strokeWidth="1"
+      android:strokeColor="#40FFFFFF" />
+
+</vector>
