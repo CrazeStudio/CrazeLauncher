@@ -19,7 +19,7 @@ import java.util.List;
  * @param <T>
  */
 public class SimpleArrayAdapter<T> extends BaseAdapter {
-    private List<T> mObjects;
+    private List<T> mObjects = Collections.emptyList();
     public SimpleArrayAdapter(List<T> objects) {
         setObjects(objects);
     }
@@ -40,12 +40,12 @@ public class SimpleArrayAdapter<T> extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mObjects.size();
+        return mObjects != null ? mObjects.size() : 0;
     }
 
     @Override
     public T getItem(int position) {
-        return mObjects.get(position);
+        return mObjects != null && position >= 0 && position < mObjects.size() ? mObjects.get(position) : null;
     }
 
     @Override
@@ -56,12 +56,42 @@ public class SimpleArrayAdapter<T> extends BaseAdapter {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        TextView v;
         if(convertView == null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+            v = (TextView) convertView;
+            v.setTextColor(parent.getContext().getResources().getColor(android.R.color.white));
+            v.setTextSize(13f);
+            v.setMaxLines(2);
+            v.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        } else {
+            v = (TextView) convertView;
         }
+        T item = getItem(position);
+        if(item != null) {
+            v.setText(item.toString());
+        }
+        return v;
+    }
 
-        TextView v = (TextView) convertView;
-        v.setText(mObjects.get(position).toString());
+    @Override
+    public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        TextView v;
+        if(convertView == null){
+            convertView = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
+            v = (TextView) convertView;
+            v.setTextColor(parent.getContext().getResources().getColor(android.R.color.white));
+            v.setTextSize(13.5f);
+            v.setPadding(20, 14, 20, 14);
+            v.setMaxLines(3);
+            v.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        } else {
+            v = (TextView) convertView;
+        }
+        T item = getItem(position);
+        if(item != null) {
+            v.setText(item.toString());
+        }
         return v;
     }
 }

@@ -25,9 +25,13 @@ public class ModDetail extends ModItem {
         this.fileNames = fileNames;
 
         // Add the mc version to the version model
-        for (int i=0; i<versionNames.length; i++){
-            if (mcVersionNames[i] != null && !versionNames[i].contains(mcVersionNames[i]))
-                versionNames[i] += " - " + mcVersionNames[i];
+        if (versionNames != null && mcVersionNames != null) {
+            for (int i = 0; i < versionNames.length && i < mcVersionNames.length; i++) {
+                if (versionNames[i] == null) versionNames[i] = "";
+                if (mcVersionNames[i] != null && !versionNames[i].toLowerCase().contains(mcVersionNames[i].toLowerCase())) {
+                    versionNames[i] = versionNames[i] + " (" + mcVersionNames[i] + ")";
+                }
+            }
         }
     }
 
