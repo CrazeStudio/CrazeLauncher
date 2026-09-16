@@ -50,6 +50,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+      - name: Decode Debug Keystore
+        run: base64 -d app_pojavlauncher/debug.keystore.base64 > app_pojavlauncher/debug.keystore
       - name: Create out directory
         run: mkdir out
       - name: Build Publishing .aab
