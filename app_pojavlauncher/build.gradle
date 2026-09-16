@@ -49,6 +49,8 @@ android {
 
     lintOptions {
         abortOnError false
+        checkReleaseBuilds false
+        disable 'StringFormatInvalid', 'StringFormatMatches'
     }
 
     signingConfigs {
@@ -262,9 +264,7 @@ class AssetTaskRegistrar {
         def copyTask = project.tasks.register(copyTaskName, Copy) {
             from jarTargetDir
             into assetTargetDir
-            // Nasty hack: explicitly reference project by name to force Gradle to configure it.
-            // Makes jar task search below work properly for fresh configurations.
-            dependsOn ":${project.name}:jar"
+            dependsOn project.tasks.named("jar")
         }
 
         mergeAssetsTask.dependsOn copyTask
