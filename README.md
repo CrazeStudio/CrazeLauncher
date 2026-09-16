@@ -1,90 +1,102 @@
-<H1 align="center">MojoLauncher (a.k.a. MJLauncher)</H1>
+<h1 align="center">CrazeLauncher</h1>
 
-<a href="./README_RU.md">Readme на русском</a>
+<p align="center">
+  <a href="https://github.com/CrazeStudio/CrazeLauncher"><img src="app_pojavlauncher/src/main/assets/pojavlauncher.png" width="120" height="120" alt="CrazeLauncher Logo"></a>
+</p>
 
-<img src="./app_pojavlauncher/src/main/assets/pojavlauncher.png" align="left" width="150" height="150" alt="MojoLauncher logo">
+<p align="center">
+  <b>Play Minecraft: Java Edition on your Android device with advanced modding, instance management, and high performance!</b>
+</p>
 
-[![Android CI](https://github.com/MojoLauncher/MojoLauncher/workflows/Android%20CI/badge.svg)](https://github.com/MojoLauncher/MojoLauncher/actions)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/MojoLauncher/MojoLauncher)](https://github.com/MojoLauncher/MojoLauncher/actions)
-[![Discord](https://img.shields.io/discord/1365346109131722753.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/VHdwQFsaGX)
+<p align="center">
+  <img src="https://img.shields.io/badge/Platform-Android-green.svg" alt="Platform Android">
+  <img src="https://img.shields.io/badge/License-LGPL%20v3-blue.svg" alt="License LGPL v3">
+  <img src="https://img.shields.io/badge/Kotlin-Compose-orange.svg" alt="Kotlin Compose">
+</p>
 
-* MojoLauncher is a launcher, based on [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher), that allows you to play Minecraft: Java Edition on your Android device!
+---
 
-* It can run almost every version of Minecraft, allowing you to use .jar only installers to install modloaders such as [Forge](https://files.minecraftforge.net/) and [Fabric](http://fabricmc.net/) and mods like [OptiFine](https://optifine.net).
+## 📖 About CrazeLauncher
 
-## Navigation
-- [Introduction](#introduction)
-- [Getting MojoLauncher](#getting-mojolauncher)
-- [Building](#building) 
-- [Current roadmap](#current-roadmap) 
-- [License](#license) 
-- [Contributing](#contributing) 
-- [Credits & Third party components and their licenses](#credits--third-party-components-and-their-licenses-if-available)
+**CrazeLauncher** is an advanced, high-performance Minecraft: Java Edition launcher for Android built upon the robust foundation of [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher). It empowers players to run almost every version of Minecraft (from classic alpha/beta and release builds to the latest snapshots and combat tests) directly on mobile devices with support for modloaders like **Forge**, **NeoForge**, **Fabric**, **Quilt**, and **OptiFine**.
 
-## Introduction 
-* MojoLauncher is a Minecraft: Java Edition launcher for Android based on [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher)
-* This launcher can launch almost all available Minecraft versions ranging from rd-132211 to 26.x snapshots (including Combat Test versions). 
-* Modding via Forge and Fabric are also supported. 
+---
 
-## Getting MojoLauncher
+## ✨ Key Features
 
-You can get MojoLauncher via four methods:
+- **Robust Instance Management**: Easily create, configure, and manage separate game instances with isolated directories and custom settings.
+- **Modpack & Mod Integration**: Built-in support for searching and installing mods and modpacks directly from Modrinth and CurseForge (.mrpack and zip imports).
+- **Comprehensive Modloader Support**: Out-of-the-box installation and execution support for Forge, NeoForge, Fabric, Quilt, and OptiFine.
+- **Optimized Rendering & Performance**: Advanced Java runtime execution (OpenJDK), OpenGL/GL4ES rendering acceleration, and customizable graphical controls.
+- **Refined User Experience**: Sleek Material Design user interface with improved spinners, expandable lists, and smooth navigation.
 
-1. You can get the prebuilt app from the [releases section](http://github.com/mojolauncher/mojolauncher/releases).
+---
 
-2. You can get it from Google Play by clicking on this badge:
-[![Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=git.artdeell.mjlaunch)
+## 🗺️ Table of Contents
 
-3. You can get early builds from [Github Actions](http://github.com/mojolauncher/mojolauncher/actions).
+- [About CrazeLauncher](#-about-crazelauncher)
+- [Key Features](#-key-features)
+- [Getting Started](#-getting-started)
+- [Building from Source](#-building-from-source)
+- [Roadmap](#️-roadmap)
+- [Credits & Acknowledgments](#-credits--acknowledgments)
+- [License](#-license)
 
-4. You can [build](#building) from source.
-## Building   
-* Build the launcher (it will automatically download all required components)
-```
-./gradlew :app_pojavlauncher:assembleDebug
-```
-(Replace `./gradlew` with `.\gradlew.bat` if you are building on Windows).
+---
 
-## Current roadmap
-- [x] Instance system in favor of profiles
-- [x] Out-of-the box 1.21.5 support
-- [x] mrpack/CurseForge zip import
-- [ ] LTW: resolve issues with Create
-- [ ] LTW: enable compute shader/image extensions
-- [ ] LTW: switch to a color-renderable format for framebuffers
-- [ ] Modpack/mod management tool
-- [ ] MMC-compatible instance import
-- [ ] Implement common native library standard
+## 🚀 Getting Started
 
-## Known Issues
-- Some physical mice may have very slow mouse speed
-- On Holy GL4ES, large texture atlases may be distorted (resulting in stretched/blocky textures in modpacks)
-- Probably more, that's why we have a bug tracker ;) 
+You can obtain CrazeLauncher through the following channels:
+1. **Releases**: Download the latest pre-built APK from the [Releases Page](https://github.com/CrazeStudio/CrazeLauncher/releases).
+2. **Source Build**: Clone the repository and build the APK locally.
 
-## License
-- MojoLauncher is licensed under [GNU LGPLv3](https://github.com/MojoLauncher/MojoLauncher/blob/v3_openjdk/LICENSE).
+---
 
-## Contributing
-Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help the wiki shape up. You can help the [translation](https://crowdin.com/project/pojavlauncher) too!
+## ⚙️ Building from Source
 
+To build CrazeLauncher locally:
 
-Any code change to this repository should be submitted as a pull request. The description should explain what the code does and give steps to execute it.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/CrazeStudio/CrazeLauncher.git
+   cd CrazeLauncher
+   ```
+2. Build the debug APK using Gradle:
+   ```bash
+   ./gradlew :app_pojavlauncher:assembleFullDebug
+   ```
+   *(On Windows, use `gradlew.bat :app_pojavlauncher:assembleFullDebug`)*
 
-## Third party components, licenses and sources (when applicable)
-- [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher): [GNU LGPLv3 License](https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/LICENSE)
-- [Boardwalk](https://github.com/zhuowei/Boardwalk) (JVM Launcher): Unknown License/[Apache License 2.0](https://github.com/zhuowei/Boardwalk/blob/master/LICENSE) or GNU GPLv2.
-- Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
-- [Holy GL4ES](https://github.com/artdeell/gl4es_extra_extra/): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).<br>
-- [OpenJDK](https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u): [GNU GPLv2 License](https://openjdk.java.net/legal/gplv2+ce.html).<br>
-- [GLFW](https://github.com/MojoLauncher/glfw): [zlib license](https://github.com/MojoLauncher/glfw/blob/glfw34/LICENSE.md)
-- [SDL](https://github.com/MojoLauncher/MojoSDL): [zlib license](https://github.com/MojoLauncher/MojoSDL/blob/main/LICENSE.txt)
-- [LWJGL2-GLFW](https://github.com/MojoLauncher/lwjgl2-glfw): 3-Clause BSD license
-- [LWJGL3](https://github.com/LWJGL/lwjgl3): [BSD-3 License](https://github.com/LWJGL/lwjgl3/blob/master/LICENSE.md).
-- [mojoexec](https://github.com/MojoLauncher/mojoexec): [MIT License](https://github.com/MojoLauncher/mojoexec/blob/master/LICENSE)
-- [Mesa 3D Graphics Library](https://gitlab.freedesktop.org/mesa/mesa): [MIT License](https://docs.mesa3d.org/license.html).
-- [pro-grade](https://github.com/pro-grade/pro-grade) (Java sandboxing security manager): [Apache License 2.0](https://github.com/pro-grade/pro-grade/blob/master/LICENSE.txt).
-- [bhook](https://github.com/bytedance/bhook) (Used for exit code trapping): [MIT license](https://github.com/bytedance/bhook/blob/main/LICENSE).
-- [Authlib-Injector](https://github.com/yushijinhun/authlib-injector) (Used for authorisation via ely.by): [AGPL-3.0](https://github.com/yushijinhun/authlib-injector/blob/develop/LICENSE).
-- [alsoft](https://github.com/kcat/openal-soft/) (Audio output library): [GNU LIBRARY GENERAL PUBLIC LICENSE](https://github.com/kcat/openal-soft/blob/master/COPYING) and [modified PFFFT](https://github.com/kcat/openal-soft/blob/master/LICENSE-pffft).
-- [oboe](https://github.com/google/oboe): [Apache License 2.0](https://github.com/google/oboe/blob/main/LICENSE).
-- Thanks to [Mineskin](https://mineskin.eu/) for providing Minecraft avatars.
+---
+
+## 🎯 Roadmap
+
+- [x] Instance system in favor of legacy profiles
+- [x] Out-of-the-box modern Minecraft version support
+- [x] Modrinth & CurseForge `.mrpack` / `.zip` import support
+- [x] Enhanced mod version spinner and UI layouts
+- [ ] Advanced compute shader and rendering extensions
+- [ ] Comprehensive mod/modpack management tools
+
+---
+
+## 💖 Credits & Acknowledgments
+
+CrazeLauncher is made possible thanks to the hard work of open-source developers and contributors worldwide:
+
+- **[PojavLauncher Team](https://github.com/PojavLauncherTeam/PojavLauncher)**: For creating the core Minecraft Java Android launcher foundation.
+- **CrazeStudio & Maintainers**: For custom enhancements, instance management, UI refinements, and maintenance.
+- **Third-Party Libraries & Components**:
+  - **OpenJDK**: Java runtime environment.
+  - **GL4ES / Holy GL4ES**: OpenGL acceleration layer.
+  - **GLFW & SDL**: Windowing and input management.
+  - **LWJGL 2 & 3**: Lightweight Java Game Library.
+  - **Mesa 3D Graphics Library**: Open-source OpenGL implementation.
+  - **Authlib-Injector**: Authorization support.
+  - **Gson & OkHttp**: Networking and JSON parsing.
+
+---
+
+## 📄 License
+
+CrazeLauncher is licensed under the **GNU Lesser General Public License v3.0 (LGPLv3)**. See the [LICENSE](LICENSE) file for details.
