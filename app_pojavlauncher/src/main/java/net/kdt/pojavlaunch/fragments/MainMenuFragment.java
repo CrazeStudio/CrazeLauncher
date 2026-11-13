@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
@@ -88,11 +89,11 @@ public class MainMenuFragment extends Fragment {
         }
         if (navMods != null) {
             CrazeAnimationUtils.attachTouchFeedback(navMods);
-            navMods.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
+            navMods.setOnClickListener(v -> openProjectBrowser("mod"));
         }
         if (navPacks != null) {
             CrazeAnimationUtils.attachTouchFeedback(navPacks);
-            navPacks.setOnClickListener(v -> openGameDirectory(requireContext()));
+            navPacks.setOnClickListener(v -> openProjectBrowser("modpack"));
         }
         if (navSettings != null) {
             CrazeAnimationUtils.attachTouchFeedback(navSettings);
@@ -213,10 +214,6 @@ public class MainMenuFragment extends Fragment {
         if (mNewsButton != null) {
             CrazeAnimationUtils.attachTouchFeedback(mNewsButton);
             mNewsButton.setOnClickListener(v -> Tools.openURL(requireActivity(), Tools.URL_HOME));
-            mNewsButton.setOnLongClickListener((v) -> {
-                Tools.swapFragment(requireActivity(), GamepadMapperFragment.class, GamepadMapperFragment.TAG, null);
-                return true;
-            });
         }
         if (mDiscordButton != null) {
             CrazeAnimationUtils.attachTouchFeedback(mDiscordButton);
