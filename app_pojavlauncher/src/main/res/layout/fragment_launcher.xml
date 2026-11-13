@@ -413,7 +413,7 @@
                 android:background="@drawable/bg_craze_home_hero_scrim"/>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="14dp"
@@ -829,11 +829,6 @@
                         android:visibility="gone"
                         android:text="Share logs"/>
                     <Button
-                        android:id="@+id/news_button"
-                        android:layout_width="1dp"
-                        android:layout_height="1dp"
-                        android:visibility="gone"/>
-                    <Button
                         android:id="@+id/social_media_button"
                         android:layout_width="1dp"
                         android:layout_height="1dp"
@@ -932,12 +927,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Account and utilities are now in the hero and navigation rail. -->
-                    <Button
-                        android:id="@+id/social_media_button"
-                        android:layout_width="1dp"
-                        android:layout_height="1dp"
-                        android:visibility="gone"/>
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
