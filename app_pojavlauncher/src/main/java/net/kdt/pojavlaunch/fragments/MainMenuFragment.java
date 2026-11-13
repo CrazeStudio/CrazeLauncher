@@ -30,12 +30,14 @@ import net.kdt.pojavlaunch.instances.Instances;
 import net.kdt.pojavlaunch.fragments.InstanceManagementFragment;
 import net.kdt.pojavlaunch.fragments.ProfileTypeSelectFragment;
 import net.kdt.pojavlaunch.fragments.SearchModFragment;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import net.kdt.pojavlaunch.progresskeeper.ProgressKeeper;
 import net.kdt.pojavlaunch.utils.CrazeAnimationUtils;
 import net.kdt.pojavlaunch.utils.FileUtils;
 
 import java.io.File;
+import java.util.Locale;
 
 public class MainMenuFragment extends Fragment {
     public static final String TAG = "MainMenuFragment";
@@ -69,6 +71,10 @@ public class MainMenuFragment extends Fragment {
         View navMods = view.findViewById(R.id.nav_mods);
         View navPacks = view.findViewById(R.id.nav_packs);
         View navSettings = view.findViewById(R.id.nav_settings);
+        View navResourcePacks = view.findViewById(R.id.nav_resource_packs);
+        View navShaderPacks = view.findViewById(R.id.nav_shader_packs);
+        View navDownloads = view.findViewById(R.id.nav_downloads);
+        View navAbout = view.findViewById(R.id.nav_about);
 
         if (navHome != null) {
             CrazeAnimationUtils.attachTouchFeedback(navHome);
@@ -91,6 +97,58 @@ public class MainMenuFragment extends Fragment {
         if (navSettings != null) {
             CrazeAnimationUtils.attachTouchFeedback(navSettings);
             navSettings.setOnClickListener(v -> Tools.swapFragment(requireActivity(), LauncherPreferenceFragment.class, LauncherActivity.SETTING_FRAGMENT_TAG, null));
+        }
+
+        if (navResourcePacks != null) {
+            CrazeAnimationUtils.attachTouchFeedback(navResourcePacks);
+            navResourcePacks.setOnClickListener(v -> openProjectBrowser("resourcepack"));
+        }
+        if (navShaderPacks != null) {
+            CrazeAnimationUtils.attachTouchFeedback(navShaderPacks);
+            navShaderPacks.setOnClickListener(v -> openProjectBrowser("shader"));
+        }
+        if (navDownloads != null) {
+            CrazeAnimationUtils.attachTouchFeedback(navDownloads);
+            navDownloads.setOnClickListener(v -> showDownloadsMenu());
+        }
+        if (navAbout != null) {
+            CrazeAnimationUtils.attachTouchFeedback(navAbout);
+            navAbout.setOnClickListener(v -> new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                    .setTitle("CrazeLauncher")
+                    .setMessage("A modern Minecraft: Java Edition launcher for Android, powered by PojavLauncher.")
+                    .setPositiveButton("GitHub", (dialog, which) -> Tools.openURL(requireContext(), "https://github.com/CrazeStudio/CrazeLauncher"))
+                    .setNegativeButton(android.R.string.ok, null)
+                    .show());
+        }
+
+        // Keep the system panel truthful: show configured launcher values, not mock values.
+        TextView ramValue = view.findViewById(R.id.system_ram_value);
+        android.widget.ProgressBar ramBar = view.findViewById(R.id.system_ram_bar);
+        int totalMemoryMb = Tools.getTotalDeviceMemory(requireContext());
+        int allocatedMb = LauncherPreferences.PREF_RAM_ALLOCATION;
+        if (ramValue != null) {
+            ramValue.setText(String.format(Locale.getDefault(), "%.1f GB / %.1f GB",
+                    allocatedMb / 1024f, totalMemoryMb / 1024f));
+        }
+        if (ramBar != null) {
+            ramBar.setMax(Math.max(totalMemoryMb, 1));
+            ramBar.setProgress(Math.min(allocatedMb, totalMemoryMb));
+        }
+        TextView javaValue = view.findViewById(R.id.system_java_value);
+        if (javaValue != null) {
+            String runtime = LauncherPreferences.PREF_DEFAULT_RUNTIME;
+            javaValue.setText(runtime == null || runtime.trim().isEmpty() ? "Built-in" : runtime);
+        }
+        TextView rendererValue = view.findViewById(R.id.system_renderer_value);
+        if (rendererValue != null) {
+            rendererValue.setText(LauncherPreferences.PREF_RENDERER == null
+                    ? "Default" : LauncherPreferences.PREF_RENDERER);
+        }
+        View systemCard = view.findViewById(R.id.system_settings_card);
+        if (systemCard != null) {
+            CrazeAnimationUtils.attachTouchFeedback(systemCard);
+            systemCard.setOnClickListener(v -> Tools.swapFragment(requireActivity(),
+                    LauncherPreferenceFragment.class, LauncherActivity.SETTING_FRAGMENT_TAG, null));
         }
 
         if (mPlayButton != null) {
@@ -134,22 +192,22 @@ public class MainMenuFragment extends Fragment {
 
         if (mCardNewInstance != null) {
             CrazeAnimationUtils.attachTouchFeedback(mCardNewInstance);
-            mCardNewInstance.setOnClickListener(v -> Tools.swapFragment(requireActivity(), InstanceManagementFragment.class, InstanceManagementFragment.TAG, null));
+            mCardNewInstance.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
         }
 
         if (mCardMods != null) {
             CrazeAnimationUtils.attachTouchFeedback(mCardMods);
-            mCardMods.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
+            mCardMods.setOnClickListener(v -> openProjectBrowser("modpack"));
         }
 
         if (mCardModsDirect != null) {
             CrazeAnimationUtils.attachTouchFeedback(mCardModsDirect);
-            mCardModsDirect.setOnClickListener(v -> Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, null));
+            mCardModsDirect.setOnClickListener(v -> openProjectBrowser("mod"));
         }
 
         if (mCardModpacksDirect != null) {
             CrazeAnimationUtils.attachTouchFeedback(mCardModpacksDirect);
-            mCardModpacksDirect.setOnClickListener(v -> Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null));
+            mCardModpacksDirect.setOnClickListener(v -> openProjectBrowser("modpack"));
         }
 
         if (mNewsButton != null) {
@@ -167,6 +225,38 @@ public class MainMenuFragment extends Fragment {
 
         CrazeAnimationUtils.attachTouchFeedbackRecursively(view);
         CrazeAnimationUtils.animateEntrance(view, 0);
+    }
+
+    private void openProjectBrowser(String projectType) {
+        Bundle args = new Bundle();
+        args.putString(SearchModFragment.ARG_PROJECT_TYPE, projectType);
+        args.putBoolean(SearchModFragment.ARG_IS_MODPACK, "modpack".equals(projectType));
+        Tools.swapFragment(requireActivity(), SearchModFragment.class, SearchModFragment.TAG, args);
+    }
+
+    private void showDownloadsMenu() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_download_manager, null);
+        androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .create();
+        dialog.setOnShowListener(ignored -> {
+            View versions = dialogView.findViewById(R.id.option_download_versions);
+            View mods = dialogView.findViewById(R.id.option_browse_mods);
+            View editor = dialogView.findViewById(R.id.option_instance_editor);
+            if (versions != null) versions.setOnClickListener(v -> {
+                dialog.dismiss();
+                Tools.swapFragment(requireActivity(), ProfileTypeSelectFragment.class, ProfileTypeSelectFragment.TAG, null);
+            });
+            if (mods != null) mods.setOnClickListener(v -> {
+                dialog.dismiss();
+                openProjectBrowser("mod");
+            });
+            if (editor != null) editor.setOnClickListener(v -> {
+                dialog.dismiss();
+                Tools.swapFragment(requireActivity(), InstanceEditorFragment.class, InstanceEditorFragment.TAG, null);
+            });
+        });
+        dialog.show();
     }
 
     private void openGameDirectory(Context context) {

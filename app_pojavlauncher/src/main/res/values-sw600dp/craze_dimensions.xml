@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="craze_sidebar_width">184dp</dimen>
+    <dimen name="craze_home_hero_height">164dp</dimen>
+    <dimen name="craze_home_account_width">226dp</dimen>
+    <dimen name="craze_home_play_width">116dp</dimen>
+</resources>

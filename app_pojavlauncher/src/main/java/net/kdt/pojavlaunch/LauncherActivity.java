@@ -72,8 +72,14 @@ public class LauncherActivity extends BaseActivity implements androidx.preferenc
         @Override
         public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
             boolean isMainMenu = f instanceof MainMenuFragment;
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), isMainMenu
-                    ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+            View topBar = findViewById(R.id.top_bar_layout);
+            View topDivider = findViewById(R.id.top_accent_divider);
+            if (topBar != null) topBar.setVisibility(isMainMenu ? View.GONE : View.VISIBLE);
+            if (topDivider != null) topDivider.setVisibility(isMainMenu ? View.GONE : View.VISIBLE);
+            if (mSettingsButton != null) {
+                mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), isMainMenu
+                        ? R.drawable.ic_px_sliders : R.drawable.ic_px_home));
+            }
 
             View backButton = findViewById(R.id.top_bar_back_button);
             View logoIcon = findViewById(R.id.logo_icon);
