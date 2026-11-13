@@ -117,7 +117,7 @@ public class MainMenuFragment extends Fragment {
             navAbout.setOnClickListener(v -> new androidx.appcompat.app.AlertDialog.Builder(requireContext())
                     .setTitle("CrazeLauncher")
                     .setMessage("A modern Minecraft: Java Edition launcher for Android, powered by PojavLauncher.")
-                    .setPositiveButton("GitHub", (dialog, which) -> Tools.openURL(requireContext(), "https://github.com/CrazeStudio/CrazeLauncher"))
+                    .setPositiveButton("GitHub", (dialog, which) -> Tools.openURL(requireActivity(), "https://github.com/CrazeStudio/CrazeLauncher"))
                     .setNegativeButton(android.R.string.ok, null)
                     .show());
         }
