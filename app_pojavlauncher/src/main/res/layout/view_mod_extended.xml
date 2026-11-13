@@ -39,7 +39,7 @@
         android:minWidth="84dp"
         android:enabled="false"
         android:text="@string/generic_install"
-        android:textColor="@color/btn_install_text"
+        android:textColor="#17120C"
         android:textSize="11.5sp"
         android:textStyle="bold"
         android:textAllCaps="false"
