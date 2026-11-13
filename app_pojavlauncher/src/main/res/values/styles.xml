@@ -17,9 +17,9 @@
         <item name="android:spinnerDropDownItemStyle">@style/CrazeSpinnerDropDownItem</item>
         <item name="spinnerDropDownItemStyle">@style/CrazeSpinnerDropDownItem</item>
 
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="colorControlActivated">#4B5563</item>
-        <item name="colorControlNormal">#8E98A5</item>
+        <item name="colorAccent">#FF7900</item>
+        <item name="colorControlActivated">#FF7900</item>
+        <item name="colorControlNormal">#9AA4B2</item>
         <item name="colorControlHighlight">#26FFFFFF</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:editTextColor">#FFFFFF</item>
@@ -33,7 +33,7 @@
         <item name="android:windowBackground">@drawable/bg_landscape_panel</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:textColorSecondary">#8E98A5</item>
-        <item name="colorAccent">#FFFFFF</item>
+        <item name="colorAccent">#FF7900</item>
         <item name="buttonBarPositiveButtonStyle">@style/CrazeDialogButton</item>
         <item name="buttonBarNegativeButtonStyle">@style/CrazeDialogButton.Negative</item>
         <item name="buttonBarNeutralButtonStyle">@style/CrazeDialogButton</item>
@@ -69,9 +69,9 @@
         <item name="dialogPreferenceStyle">@style/CrazePreference</item>
         <item name="editTextPreferenceStyle">@style/CrazePreference</item>
 
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="colorControlActivated">#FFFFFF</item>
-        <item name="colorControlNormal">#9E9E9E</item>
+        <item name="colorAccent">#FF7900</item>
+        <item name="colorControlActivated">#FF7900</item>
+        <item name="colorControlNormal">#9AA4B2</item>
         <item name="colorControlHighlight">#26FFFFFF</item>
     </style>
 

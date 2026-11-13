@@ -15,9 +15,9 @@
         <item name="android:spinnerStyle">@style/CrazeSpinnerStyle</item>
         <item name="spinnerStyle">@style/CrazeSpinnerStyle</item>
 
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="colorControlActivated">#4B5563</item>
-        <item name="colorControlNormal">#8E98A5</item>
+        <item name="colorAccent">#FF7900</item>
+        <item name="colorControlActivated">#FF7900</item>
+        <item name="colorControlNormal">#9AA4B2</item>
         <item name="colorControlHighlight">#26FFFFFF</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:textColorSecondary">#8E98A5</item>

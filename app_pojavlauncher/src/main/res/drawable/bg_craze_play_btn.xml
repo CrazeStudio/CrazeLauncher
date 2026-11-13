@@ -1,27 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="#33000000">
-    <item>
-        <selector>
-            <item android:state_enabled="false">
-                <shape android:shape="rectangle">
-                    <corners android:radius="10dp" />
-                    <solid android:color="#222222" />
-                </shape>
-            </item>
-            <item android:state_pressed="true">
-                <shape android:shape="rectangle">
-                    <corners android:radius="10dp" />
-                    <solid android:color="#E0E0E0" />
-                </shape>
-            </item>
-            <item>
-                <shape android:shape="rectangle">
-                    <corners android:radius="10dp" />
-                    <solid android:color="#FFFFFF" />
-                </shape>
-            </item>
-        </selector>
-    </item>
-</ripple>
-
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="#55FFFFFF"><item><selector>
+<item android:state_enabled="false"><shape android:shape="rectangle"><corners android:radius="11dp"/><solid android:color="#33343A"/></shape></item>
+<item android:state_pressed="true"><shape android:shape="rectangle"><corners android:radius="11dp"/><gradient android:angle="0" android:startColor="#E66B00" android:endColor="#D94A00"/></shape></item>
+<item><shape android:shape="rectangle"><corners android:radius="11dp"/><gradient android:angle="0" android:startColor="#FF9500" android:endColor="#F45100"/></shape></item>
+</selector></item></ripple>
