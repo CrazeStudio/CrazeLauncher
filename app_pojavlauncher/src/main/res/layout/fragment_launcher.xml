@@ -404,7 +404,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_setting_sign_in_background"
+                android:src="@drawable/craze_home_hero"
                 android:scaleType="centerCrop"
                 android:contentDescription="@null"/>
             <View
